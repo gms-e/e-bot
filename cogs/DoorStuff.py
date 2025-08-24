@@ -13,187 +13,183 @@ class DoorStuff(commands.Cog):
 
 
 
-    #TODO: make into higher level function that returns the VIEWS AND FUNCTIONS WITHIN with proper variables in place.
-    async def fail(self, interaction, ctx, public, ephem):
-        if not public and str(interaction.user.name) != str(ctx.author.name):
-            print(f"oi {interaction.user.name} piss off")
-            return
 
-        global HSDict
-        global scoreDict
-        failedStr = "```ansi\n[2;31m[1;31m[1;40m[1;47m[4;31m[4;40m[4;44m[4;40m[4;40mFailed[0m[4;31m[4;40m[0m[4;31m[4;44m[0m[4;31m[4;40m[0m[4;31m[4;47m[0m[1;31m[1;47m[4;31m[0m[1;31m[1;47m[0m[1;31m[1;40m[0m[1;31m[0m[2;31m[0m\n```"
+    async def genViewList(self, ctx, public, ephem):
 
-        if scoreDict.get(str(interaction.user.id), 0) == 0:
-            await self.retry(interaction, ctx, public,  True)
-            return
-        print(f"{interaction.user.name} ended with {scoreDict.get(str(interaction.user.id), 0)}")
+        async def fail(interaction: discord.Interaction):
+            if not public and str(interaction.user.name) != str(ctx.author.name):
+                print(f"oi {interaction.user.name} piss off")
+                return
 
-        with open('HighScore.txt', 'r') as f:
+            global HSDict
+            global scoreDict
+            failedStr = "```ansi\n[2;31m[1;31m[1;40m[1;47m[4;31m[4;40m[4;44m[4;40m[4;40mFailed[0m[4;31m[4;40m[0m[4;31m[4;44m[0m[4;31m[4;40m[0m[4;31m[4;47m[0m[1;31m[1;47m[4;31m[0m[1;31m[1;47m[0m[1;31m[1;40m[0m[1;31m[0m[2;31m[0m\n```"
+
+            if scoreDict.get(str(interaction.user.id), 0) == 0:
+                try:
+                    await retry(interaction, True)
+                except Exception as error:
+                    print(type(error).__name__)
+                    print(str(error))
+                return
+            print(f"{interaction.user.name} ended with {scoreDict.get(str(interaction.user.id), 0)}")
+
+            with open('HighScore.txt', 'r') as f:
+                try:
+                    HSDict = eval(f.read())
+                except Exception as error:
+                    print("An error occurred:", type(error).__name__)
+                    print(str(error))
+
             try:
-                HSDict = eval(f.read())
+                if HSDict.get(str(interaction.user.id), 0) < scoreDict.get(str(interaction.user.id), 0):
+                    HSDict[str(interaction.user.id)] = scoreDict[str(interaction.user.id)]
+
+                    with open('HighScore.txt', 'w') as f:
+                        f.write(str(HSDict))
+
+                if scoreDict.get(str(interaction.user.id), 0) > HSDict.get("High Score", 0):
+                    HSDict["High Score"] = scoreDict.get(str(interaction.user.id))
+                    HSDict["Holder"] = str(interaction.user.id)
+                    with open('HighScore.txt', 'w') as f:
+                        f.write(str(HSDict))
+                if scoreDict.get(str(interaction.user.id), 0) == HSDict.get("High Score", 0):
+                    if str(interaction.user.id) not in HSDict["Holder"]:
+                        HSDict["Holder"] = f"{HSDict["Holder"]}  & {interaction.user.id}"
+                        with open('HighScore.txt', 'w') as f:
+                            f.write(str(HSDict))
+                global holder
+
+                try:
+                    holder = ctx.guild.get_member(int(HSDict["Holder"]))
+                except Exception as error:
+                    print(f"An error occurred:", type(error).__name__)
+                    holder = "Some guy who ain't here"
+                print(str(holder))
+                if "None" in str(holder):
+                    holder = "Some guy who ain't here"
+                if ephem:
+                    await interaction.response.edit_message(
+                        content=f"{failedStr}High Score: {HSDict["High Score"]} ({holder})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {scoreDict.get(str(interaction.user.id), 0)}.\n Try again?",
+                        view=vfail)
+                else:
+                    await interaction.response.edit_message(
+                        content=f"{failedStr}High Score: {HSDict["High Score"]} ({holder})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {scoreDict.get(str(interaction.user.id), 0)}.\n Try again?",
+                        view=vfail)
+
+
             except Exception as error:
                 print("An error occurred:", type(error).__name__)
                 print(str(error))
 
-        try:
-            if HSDict.get(str(interaction.user.id), 0) < scoreDict.get(str(interaction.user.id), 0):
-                HSDict[str(interaction.user.id)] = scoreDict[str(interaction.user.id)]
+        async def retry(interaction: discord.Interaction, quick = False):
+            global scoreDict
+            if not public and str(interaction.user.name) != str(ctx.author.name):
+                print(f"oi {interaction.user.name} piss off")
+                return
+            scoreDict[str(interaction.user.id)] = 0
+            extra = ""
+            if quick:
+                print(f"{interaction.user.name} quick restarted")
+                extra = " (Quick Restarted)"
+            if random.random() < 1 / 2:
+                await interaction.response.edit_message(content=f"Score: 0{extra}", view=ri)
+            else:
+                await interaction.response.edit_message(content=f"Score: 0{extra}", view=le)
 
-                with open('HighScore.txt', 'w') as f:
-                    f.write(str(HSDict))
-
-            if scoreDict.get(str(interaction.user.id), 0) > HSDict.get("High Score", 0):
-                HSDict["High Score"] = scoreDict.get(str(interaction.user.id))
-                HSDict["Holder"] = str(interaction.user.id)
-                with open('HighScore.txt', 'w') as f:
-                    f.write(str(HSDict))
-            if scoreDict.get(str(interaction.user.id), 0) == HSDict.get("High Score", 0):
-                if str(interaction.user.id) not in HSDict["Holder"]:
-                    HSDict["Holder"] = f"{HSDict["Holder"]}  & {interaction.user.id}"
-                    with open('HighScore.txt', 'w') as f:
-                        f.write(str(HSDict))
-            global holder
+        async def quit(interaction: discord.Interaction):
+            if str(interaction.user.name) != str(ctx.author.name):
+                print(f"oi {interaction.user.name} piss off")
+                return
+            global scoreDict
+            global HSDict
 
             try:
-                holder = ctx.guild.get_member(int(HSDict["Holder"]))
+
+                await interaction.response.edit_message(
+                    content=f"High Score: {HSDict["High Score"]} ({ctx.guild.get_member(int(HSDict["Holder"]))})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {scoreDict.get(str(interaction.user.id), 0)}",
+                    view=None)
             except Exception as error:
-                print(f"An error occurred:", type(error).__name__)
-                holder = "Some guy who ain't here"
-            print(str(holder))
-            if "None" in str(holder):
-                holder = "Some guy who ain't here"
-            if ephem:
-                await interaction.response.edit_message(
-                    content=f"{failedStr}High Score: {HSDict["High Score"]} ({holder})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {scoreDict.get(str(interaction.user.id), 0)}.\n Try again?",
-                    view=self.failephem)
-            else:
-                await interaction.response.edit_message(
-                    content=f"{failedStr}High Score: {HSDict["High Score"]} ({holder})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {scoreDict.get(str(interaction.user.id), 0)}.\n Try again?",
-                    view=self.failpub)
+                print("An error occurred:", type(error).__name__)
+                print(str(error))
 
+        async def kill(interaction: discord.Interaction):
+            if str(interaction.user.name) != str(ctx.author.name):
+                print(f"oi {interaction.user.name} piss off")
+                return
+            await interaction.message.delete()
 
-        except Exception as error:
-            print("An error occurred:", type(error).__name__)
-            print(str(error))
+        async def reveal(interaction: discord.Interaction):
+            global scoreDict
+            global HSDict
+            try:
+                await interaction.response.edit_message(content="Revealed.\n(You can dismiss this now)", view=None)
+                await interaction.channel.send(
+                    content=f"``{interaction.user} used doors of doom``\nHigh Score: {HSDict["High Score"]} ({ctx.guild.get_member(int(HSDict["Holder"]))})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {scoreDict.get(str(interaction.user.id), 0)}",
+                    view=None)
 
-    async def retry(self, interaction, ctx, public, quick=False):
-        global scoreDict
-        if not public and str(interaction.user.name) != str(ctx.author.name):
-            print(f"oi {interaction.user.name} piss off")
-            return
-        scoreDict[str(interaction.user.id)] = 0
-        extra = ""
-        if quick:
-            print(f"{interaction.user.name} quick restarted")
-            extra = " (Quick Restarted)"
-        if random.random() < 1 / 2:
-            await interaction.response.edit_message(content=f"Score: 0{extra}", view=self.ri)
-        else:
-            await interaction.response.edit_message(content=f"Score: 0{extra}", view=self.le)
+            except Exception as error:
+                print("An error occurred:", type(error).__name__)
+                print(str(error))
 
-    async def quit(self, interaction, ctx):
-        if str(interaction.user.name) != str(ctx.author.name):
-            print(f"oi {interaction.user.name} piss off")
-            return
-        global scoreDict
-        global HSDict
-
-        try:
-
-            await interaction.response.edit_message(
-                content=f"High Score: {HSDict["High Score"]} ({ctx.guild.get_member(int(HSDict["Holder"]))})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {scoreDict.get(str(interaction.user.id), 0)}",
-                view=None)
-        except Exception as error:
-            print("An error occurred:", type(error).__name__)
-            print(str(error))
-
-    async def kill(self, interaction, ctx):
-        if str(interaction.user.name) != str(ctx.author.name):
-            print(f"oi {interaction.user.name} piss off")
-            return
-        await interaction.message.delete()
-
-    async def reveal(self, interaction, ctx):
-        global scoreDict
-        global HSDict
-        try:
-            await interaction.response.edit_message(content="Revealed.\n(You can dismiss this now)", view=None)
-            await interaction.channel.send(
-                content=f"``{interaction.user} used doors of doom``\nHigh Score: {HSDict["High Score"]} ({ctx.guild.get_member(int(HSDict["Holder"]))})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {scoreDict.get(str(interaction.user.id), 0)}",
-                view=None)
-
-        except Exception as error:
-            print("An error occurred:", type(error).__name__)
-            print(str(error))
-
-
-    async def givecorr(self, interaction, ctx, public: Optional[bool]):
-
-        async def corr(self):
-            interac = interaction
-            contxt = ctx
-            pub = public
+        async def corr(interaction: discord.Interaction):
 
             print("it at least RAN the function")
             try:
-                if not pub and str(interac.user.name) != str(contxt.author.name):
-                    print(f"oi {interac.user.name} piss off")
+                if not public and str(interaction.user.name) != str(ctx.author.name):
+                    print(f"oi {interaction.user.name} piss off")
                     return
                 global scoreDict
 
-                scoreDict[str(interac.user.id)] = scoreDict.get(str(interac.user.id), 0) + 1
+                scoreDict[str(interaction.user.id)] = scoreDict.get(str(interaction.user.id), 0) + 1
                 if random.random() < 1 / 2:
-                    await interac.response.edit_message(content=f"Score:{scoreDict.get(str(interac.user.id), 0)}",
-                                                            view=self.ri)
+                    await interaction.response.edit_message(content=f"Score:{scoreDict.get(str(interaction.user.id), 0)}",
+                                                            view=ri)
                 else:
-                    await interac.response.edit_message(content=f"Score:{scoreDict.get(str(interac.user.id), 0)}",
-                                                            view=self.le)
+                    await interaction.response.edit_message(content=f"Score:{scoreDict.get(str(interaction.user.id), 0)}",
+                                                            view=le)
             except Exception as error:
                 print("An error occurred:", type(error).__name__)
                 print(str(error))
                 print(error)
-        return corr
+
+        vfail = View(timeout=50)
+        ri = View(timeout=120)
+        le = View(timeout=120)
+
+        y = Button(label="Retry", style=discord.ButtonStyle.green)
+        y.callback = retry
+
+        n = Button(label="Save & Quit", style=discord.ButtonStyle.blurple)
+        n.callback = quit
+
+        k = Button(label="X", style=discord.ButtonStyle.red)
+        k.callback = kill
+
+        r = Button(label="Reveal", style=discord.ButtonStyle.gray)
+        r.callback = reveal
+
+        vfail.add_item(y)
+
+        vfail.add_item(n)
+
+        if ephem:
+            vfail.add_item(r)
+        else:
+            vfail.add_item(k)
+        b = Button(label="O🚪")
+        b.callback = corr
+        b2 = Button(label="X🚪")
+        b2.callback = fail
 
 
+        le.add_item(b)
+        le.add_item(b2)
 
+        ri.add_item(b2)
+        ri.add_item(b)
 
-
-    failpub = View(timeout=50)
-    failephem = View(timeout=50)
-
-    ri = View(timeout=120)
-    le = View(timeout=120)
-
-    y = Button(label="Retry", style=discord.ButtonStyle.green)
-    y.callback = retry
-
-    n = Button(label="Save & Quit", style=discord.ButtonStyle.blurple)
-    n.callback = quit
-
-    k = Button(label="X", style=discord.ButtonStyle.red)
-    k.callback = kill
-
-    r = Button(label="Reveal", style=discord.ButtonStyle.gray)
-    r.callback = reveal
-
-    failpub.add_item(y)
-    failephem.add_item(y)
-
-    failephem.add_item(n)
-    failpub.add_item(n)
-
-    failephem.add_item(r)
-
-    failpub.add_item(k)
-
-    b = Button(label="O🚪")
-    b.callback = corr
-    b2 = Button(label="X🚪")
-    b2.callback = fail
-    le.add_item(b)
-    le.add_item(b2)
-    ri.add_item(b2)
-    ri.add_item(b)
+        return [ri, le]
 
 
     @commands.Cog.listener()
@@ -255,20 +251,24 @@ class DoorStuff(commands.Cog):
         global HSDict
         scoreDict = {str(ctx.author.id): 0}
         print(f"{ctx.author.name} is {ephem} a ghost")
-
-
+        views = []
         try:
-            if random.random() < 1 / 2:
-                await ctx.send("Doors of doom\n https://imgur.com/a/nfXbOqZ", view=self.ri, ephemeral=ephem)
-            else:
-                await ctx.send("Doors of doom\n https://imgur.com/a/nfXbOqZ", view=self.le, ephemeral=ephem)
-
-
-
+            views = await self.genViewList(ctx, public, ephem)
         except Exception as error:
             print("An error occurred:", type(error).__name__)
             print(str(error))
 
+
+        try:
+           if random.random() < 1 / 2:
+                await ctx.send("Doors of doom\n https://imgur.com/a/nfXbOqZ", view=views[1], ephemeral=ephem)
+           else:
+                await ctx.send("Doors of doom\n https://imgur.com/a/nfXbOqZ", view=views[0], ephemeral=ephem)
+        except Exception as error:
+            print("An error occurred:", type(error).__name__)
+            print(str(error))
+
+    #TODO: adapt genViewList to have a daily mode & default mode, so this frickin thing can finally work
     @of_group.command(name="daily")
     async def daily(self, ctx, ephem: Optional[bool]):
         global scoreDict2
