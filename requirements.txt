@@ -1,3 +1,4 @@
+mcstatus
 discord.py
 python-dotenv
 ffmpeg
