@@ -20,3 +20,4 @@
 /.venv
 /.idea
 /discord.log
+/cogs/__pycache__
