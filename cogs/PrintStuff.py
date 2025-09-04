@@ -1,4 +1,5 @@
 import discord
+import mcstatus
 from discord.ext import commands
 from typing import Optional
 import random
@@ -75,9 +76,6 @@ class PrintStuff(commands.Cog):
             await message.reply("o7 on it", mention_author=False)
             bluff = False
 
-
-
-
     # ------------------------------------------Bluff----------------------------------------------------------#
     @commands.hybrid_command(name="bluff", brief = "Sometimes ya wanna tell e bot to do something, even if it can't.")
     async def fakeit(self, ctx):
@@ -96,17 +94,33 @@ class PrintStuff(commands.Cog):
         await ctx.send(f"<t:{1748565600}:R>")
         await self.bot.process_commands(ctx)
 
-    #----------------------------------------Hit singer Kasane Teto----------------------------------------------------#
-    @commands.hybrid_command(name = "test")
-    async def testjoin(self, ctx):
+    #-------------------------------Reports mc server status & players when requested--------------------------------#
+    @commands.hybrid_group(name = "server")
+    async def server(self, ctx):
+        print("obsolete")
+    @server.command(name = "up")
+    async def up(self, ctx):
+        print("o7")
         try:
-            vc = await ctx.author.voice.channel.connect()
-            await asyncio.sleep(2)
-            await ctx.channel.send(",join")
-        except Exception as e:
-            print(e)
-            print(str(e))
+            server = mcstatus.JavaServer.lookup("true-cigarette.gl.joinmc.link")
+            await ctx.send(f"yea {server.status().players.online} {"guys" if server.status().players.online > 1 else "guy" if server.status().players.online == 1 else "nobody"} on there")
+            dudes = server.status().players.sample
+            dudelist = ""
+            if len(dudes) > 1:
+                for dude in dudes:
+                    dudelist = dudelist + dude.name + ", "
+            elif len(dudes) == 1:
+                dudelist = dudes[0].name
+            if len(dudes) >=1:
+                await ctx.send(f"{dudelist}")
 
+            print(server.status())
+        except Exception as error:
+            await ctx.send("nope")
+            print(error)
+            print(str(error))
+
+    #----------------------------------------Hit singer Kasane Teto----------------------------------------------------#
 
     @commands.hybrid_group(name = "daily")
     async def daily(self, ctx):
@@ -132,39 +146,7 @@ class PrintStuff(commands.Cog):
             print(e)
             print(str(e))
 
-    #abandoned capital word extractor
-    '''
-    @bot.hybrid_command(name = "parse")
-    async def parse(ctx):
-        print("parsing")
-        with open("loreSnippet.txt", "r") as file:
 
-            capWords = [""]
-            hole = 0
-            currWord = ""
-            capFound = False
-            doc = file.read()
-
-            for char in doc:
-                if char.isupper():
-                    capFound = True
-                if capFound:
-                    currWord += char
-                    if char != "'" and not char.isalpha():
-                        capFound = False
-
-                        capWords[hole] = capWords[hole] + " " + currWord
-                        if len(capWords[hole]) > 1950:
-                            hole+= 1
-                            capWords.append("")
-
-                        currWord = ""
-            theChannel = bot.get_channel(786797850751139862)
-            print(len(capWords))
-            for silk in capWords:
-                await theChannel.send(silk)
-            print(capWords)
-    '''
     # ----------------------------------Deltarune tomorrow--------------------------------------------#
     @commands.hybrid_group(name="deltarune", brief="tomorrow")
     async def deltarune(self, ctx):
@@ -174,6 +156,8 @@ class PrintStuff(commands.Cog):
     async def tomorrow(self, ctx):
         await ctx.reply("Deltarune tomorrow", mention_author=False)
         await self.bot.process_commands(ctx)
+
+    #----------------------command I made once as a joke to dm mariofan and fake being a bluff but kept---------------#
     sad = [
     "https://tenor.com/view/dog-crying-meme-doggo-crys-megan-soo-crying-dog-gif-5276199764143986284",
     "https://tenor.com/view/sad-walk-gif-24718162",
@@ -213,7 +197,9 @@ class PrintStuff(commands.Cog):
         try:
             await ctx.send("o7 on it")
             await asyncio.sleep(120)
+
             guy = await self.bot.fetch_user(405197452833062912)
+
             await guy.send(self.sad[random.randint(0, len(self.sad) - 1)])
         except Exception as e:
             print(e)
@@ -331,59 +317,6 @@ class PrintStuff(commands.Cog):
             print(str(error))
 
 
-    # ----------------------------------Odyssey, ya see. Odyssey, ya see.------------------------------------------#
-    @commands.hybrid_group(name = "odyssey")
-    async def odyssey(self, ctx):
-        try:
-            print("trying odyssey")
-            class MyModal(discord.ui.Modal, title='Enter Your Feedback'):
-                feedback_input = discord.ui.TextInput(
-                    label='Your Feedback',
-                    style=discord.TextStyle.paragraph,
-                    placeholder='Tell us what you think...',
-                    required=True,
-                    max_length=500
-                )
-
-                async def on_submit(self, interaction: discord.Interaction):
-                    await interaction.response.send_message(f'Thanks for your feedback: "{self.feedback_input.value}"',
-                                                            ephemeral=True)
-            print("gonna try sending")
-
-            await ctx.send(MyModal())
-        except Exception as error:
-            print("An error occurred:", type(error).__name__)
-            print(str(error))
-
-    async def oddyspeak(self, message: discord.Message) -> string:
-        mess = message.content.lower()
-        result = message.content
-        print(result)
-        if "ington" in mess:
-            result = result.replace("ington", "")
-        if "josh" in mess:
-            result = re.sub("josh", "Josh <:crazy:1178765587929890877>", flags=re.IGNORECASE)
-        if "mariofan" in mess:
-            result = re.sub("mariofan", "Mariofan <:mewrlefan:1399225627655147550>", flags=re.IGNORECASE)
-        elif "mario" in mess and "fan" not in mess:
-            result = re.sub("mario", "Mariofan <:mewrlefan:1399225627655147550>", flags=re.IGNORECASE)
-        if "edwosk" in mess:
-            result = re.sub("edwosk", "Edwosk <:riskwosk:1363696488068153445>", flags=re.IGNORECASE)
-        if "astro" in mess:
-            result = re.sub("astro", "Astro <:green_sus:786757714121457664>", flags=re.IGNORECASE)
-        if "naut" in mess:
-            result.replace("naut", "")
-        if "cb" in mess:
-            result = re.sub("cb", "CB <:SmugPac:833531321061343232>", flags=re.IGNORECASE)
-        if "omar" in mess:
-            result = re.sub("omar", "Omar <:welp:1363696460343804004>", flags=re.IGNORECASE)
-        if "rover" in mess:
-            result = re.sub("rover", "Rover <:Maxwell_I_Guess:1400716442697072651>", flags=re.IGNORECASE)
-        elif "rov" in mess:
-            result = re.sub("rov", "Rover <:Maxwell_I_Guess:1400716442697072651>", flags=re.IGNORECASE)
-        if "anth" in mess:
-            result = re.sub("anth", "Anth <:anth:1363704263402061985>", flags=re.IGNORECASE)
-        return result
 
 async def setup(bot):
     await bot.add_cog(PrintStuff(bot))
