@@ -9,11 +9,11 @@ uncensored yoshi and me's are missing,
 all the quotes, and HighScore.txt
 I'll probably add dummy files for them later so the bot doesn't crash and burn since they're missing.
 
-Doors of doom...works, probably. I haven't *tested* it all too much, but it worked as expected.
-(I forgot to clear the labels of correct and wrong door I used for testing actually... oops)
+Doors of doom seems functional, and doors of daily now also seems functional, 
+though it still doesn't automatically reset the list of people who've done it for the day,
+effectively making it doors of permenant until then.
 
-
-Doors of scores still doesn't really exist, but it should just be a matter of tweaking genViewList
-to give some views that don't intersect with views from doors of doom, and adding an if statement
-that prevents you from sending the interaction if it's the same day as your last run.
-
+Goals left: add loop to check & announce server status every 5 minutes and on boot
+add loop to check & reset dailist every hour, and on boot
+add convenient way to automatically add to quote lists (maybe a way to manually add images, possibly through tree?)
+allow bot to detect and un server mute self to counter a certain nerd
