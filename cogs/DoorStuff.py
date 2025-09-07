@@ -79,13 +79,16 @@ class DoorStuff(commands.Cog):
                 except Exception as error:
                     print(f"An error occurred:", type(error).__name__)
                     print(str(error))
+                extra = "Try again?"
+                if dailymode:
+                    extra = "Try aga-\noh wait you CAN'T"
                 if ephem:
                     await interaction.response.edit_message(
-                        content=f"{failedStr}High Score: {HSDict["High Score"]} ({holder})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}.\n Try again?",
+                        content=f"{failedStr}High Score: {HSDict["High Score"]} ({holder})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}.\n{extra}",
                         view=vfail)
                 else:
                     await interaction.response.edit_message(
-                        content=f"{failedStr}High Score: {HSDict["High Score"]} ({holder})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}.\n Try again?",
+                        content=f"{failedStr}High Score: {HSDict["High Score"]} ({holder})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}.\n{extra}",
                         view=vfail)
 
 
@@ -101,7 +104,10 @@ class DoorStuff(commands.Cog):
             extra = ""
             if quick:
                 print(f"{interaction.user.name} quick restarted")
-                extra = " (Quick Restarted)"
+                if dailymode:
+                    extra = " (YOU FA- oh quick restarts are still a thing.)\n(I'm so nice for that)"
+                else:
+                    extra = " (Quick Restarted)"
             if random.random() < 1 / 2:
                 await interaction.response.edit_message(content=f"Score: 0{extra}", view=ri)
             else:
@@ -313,9 +319,9 @@ class DoorStuff(commands.Cog):
 
         try:
            if random.random() < 1 / 2:
-                await ctx.send("Doors of Daily, think you're lucky?\n https://tenor.com/view/niko-ballin-one-shot-gif-26638177", view=views[1], ephemeral=ephem)
+                await ctx.send("Doors of Daily, think you're lucky?\nhttps://tenor.com/view/oneshot-ballin-gif-8940602852183524649", view=views[1], ephemeral=ephem)
            else:
-                await ctx.send("Doors of Daily, think you're lucky?\n https://tenor.com/view/niko-ballin-one-shot-gif-26638177", view=views[0], ephemeral=ephem)
+                await ctx.send("Doors of Daily, think you're lucky?\nhttps://tenor.com/view/oneshot-ballin-gif-8940602852183524649", view=views[0], ephemeral=ephem)
         except Exception as error:
             print("An error occurred:", type(error).__name__)
             print(str(error))
