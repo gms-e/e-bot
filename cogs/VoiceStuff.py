@@ -63,7 +63,8 @@ class VoiceStuff(commands.Cog):
         j = 0
         for cue in queue:
             if random.random() < 1 / 100:
-               queue[j] = "music/LonkPastBoss.mp3"
+                print(f"{j} : {cue} is now lonk")
+                queue[j] = "music/LonkPastBoss.mp3"
 
         try:
             print(queue[count])
@@ -147,9 +148,13 @@ class VoiceStuff(commands.Cog):
         await ctx.bot.process_commands(ctx)
 
     @boost.command(name="debate")
-    async def debate(self, ctx, nada = None):
+    async def debate(self, ctx):
         print("trying debate")
-        await self.playSong(self, ctx, "music/boost.mp3")
+        try:
+            await self.playSong(ctx,"music/boost.mp3", True)
+        except Exception as error:
+            print("An error occurred:", type(error).__name__)
+            print(str(error))
         print("worked")
         await self.bot.process_commands(ctx)
 
