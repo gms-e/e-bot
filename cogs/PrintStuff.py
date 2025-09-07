@@ -100,10 +100,10 @@ class PrintStuff(commands.Cog):
         print("obsolete")
     @server.command(name = "up")
     async def up(self, ctx):
-        print("o7")
+        sessage = await ctx.send("uh")
         try:
             server = mcstatus.JavaServer.lookup("true-cigarette.gl.joinmc.link")
-            await ctx.send(f"yea {server.status().players.online} {"guys" if server.status().players.online > 1 else "guy" if server.status().players.online == 1 else "nobody"} on there")
+            await sessage.edit(content = f"yea {server.status().players.online} {"guys" if server.status().players.online > 1 else "guy" if server.status().players.online == 1 else "nobody"} on there")
             dudes = server.status().players.sample
             dudelist = ""
             if len(dudes) > 1:
@@ -113,12 +113,14 @@ class PrintStuff(commands.Cog):
                 dudelist = dudes[0].name
             if len(dudes) >=1:
                 await ctx.send(f"{dudelist}")
-
             print(server.status())
-        except Exception as error:
-            await ctx.send("nope")
-            print(error)
-            print(str(error))
+        except Exception as e:
+            await sessage.edit(content = "nope")
+
+    @up.error
+    async def mcstatus_error(self, ctx, error):
+        print(f"trying, but {error}")
+        await ctx.send("nope")
 
     #----------------------------------------Hit singer Kasane Teto----------------------------------------------------#
 
