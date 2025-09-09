@@ -31,7 +31,7 @@ class DoorStuff(commands.Cog):
                     print(type(error).__name__)
                     print(str(error))
                 return
-            print(f"{interaction.user.name} ended daily with {gdict.get(str(interaction.user.id), 0)}")
+            print(f"{interaction.user.name} ended with {gdict.get(str(interaction.user.id), 0)}")
 
             with open('HighScore.txt', 'r') as f:
                 try:
@@ -54,7 +54,7 @@ class DoorStuff(commands.Cog):
                         f.write(str(HSDict))
                 if gdict.get(str(interaction.user.id), 0) == HSDict.get("High Score", 0):
                     if str(interaction.user.id) not in HSDict["Holder"]:
-                        HSDict["Holder"] = f"{HSDict["Holder"]}  & {interaction.user.id}"
+                        HSDict["Holder"] = f"{HSDict['Holder']}  & {interaction.user.id}"
                         with open('HighScore.txt', 'w') as f:
                             f.write(str(HSDict))
                 global holder
@@ -84,11 +84,11 @@ class DoorStuff(commands.Cog):
                     extra = "Try aga-\noh wait you CAN'T"
                 if ephem:
                     await interaction.response.edit_message(
-                        content=f"{failedStr}High Score: {HSDict["High Score"]} ({holder})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}.\n{extra}",
+                        content=f"{failedStr}High Score: {HSDict['High Score']} ({holder})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}.\n{extra}",
                         view=vfail)
                 else:
                     await interaction.response.edit_message(
-                        content=f"{failedStr}High Score: {HSDict["High Score"]} ({holder})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}.\n{extra}",
+                        content=f"{failedStr}High Score: {HSDict['High Score']} ({holder})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}.\n{extra}",
                         view=vfail)
 
 
@@ -122,7 +122,7 @@ class DoorStuff(commands.Cog):
             try:
 
                 await interaction.response.edit_message(
-                    content=f"High Score: {HSDict["High Score"]} ({ctx.guild.get_member(int(HSDict["Holder"]))})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}",
+                    content=f"High Score: {HSDict['High Score']} ({ctx.guild.get_member(int(HSDict['Holder']))})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}",
                     view=None)
             except Exception as error:
                 print("An error occurred:", type(error).__name__)
@@ -139,7 +139,7 @@ class DoorStuff(commands.Cog):
             try:
                 await interaction.response.edit_message(content="Revealed.\n(You can dismiss this now)", view=None)
                 await interaction.channel.send(
-                    content=f"``{interaction.user} used doors of doom``\nHigh Score: {HSDict["High Score"]} ({ctx.guild.get_member(int(HSDict["Holder"]))})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}",
+                    content=f"``{interaction.user} used doors of doom``\nHigh Score: {HSDict['High Score']} ({ctx.guild.get_member(int(HSDict['Holder']))})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}",
                     view=None)
 
             except Exception as error:
