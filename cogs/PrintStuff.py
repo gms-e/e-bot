@@ -103,7 +103,12 @@ class PrintStuff(commands.Cog):
         sessage = await ctx.send("uh")
         try:
             server = mcstatus.JavaServer.lookup("true-cigarette.gl.joinmc.link")
-            await sessage.edit(content = f"yea {server.status().players.online} {"guys" if server.status().players.online > 1 else "guy" if server.status().players.online == 1 else "nobody"} on there")
+            server.status().players.online
+            if random.random() < 1/90:
+                await sessage.edit(content="Nope...")
+                return
+            else:
+                await sessage.edit(content = f"yea {server.status().players.online} {"guys" if server.status().players.online > 1 else "guy" if server.status().players.online == 1 else "nobody"} on there")
             dudes = server.status().players.sample
             dudelist = ""
             if len(dudes) > 1:
@@ -115,12 +120,17 @@ class PrintStuff(commands.Cog):
                 await ctx.send(f"{dudelist}")
             print(server.status())
         except Exception as e:
-            await sessage.edit(content = "nope")
+            if random.random() < 1/90:
+                await sessage.edit(content="Yeah One guy one there")
+                await sessage.channel.send("Mariofan527")
+
+            else:
+                await sessage.edit(content = "nope")
 
     @up.error
     async def mcstatus_error(self, ctx, error):
         print(f"trying, but {error}")
-        await ctx.send("nope")
+        await ctx.send("idk something broke")
 
     #----------------------------------------Hit singer Kasane Teto----------------------------------------------------#
 
