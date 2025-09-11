@@ -230,7 +230,7 @@ class DoorStuff(commands.Cog):
             tmp = HSDict.copy()
             del tmp["Holder"]
 
-            tmp = HSDict(sorted(tmp.items(), key=lambda item: item[1], reverse=True))
+            tmp = dict(sorted(tmp.items(), key=lambda item: item[1], reverse=True))
             display = {}
             for s in tmp:
                 try:
