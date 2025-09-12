@@ -1,7 +1,7 @@
 import string
 from argparse import BooleanOptionalAction
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import asyncio
 # import interactions
 import logging
@@ -11,7 +11,9 @@ from discord import app_commands
 from typing import Optional
 import random
 import ffmpeg
+import datetime
 load_dotenv()
+
 
 
 token = os.getenv("DISCORD_TOKEN")#you're not getting my bot token that easy
@@ -28,7 +30,6 @@ intents.moderation = True
 intents.webhooks = True
 #slashClient = discord.Client(intents=intents)#slash command
 bot = commands.AutoShardedBot(command_prefix=["e, ", "E, ", ",e ", ",E ", "jarvis, ", "mods, ", "e "], intents=intents)
-EDWOSKcount = 0
 messageCount = 0
 #----------------------------------slash command stuff ----------------------------------------------#
 #@bot.event
@@ -40,8 +41,62 @@ messageCount = 0
 async def on_ready():
     print(f'{bot.user} has connected to Discord! Version {discord.__version__}')
     synced = await bot.tree.sync()
-
+    try:
+        await timechecks.start()
+    except Exception as error:
+        print(error)
+        print(str(error))
     print(f"bot ready")
+
+@tasks.loop(minutes=30) # Runs every 60 seconds (adjust as needed)
+async def timechecks():
+    checker = bot.get_cog("PrintStuff")
+
+    servNum = -1
+    try:
+        with open("serverStat.txt", 'r') as f:
+            line = f.readline()
+            servNum = int(line.strip())  # Strip whitespace and convert to int
+    except FileNotFoundError:
+        with open("serverStat.txt", "x") as f:
+            f.write("0")
+            print("made a file since it wasn't there, running as if was offline")
+
+    if checker.sup == 1 and servNum <= 0:
+        print("server up and used to be offline")
+        with open("serverStat.txt", "w") as f:
+            f.write("1")
+        await bot.get_channel(1264704750633619486).send("Server up")
+    else:
+        print("server offline")
+        with open("serverStat.txt", "w") as f:
+            f.write("0")
+
+    currday = datetime.datetime.today().weekday()
+    serday = -1
+    #TODO: combine all persistent memory into one dict JSON file, because this is getting ridiculous
+
+    try:
+        with open("weeknum.txt", 'r') as f:
+            line = f.readline()
+            serday = int(line.strip())  # Strip whitespace and convert to int
+    except FileNotFoundError:
+        with open("weeknum.txt", "x") as f:
+            f.write(f"{datetime.datetime.today().weekday()}")
+            serday = 999
+            print("made a file since it wasn't there, running as if different day")
+    except ValueError:
+        print(f"something went HORRIBLY wrong with the file somehow")
+    if currday == serday:
+        print("same day")
+    else:
+        with open("weeknum.txt", "w") as f:
+            f.write(f"{datetime.datetime.today().weekday()}")
+        with open("dailist.json", "w") as f:
+            f.write(str({}))
+            return None
+        #TODO: add warndle, a warning for the last 30 min of the day IF nobody's done the wordle yet
+
 
 
 ############################stolen because I'm not paid######################
@@ -106,17 +161,7 @@ async def on_message(message):
     if message.author == bot.user:
         return
     lower = message.content.lower()
-    if "Left voice channel!" in message.content and "input_command" in str(message.type):
-        print("yeeting nerd")
 
-        josh = message.guild.get_member(721389007426158633) #await bot.fetch_user(721389007426158633)
-        print(josh)
-        try:
-            await josh.move_to(None)
-        except Exception as e:
-            print(e)
-            print(str(e))
-        print("yote")
 #----------------------------------Kys catcher--------------------------------------------#
     if "kys" in lower or "kill yourself" in lower:
 

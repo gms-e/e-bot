@@ -132,6 +132,17 @@ class PrintStuff(commands.Cog):
         print(f"trying, but {error}")
         await ctx.send("idk something broke")
 
+    #helper command for checking if server is up in main, exists to avoid importing mcstatus *again* in main
+    async def sup(self):
+        try:
+            server = mcstatus.JavaServer.lookup("true-cigarette.gl.joinmc.link")
+            server.status().players.online
+            print("Server online")
+            return 1
+        except Exception as e:
+            print("Server offline")
+            return 0
+
     #----------------------------------------Hit singer Kasane Teto----------------------------------------------------#
 
     @commands.hybrid_group(name = "daily")

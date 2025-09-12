@@ -22,3 +22,5 @@
 /discord.log
 /cogs/__pycache__
 dailist.json
+serverStat.txt
+weeknum.txt
