@@ -68,17 +68,6 @@ class DoorStuff(commands.Cog):
                 if "None" in str(holder):
                     holder = "Some guy who ain't here"
 
-                don = {}
-                try:
-                    with open("dailist.json", "r") as f:
-                        don = eval(f.read())
-
-                    with open("dailist.json", "w") as f:
-                        don[str(interaction.user.id)] = True
-                        f.write(str(don))
-                except Exception as error:
-                    print(f"An error occurred:", type(error).__name__)
-                    print(str(error))
                 extra = "Try again?"
                 if dailymode:
                     extra = "Try aga-\noh wait you CAN'T"
@@ -138,8 +127,9 @@ class DoorStuff(commands.Cog):
             global HSDict
             try:
                 await interaction.response.edit_message(content="Revealed.\n(You can dismiss this now)", view=None)
+
                 await interaction.channel.send(
-                    content=f"``{interaction.user} used doors of doom``\nHigh Score: {HSDict['High Score']} ({ctx.guild.get_member(int(HSDict['Holder']))})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}",
+                    content=f"``{interaction.user} used doors of {"daily" if dailymode else "doom" }``\nHigh Score: {HSDict['High Score']} ({ctx.guild.get_member(int(HSDict['Holder']))})\nPersonal Best: {HSDict.get(str(interaction.user.id), 0)}\nScore: {gdict.get(str(interaction.user.id), 0)}",
                     view=None)
 
             except Exception as error:
@@ -298,7 +288,15 @@ class DoorStuff(commands.Cog):
             await ctx.send("Ya did it already -. -", ephemeral=ephem)
             return
         else:
-            done[ctx.author.id] = False
+            try:
+                with open("dailist.json", "w") as f:
+                    print("assigning done")
+                    done[str(ctx.author.id)] = True
+                    print("done")
+                    f.write(str(done))
+            except Exception as error:
+                print(f"An error occurred:", type(error).__name__)
+                print(str(error))
         print("made it past done check")
 
         if "true" in str(ephem).lower():
