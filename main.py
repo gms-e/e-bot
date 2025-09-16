@@ -62,13 +62,15 @@ async def timechecks():
             f.write("0")
             print("made a file since it wasn't there, running as if was offline")
 
-    if checker.sup == 1 and servNum <= 0:
+    if await checker.sup() == 1 and servNum <= 0:
         print("server up and used to be offline")
         with open("serverStat.txt", "w") as f:
             f.write("1")
         await bot.get_channel(1264704750633619486).send("Server up")
+    elif await checker.sup() == 1 and servNum == 1:
+        print("server up and used to be online")
     else:
-        print("server offline")
+        print("Server not up")
         with open("serverStat.txt", "w") as f:
             f.write("0")
 
