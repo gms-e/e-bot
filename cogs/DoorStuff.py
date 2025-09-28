@@ -5,6 +5,7 @@ import random
 from discord.ui import Button, View
 import asyncio
 import string
+import datetime
 
 class DoorStuff(commands.Cog):
     def __init__(self, bot):
@@ -273,6 +274,32 @@ class DoorStuff(commands.Cog):
 
     @of_group.command(name="daily")
     async def daily(self, ctx, ephem: Optional[bool]):
+        #checks if day has changed and resets dailist if so
+        currday = datetime.datetime.today().weekday()
+        serday = -1
+        # TODO: combine all persistent memory into one dict JSON file, because this is getting ridiculous
+
+        try:
+            with open("weeknum.txt", 'r') as f:
+                line = f.readline()
+                serday = int(line.strip())  # Strip whitespace and convert to int
+        except FileNotFoundError:
+            with open("weeknum.txt", "x") as f:
+                f.write(f"{datetime.datetime.today().weekday()}")
+                serday = 999
+                print("made a file since it wasn't there, running as if different day")
+        except ValueError:
+            print(f"something went HORRIBLY wrong with the file somehow")
+        if currday == serday:
+            print("same day")
+        else:
+            with open("weeknum.txt", "w") as f:
+                f.write(f"{datetime.datetime.today().weekday()}")
+            with open("dailist.json", "w") as f:
+                f.write(str({}))
+
+
+        #checks dailist regardless of day change or not
         done = {}
         try:
             with open("dailist.json", "r") as f:

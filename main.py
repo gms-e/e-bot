@@ -74,29 +74,6 @@ async def timechecks():
         with open("serverStat.txt", "w") as f:
             f.write("0")
 
-    currday = datetime.datetime.today().weekday()
-    serday = -1
-    #TODO: combine all persistent memory into one dict JSON file, because this is getting ridiculous
-
-    try:
-        with open("weeknum.txt", 'r') as f:
-            line = f.readline()
-            serday = int(line.strip())  # Strip whitespace and convert to int
-    except FileNotFoundError:
-        with open("weeknum.txt", "x") as f:
-            f.write(f"{datetime.datetime.today().weekday()}")
-            serday = 999
-            print("made a file since it wasn't there, running as if different day")
-    except ValueError:
-        print(f"something went HORRIBLY wrong with the file somehow")
-    if currday == serday:
-        print("same day")
-    else:
-        with open("weeknum.txt", "w") as f:
-            f.write(f"{datetime.datetime.today().weekday()}")
-        with open("dailist.json", "w") as f:
-            f.write(str({}))
-            return None
         #TODO: add warndle, a warning for the last 30 min of the day IF nobody's done the wordle yet
 
 
