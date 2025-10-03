@@ -181,7 +181,7 @@ class PrintStuff(commands.Cog):
                     day = int(line.strip())  # Strip whitespace and convert to int
             except FileNotFoundError:
                 with open("updayt.txt", "x") as f:
-                    f.write("4")
+                    f.write("2")
                     day= 2
                     print("made a file since it wasn't there, running as if was offline")
 
@@ -195,9 +195,13 @@ class PrintStuff(commands.Cog):
 
                 case 1:
                     await channel.send("https://tenor.com/view/majoras-mask-majora-zelda-final-day-gif-26658556")
-            if day == 0:
-                with open("updayt.txt", "w") as f:
-                    f.write("1")
+                case 0:
+                    await channel.send("well, this is ackward. Hopefully you never see this message, 'cause it means I done did messed up and missed the deadline")
+                case _:
+                    await channel.send(f"I don't know what I am doing. {day} days left, this message shouldn't be possible to see and only exists for error handling.")
+
+            with open("updayt.txt", "w") as f:
+                f.write(f"{day}")
 
     #--------------------------------Check anim days left----------------------------------------------#
     @commands.hybrid_group(name = "animation")
@@ -216,10 +220,12 @@ class PrintStuff(commands.Cog):
                 day = int(line.strip())  # Strip whitespace and convert to int
         except FileNotFoundError:
             with open("updayt.txt", "x") as f:
-                f.write("4")
+                f.write("2")
                 day = 2
                 print("made a file since it wasn't there, running as if was offline")
         match day:
+            case 4:
+                await ctx.send("4 days left technically, made progress today .-.")
             case 3:
                 await ctx.send(f"3 days :D")
             case 2:
@@ -231,6 +237,18 @@ class PrintStuff(commands.Cog):
             case _:
                 await ctx.send(f"like {day}, he done messed up now. what a nerd")
 
+    @animation.hybrid_group(name = "time")
+    async def time(self, ctx):
+        print("obsolete")
+    @time.hybrid_group(name = "reset")
+    async def reset(self, ctx):
+        if ctx.author.id != 702906770003198003 or ctx.author.id != 405197452833062912:
+            await ctx.send("Imma don't think you're allowed to do dat")
+            await ctx.send("https://tenor.com/view/luigi-coo-coo-crazy-luigis-mansion-dark-moon-gif-1213275346224547321")
+            return
+        with open("updayt.txt", "w") as f:
+            f.write(f"4")
+        await ctx.send("o7 he gets time now")
 
 
     # ----------------------------------Deltarune tomorrow--------------------------------------------#
