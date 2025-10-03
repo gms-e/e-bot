@@ -1,6 +1,6 @@
 import discord
 import mcstatus
-from discord.ext import commands
+from discord.ext import commands, tasks
 from typing import Optional
 import random
 import asyncio
@@ -170,7 +170,7 @@ class PrintStuff(commands.Cog):
             print(str(e))
 
     #-----------------------------------Anim progress tracker-----------------------------------------#
-    @commands.tasks.loop(minutes=120.0)
+    @tasks.loop(minutes=120.0)
     async def task(self):
         channel = await self.bot.get_channel(1282010600322629652)
         if datetime.now().hour == 0 or datetime.now().hour == 23:
@@ -208,10 +208,10 @@ class PrintStuff(commands.Cog):
     async def animation(self, ctx):
         print("obsolete")
 
-    @animation.hybrid_group(name = "due")
+    @animation.group(name = "due")
     async def due(self, ctx):
         print("obsolete")
-    @due.hybrid_group(name = "in")
+    @due.command(name = "in")
     async def within(self, ctx):
         day = -1
         try:
@@ -237,10 +237,10 @@ class PrintStuff(commands.Cog):
             case _:
                 await ctx.send(f"like {day}, he done messed up now. what a nerd")
 
-    @animation.hybrid_group(name = "time")
-    async def time(self, ctx):
+    @animation.group(name = "time")
+    async def tiempo(self, ctx):
         print("obsolete")
-    @time.hybrid_group(name = "reset")
+    @tiempo.command(name = "reset")
     async def reset(self, ctx):
         if ctx.author.id != 702906770003198003 or ctx.author.id != 405197452833062912:
             await ctx.send("Imma don't think you're allowed to do dat")
