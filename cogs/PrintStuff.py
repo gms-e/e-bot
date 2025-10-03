@@ -169,6 +169,69 @@ class PrintStuff(commands.Cog):
             print(e)
             print(str(e))
 
+    #-----------------------------------Anim progress tracker-----------------------------------------#
+    @commands.tasks.loop(minutes=120.0)
+    async def task(self):
+        channel = await self.bot.get_channel(1282010600322629652)
+        if datetime.now().hour == 0 or datetime.now().hour == 23:
+            day = -1
+            try:
+                with open("updayt.txt", 'r') as f:
+                    line = f.readline()
+                    day = int(line.strip())  # Strip whitespace and convert to int
+            except FileNotFoundError:
+                with open("updayt.txt", "x") as f:
+                    f.write("4")
+                    day= 2
+                    print("made a file since it wasn't there, running as if was offline")
+
+            day -= 1
+            match day:
+                case 3:
+                    await channel.send("3 days left :D\n**procrastinate.**")
+                case 2:
+                    await channel.send("2 days left :)")
+                    await channel.send(file=discord.File("timesatickin.png"))
+
+                case 1:
+                    await channel.send("https://tenor.com/view/majoras-mask-majora-zelda-final-day-gif-26658556")
+            if day == 0:
+                with open("updayt.txt", "w") as f:
+                    f.write("1")
+
+    #--------------------------------Check anim days left----------------------------------------------#
+    @commands.hybrid_group(name = "animation")
+    async def animation(self, ctx):
+        print("obsolete")
+
+    @animation.hybrid_group(name = "due")
+    async def due(self, ctx):
+        print("obsolete")
+    @due.hybrid_group(name = "in")
+    async def within(self, ctx):
+        day = -1
+        try:
+            with open("updayt.txt", 'r') as f:
+                line = f.readline()
+                day = int(line.strip())  # Strip whitespace and convert to int
+        except FileNotFoundError:
+            with open("updayt.txt", "x") as f:
+                f.write("4")
+                day = 2
+                print("made a file since it wasn't there, running as if was offline")
+        match day:
+            case 3:
+                await ctx.send(f"3 days :D")
+            case 2:
+                await ctx.send(f"2 days")
+                await ctx.send(file=discord.File("timesatickin.png"))
+            case 1:
+                await ctx.send(f"TODAY.")
+                await ctx.send("https://tenor.com/view/majoras-mask-majora-zelda-final-day-gif-26658556")
+            case _:
+                await ctx.send(f"like {day}, he done messed up now. what a nerd")
+
+
 
     # ----------------------------------Deltarune tomorrow--------------------------------------------#
     @commands.hybrid_group(name="deltarune", brief="tomorrow")
