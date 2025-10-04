@@ -251,7 +251,7 @@ class PrintStuff(commands.Cog):
         print("obsolete")
     @tiempo.command(name = "reset")
     async def reset(self, ctx):
-        if ctx.author.id != 702906770003198003 or ctx.author.id != 405197452833062912:
+        if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912):
             await ctx.send("Imma don't think you're allowed to do dat")
             await ctx.send("https://tenor.com/view/luigi-coo-coo-crazy-luigis-mansion-dark-moon-gif-1213275346224547321")
             return
