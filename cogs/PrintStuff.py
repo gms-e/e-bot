@@ -15,7 +15,11 @@ bluff = False
 class PrintStuff(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.task.start()
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Print Stuff online")
 
     #-----------------------------------------
     @commands.Cog.listener()
@@ -170,38 +174,43 @@ class PrintStuff(commands.Cog):
             print(str(e))
 
     #-----------------------------------Anim progress tracker-----------------------------------------#
-    @tasks.loop(minutes=120.0)
+    @tasks.loop(minutes=120)
     async def task(self):
-        channel = await self.bot.get_channel(1282010600322629652)
-        if datetime.now().hour == 0 or datetime.now().hour == 23:
-            day = -1
-            try:
-                with open("updayt.txt", 'r') as f:
-                    line = f.readline()
-                    day = int(line.strip())  # Strip whitespace and convert to int
-            except FileNotFoundError:
-                with open("updayt.txt", "x") as f:
-                    f.write("2")
-                    day= 2
-                    print("made a file since it wasn't there, running as if was offline")
+        try:
+            channel = self.bot.get_channel(1282010600322629652)
+            if datetime.datetime.now().hour == 0 or datetime.datetime.now().hour == 23:
+                day = -1
+                try:
+                    with open("updayt.txt", 'r') as f:
+                        line = f.readline()
+                        day = int(line.strip())  # Strip whitespace and convert to int
+                except FileNotFoundError:
+                    with open("updayt.txt", "x") as f:
+                        f.write("2")
+                        day= 2
+                        print("made a file since it wasn't there, running as if was offline")
 
-            day -= 1
-            match day:
-                case 3:
-                    await channel.send("3 days left :D\n**procrastinate.**")
-                case 2:
-                    await channel.send("2 days left :)")
-                    await channel.send(file=discord.File("timesatickin.png"))
+                day -= 1
+                match day:
+                    case 3:
 
-                case 1:
-                    await channel.send("https://tenor.com/view/majoras-mask-majora-zelda-final-day-gif-26658556")
-                case 0:
-                    await channel.send("well, this is ackward. Hopefully you never see this message, 'cause it means I done did messed up and missed the deadline")
-                case _:
-                    await channel.send(f"I don't know what I am doing. {day} days left, this message shouldn't be possible to see and only exists for error handling.")
+                        await channel.send("3 days left :D\n**procrastinate.**")
+                    case 2:
+                        await channel.send("2 days left :)")
+                        await channel.send(file=discord.File("timesatickin.png"))
 
-            with open("updayt.txt", "w") as f:
-                f.write(f"{day}")
+                    case 1:
+                        await channel.send("https://tenor.com/view/majoras-mask-majora-zelda-final-day-gif-26658556")
+                    case 0:
+                        await channel.send("well, this is ackward. Hopefully you never see this message, 'cause it means I done did messed up and missed the deadline")
+                    case _:
+                        await channel.send(f"I don't know what I am doing. {day} days left, this message shouldn't be possible to see and only exists for error handling.")
+
+                with open("updayt.txt", "w") as f:
+                    f.write(f"{day}")
+        except Exception as e:
+            print(e)
+            print(str(e))
 
     #--------------------------------Check anim days left----------------------------------------------#
     @commands.hybrid_group(name = "animation")
