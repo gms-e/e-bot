@@ -90,18 +90,21 @@ class DoorStuff(commands.Cog):
             if not public and str(interaction.user.name) != str(ctx.author.name):
                 print(f"oi {interaction.user.name} piss off")
                 return
-            gdict[str(interaction.user.id)] = 0
+            if gdict[str(interaction.user.id)] <= 0 and dailymode:
+                gdict[str(interaction.user.id)] -= 1
+            else:
+                gdict[str(interaction.user.id)] = 0
             extra = ""
             if quick:
                 print(f"{interaction.user.name} quick restarted")
                 if dailymode:
-                    extra = " (YOU FA- oh quick restarts are still a thing.)\n(I'm so nice for that)"
+                    extra = " (YOU FA- actually, you know what?)\n(NEGATIVE TIME)"
                 else:
                     extra = " (Quick Restarted)"
             if random.random() < 1 / 2:
-                await interaction.response.edit_message(content=f"Score: 0{extra}", view=ri)
+                await interaction.response.edit_message(content=f"Score: {gdict[str(interaction.user.id)]}{extra}", view=ri)
             else:
-                await interaction.response.edit_message(content=f"Score: 0{extra}", view=le)
+                await interaction.response.edit_message(content=f"Score: {gdict[str(interaction.user.id)]}{extra}", view=le)
 
         async def quit(interaction: discord.Interaction):
             if str(interaction.user.name) != str(ctx.author.name):
@@ -143,8 +146,10 @@ class DoorStuff(commands.Cog):
                 if not public and str(interaction.user.name) != str(ctx.author.name):
                     print(f"oi {interaction.user.name} piss off")
                     return
-
-                gdict[str(interaction.user.id)] = gdict.get(str(interaction.user.id), 0) + 1
+                if gdict[str(interaction.user.id)] < 0 and dailymode:
+                    gdict[str(interaction.user.id)] -= 1
+                else:
+                    gdict[str(interaction.user.id)] = gdict.get(str(interaction.user.id), 0) + 1
                 if random.random() < 1 / 2:
                     await interaction.response.edit_message(content=f"Score:{gdict.get(str(interaction.user.id), 0)}",
                                                             view=ri)
