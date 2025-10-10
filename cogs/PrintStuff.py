@@ -146,6 +146,22 @@ class PrintStuff(commands.Cog):
         except Exception as e:
             print("Server offline")
             return 0
+    #------------------------------------Server role management---------------------------------------------#
+    @server.group(name = "role")
+    async def role(self, ctx):
+        print("obsolete")
+
+    @role.command(name = "add")
+    async def role_add(self, ctx):
+        await ctx.author.add_roles(ctx.author.guild.get_role(1426289745784340591))
+        await ctx.send("o7 you're in")
+
+    @role.command(name = "remove")
+    async def role_remove(self, ctx):
+        await ctx.author.remove_roles(ctx.author.guild.get_role(1426289745784340591))
+        await ctx.send("o7 it's gone")
+
+
 
     #----------------------------------------Hit singer Kasane Teto----------------------------------------------------#
 

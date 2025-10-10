@@ -66,7 +66,7 @@ async def timechecks():
         print("server up and used to be offline")
         with open("serverStat.txt", "w") as f:
             f.write("1")
-        await bot.get_channel(1264704750633619486).send("Server up")
+        await bot.get_channel(1264704750633619486).send("<@&1426289745784340591> server people,\nServer up")
     elif await checker.sup() == 1 and servNum == 1:
         print("server up and used to be online")
     else:
