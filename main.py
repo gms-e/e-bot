@@ -180,6 +180,38 @@ async def on_message(message):
             await asyncio.sleep(20)
             voices = bot.get_cog("VoiceStuff")
             await voices.jam(message, 0)
+
+    #----------------------------------Stupid o clock enforcer-------------------------------------------#
+
+    if message.channel.id == 873640967138336768 and discord.utils.get(message.guild.roles, name="timed worse than Omar") in message.author.roles:
+        pacific = discord.utils.get(message.guild.roles, name="Pacific Time -8")
+        central = discord.utils.get(message.guild.roles, name="Central Time -6")
+        eastern = discord.utils.get(message.guild.roles, name="Eastern Time -5")
+        mountain = discord.utils.get(message.guild.roles, name="Mountain Time -7")
+        ceneuro = discord.utils.get(message.guild.roles, name="Central European Time +1")
+
+        t = datetime.datetime.now().hour
+        if pacific in message.author.roles:
+            if t > 6 or t < 0:
+                await message.delete()
+                await message.author.send("oi")
+        elif central in message.author.roles:
+            if t > 8 or t < 2:
+                await message.delete()
+                await message.author.send("oi")
+        elif eastern in message.author.roles:
+            if t > 9 or t < 3:
+                await message.delete()
+                await message.author.send("oi")
+        elif mountain in message.author.roles:
+            if t > 7 or t < 1:
+                await message.delete()
+                await message.author.send("oi")
+        elif ceneuro in message.author.roles:
+            if t > 8 or t < 2:
+                await message.delete()
+                await message.author.send("oi")
+
     #------------------------------------krusty krab------------------------------------------------------#
     if "cr" in message.content and "a" in message.content and "b" in message.content and "i" not in message.content and "o" not in message.content and "h" not in message.content:
         await message.channel.send(file=discord.File("crabbethy.jpg"))
