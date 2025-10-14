@@ -286,53 +286,6 @@ class PrintStuff(commands.Cog):
         await ctx.reply("Deltarune tomorrow", mention_author=False)
         await self.bot.process_commands(ctx)
 
-    #----------------------command I made once as a joke to dm mariofan and fake being a bluff but kept---------------#
-    sad = [
-    "https://tenor.com/view/dog-crying-meme-doggo-crys-megan-soo-crying-dog-gif-5276199764143986284",
-    "https://tenor.com/view/sad-walk-gif-24718162",
-    "https://tenor.com/view/sadhamstergirl-gif-4231717927828306245",
-    "https://tenor.com/view/sad-crying-crying-face-sad-face-sorry-gif-16443666066815353211",
-    "https://tenor.com/view/breaking-bad-walter-white-bryan-cranston-sad-oh-no-gif-17379933",
-    "https://tenor.com/view/meme-crying-gif-24782561",
-    "https://tenor.com/view/%D0%BF%D0%BE%D0%BF%D0%BB%D0%B0%D1%87-gif-14046562056654997205"]
-    print(len(sad))
-
-    @commands.group(name = "dm", hidden = True)
-    async def sendto(self, ctx):
-        print("obsolete")
-
-    @sendto.group(name="mariofan", hidden = True)
-    async def mariofan(self, ctx):
-        print("obsolete")
-
-    @mariofan.group(name="something")
-    async def something(self, ctx):
-        print("obsolete")
-
-    @something.group(name="sad")
-    async def depressing(self, ctx):
-        print("obsolete")
-
-    @depressing.group(name="in")
-    async def within(self, ctx):
-        print("obsolete")
-
-    @within.group(name="two")
-    async def one(self, ctx):
-        print("obsolete")
-
-    @one.command(name="minutes")
-    async def minute(self, ctx):
-        try:
-            await ctx.send("o7 on it")
-            await asyncio.sleep(120)
-
-            guy = await self.bot.fetch_user(405197452833062912)
-
-            await guy.send(self.sad[random.randint(0, len(self.sad) - 1)])
-        except Exception as e:
-            print(e)
-            print(str(e))
 
     # ----------------------------------Quote series--------------------------------------------#
     @commands.hybrid_group()
