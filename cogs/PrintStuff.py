@@ -27,8 +27,8 @@ class PrintStuff(commands.Cog):
         # Ignore messages from the bot itself to prevent infinite loops
         if message.author == self.bot.user:
             return
-
-        if "today" in message.content.lower() and random.random() < 0.5:
+        #TODO: implement user settings for ALL non command and random functionality
+        if "Today" in message.content and random.random() < 0.5:
             await self.kasane(message)
         # -------------------------------------wordle e bot collab------------------------------------------#
         if message.author.id == 1211781489931452447 and ("X/6" in message.content or "6/6" in message.content):
