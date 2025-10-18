@@ -173,6 +173,9 @@ class VoiceStuff(commands.Cog):
     @commands.hybrid_command()
     async def soundboard(self, ctx, guy: discord.Member = discord.ext.commands.parameter(displayed_name="guy",
                                                                                    description="Dude you wanna soundboard (must be in vc)")):
+        await self.sendSound(ctx, guy, False)
+
+    async def sendSound(self, ctx, guy, redo):
         print("soundboarding " + guy.name)
         voice_channel = guy.voice.channel
         print(voice_channel)
@@ -186,7 +189,8 @@ class VoiceStuff(commands.Cog):
             print("picked " + sound.name)
 
             try:
-                vc = await voice_channel.connect()
+                if not redo:
+                    vc = await voice_channel.connect()
                 await voice_channel.send_sound(sound)
                 await ctx.send(sound.name + "ing " + guy.display_name, ephemeral=True)
                 await asyncio.sleep(0.3)
@@ -195,13 +199,17 @@ class VoiceStuff(commands.Cog):
             except Exception as error:
                 print("An error occurred:", type(error).__name__)
                 print("gonna try sending as such")
-                if "Already connected" in str(error):
+                if "Already connected" in str(error) and not redo:
                     print("already connected")
                     await ctx.send("DON'T YOU FRICKIN INTERRUPT ME")
                     return
+                elif redo:
+                    self.bot.voice_clients[0].stop()
+                    await self.bot.voice_clients.pop().disconnect()
                 else:
                     await ctx.send("An error occurred: " + str(error) + "\n I can't frickin use that sound",
                                    ephemeral=True)
+                    await self.sendSound(ctx, guy, True)
                     print("I can't frickin use that sound")
                     self.bot.voice_clients[0].stop()
                     print("Stopped")
