@@ -205,11 +205,11 @@ class DoorStuff(commands.Cog):
     async def on_ready(self):
         print("Door Stuff online")
 
-    @commands.hybrid_group(name="doors", brief="of doom")
+    @commands.hybrid_group(name="doors", brief="of doom | of scores | of daily")
     async def doors_group(self, ctx):
         print("obsolete")
 
-    @doors_group.group(name="of", brief="doom")
+    @doors_group.group(name="of", brief="doom | scores | daily")
     async def of_group(self, ctx):
         print("obsolete")
 

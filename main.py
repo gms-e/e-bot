@@ -370,7 +370,7 @@ async def this(interaction: discord.Interaction, message: discord.Message):
         await message.reply("\"" + capi_sentence(message.content) + "\"", mention_author=False)
     await interaction.response.send_message("k", ephemeral=True)
 #-------------------------------------------------------------Mock branches--------------------------------------------#
-@bot.hybrid_group(brief = "3 Branches: \n          next\n          that\n          this(app menu)")
+@bot.hybrid_group(brief = "next | that | this(app menu)")
 async def mock(ctx):
    print("obsolete")
 

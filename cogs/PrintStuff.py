@@ -81,7 +81,7 @@ class PrintStuff(commands.Cog):
             bluff = False
 
     # ------------------------------------------Bluff----------------------------------------------------------#
-    @commands.hybrid_command(name="bluff", brief = "Sometimes ya wanna tell e bot to do something, even if it can't.")
+    @commands.hybrid_command(name="bluff", brief = "Tell e bot to do something, even if it can't.")
     async def fakeit(self, ctx):
         print("bluff")
         global bluff
@@ -99,7 +99,7 @@ class PrintStuff(commands.Cog):
         await self.bot.process_commands(ctx)
 
     #-------------------------------Reports mc server status & players when requested--------------------------------#
-    @commands.hybrid_group(name = "server")
+    @commands.hybrid_group(name = "server", brief = "up\n role add | remove")
     async def server(self, ctx):
         print("obsolete")
     @server.command(name = "up")
@@ -165,7 +165,7 @@ class PrintStuff(commands.Cog):
 
     #----------------------------------------Hit singer Kasane Teto----------------------------------------------------#
 
-    @commands.hybrid_group(name = "daily")
+    @commands.hybrid_group(name = "daily", breif = "teto")
     async def daily(self, ctx):
         print("obsolete")
     @daily.command(name="teto", brief = "posts the day's teto")
@@ -229,11 +229,11 @@ class PrintStuff(commands.Cog):
             print(str(e))
 
     #--------------------------------Check anim days left----------------------------------------------#
-    @commands.hybrid_group(name = "animation")
+    @commands.hybrid_group(name = "animation", brief = "time reset\n due in")
     async def animation(self, ctx):
         print("obsolete")
 
-    @animation.group(name = "due")
+    @animation.group(name = "due", brief = "in")
     async def due(self, ctx):
         print("obsolete")
     @due.command(name = "in")
@@ -262,7 +262,7 @@ class PrintStuff(commands.Cog):
             case _:
                 await ctx.send(f"like {day}, he done messed up now. what a nerd")
 
-    @animation.group(name = "time")
+    @animation.group(name = "time", brief = "reset")
     async def tiempo(self, ctx):
         print("obsolete")
     @tiempo.command(name = "reset")
@@ -288,7 +288,7 @@ class PrintStuff(commands.Cog):
 
 
     # ----------------------------------Quote series--------------------------------------------#
-    @commands.hybrid_group()
+    @commands.hybrid_group(brief = "from | random")
     async def quote(self, ctx):
         print("obsolete")
     #quote helper command
