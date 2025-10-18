@@ -378,10 +378,11 @@ async def mock(ctx):
 async def next(ctx,  number: Optional[int] = None):
     print("mocking next " + str(number))
     global messageCount
+    print(messageCount)
     if 16 > number > -1 and messageCount <= 0:  # apparantly if two people use -1 at once it overflows, so <=0 it is
         print(f"saw {number}")
         print(ctx.message.author)
-
+        messageCount = number
         await ctx.send(f"o7 on it", ephemeral=True)
     elif messageCount > 0:
         await ctx.send(f"skill issue, mocking still at {messageCount}")
