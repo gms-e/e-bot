@@ -273,7 +273,8 @@ class PrintStuff(commands.Cog):
             return
         with open("updayt.txt", "w") as f:
             f.write(f"4")
-        await ctx.send("o7 he gets time now")
+        await ctx.send("o7 he gets more time now")
+        await ctx.send("https://tenor.com/view/majoras-mask-zelda-songoftime-ocarina-gif-22880234")
 
 
     # ----------------------------------Deltarune tomorrow--------------------------------------------#
