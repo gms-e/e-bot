@@ -19,7 +19,7 @@ class SetStuff(commands.Cog):
         print("obsolete")
 
 
-    @hybrid_group.group(name = "reaction") #branch for reaction toggles
+    @hybrid_group.group(name = "reaction", brief = "branch for toggling message reactions")
     async def reaction_group(self, ctx):
         print("obsolete")
 
@@ -53,95 +53,94 @@ class SetStuff(commands.Cog):
 
 
 
-    @reaction_group.command(name = "kys")
+    @reaction_group.command(name = "kys", brief = "toggles kys reaction")
     async def kys(self, ctx, value: bool):
         await self.setValue(ctx, "kys", value)
 
-    @reaction_group.command(name = "skillissue")
+    @reaction_group.command(name = "skillissue", brief = "toggles skill issue reaction for all keywords")
     async def skillissue(self, ctx, value: bool):
         await self.setValue(ctx, "skillissue", value)
 
-    @reaction_group.command(name = "sadeyes")
+    @reaction_group.command(name = "sadeyes", brief = "toggles eyes from saying so sad")
     async def sadeyes(self, ctx, value: bool):
         await self.setValue(ctx, "sadeyes", value)
 
-    @reaction_group.command(name = "replyeyes")
+    @reaction_group.command(name = "replyeyes", brief = "toggles eye reaction from pinging e bot")
     async def replyeyes(self, ctx, value: bool):
         await self.setValue(ctx, "replyeyes", value)
 
-    @reaction_group.command(name = "omaranim")
+    @reaction_group.command(name = "omaranim", brief = "toggles response to omar animating in sentence")
     async def omaranim(self, ctx, value: bool):
         await self.setValue(ctx, "omaranim", value)
 
 
 
 
-    @hybrid_group.group(name = "chance")
+    @hybrid_group.group(name = "chance", brief = "branch for all random chance 'features'")
     async def chance_group(self, ctx):
         print("obsolete")
 
 
-    @chance_group.command(name = "mock")
+    @chance_group.command(name = "mock", brief = "toggles 1/1000 mock chance")
     async def mock(self, ctx, value: bool):
         await self.setValue(ctx, "mock", value)
 
-    @chance_group.command(name = "tetnot")
+    @chance_group.command(name = "tetnot", brief = "toggles 1/20 chance to get miku")
     async def tetnot(self, ctx, value: bool):
         await self.setValue(ctx, "tetnot", value)
 
-    @chance_group.command(name = "serverlie")
+    @chance_group.command(name = "serverlie", brief = "toggles 1/90 chance for server up to lie")
     async def serverlie(self, ctx, value: bool):
         await self.setValue(ctx, "serverlie", value)
 
-    @chance_group.command(name = "boss")
+    @chance_group.command(name = "boss", brief = "toggles 1/100 chance for link boss music")
     async def boss(self, ctx, value: bool):
         await self.setValue(ctx, "boss", value)
 
-    @chance_group.command(name = "boost")
+    @chance_group.command(name = "boost", brief = "toggles 1/84 chance boost replaces yoshi and me")
     async def boost(self, ctx, value: bool):
         await self.setValue(ctx, "boost", value)
 
-    @chance_group.command(name="sosad")
+    @chance_group.command(name="sosad", brief = "toggles chance to be asked how sad")
     async def sosad(self, ctx, value: bool):
         await self.setValue(ctx, "sosad", value)
 
+    @chance_group.command(name = "fakejoin", brief = "toggles 1/500 chance I don't think has even happened ONCE since adding it, so why bother")
+    async def fakejoin(self, ctx, value: bool):
+        await self.setValue(ctx, "fakejoin", value)
 
 
 
-    @hybrid_group.group(name = "keyword")
+    @hybrid_group.group(name = "keyword", brief = "toggles non command keywords")
     async def keyword(self, ctx):
         print("obsolete")
 
 
-    @keyword.command(name = "yoshiandme")
+    @keyword.command(name = "yoshiandme", brief = "removes 'play yoshi and me' in message check, gotta use jimjam now")
     async def yoshiandme(self, ctx, value: bool):
         await self.setValue(ctx, "yoshiandme", value)
 
-    @keyword.command(name = "debate")
+    @keyword.command(name = "debate", brief = "toggles 'play boost debate' in message check, gotta use / command now")
     async def debate(self, ctx, value: bool):
         await self.setValue(ctx, "debate", value)
 
-    @keyword.command(name = "worldismine")
+    @keyword.command(name = "worldismine", brief = "toggles keywords for world is mine song, bet you forgot those were around")
     async def worldismine(self, ctx, value: bool):
         await self.setValue(ctx, "worldismine", value)
 
-    @keyword.command(name = "leavevc")
+    @keyword.command(name = "leavevc", brief = "toggles keywords to make bot leave vc, which everyone forgets are around ._.")
     async def leavevc(self, ctx, value: bool):
         await self.setValue(ctx, "leavevc", value)
 
-    @keyword.command(name = "fakejoin")
-    async def fakejoin(self, ctx, value: bool):
-        await self.setValue(ctx, "fakejoin", value)
-
-    @keyword.command(name = "crab")
+    @keyword.command(name = "crab", brief = "toggles crabbethew, who already had really rough appearance conditions")
     async def crab(self, ctx, value: bool):
         await self.setValue(ctx, "crab", value)
 
-    @keyword.command(name = "deltarune")
+    @keyword.command(name = "deltarune", brief = "toggles 1/3 response to 'deltarune' in message")
     async def deltarune(self, ctx, value: bool):
         await self.setValue(ctx, "deltarune", value)
 
-    @keyword.command(name = "tetoday")
+    @keyword.command(name = "tetoday", brief = "toggles 1/2 response to 'today' in message")
     async def tetoday(self, ctx, value: bool):
         await self.setValue(ctx, "tetoday", value)
 
