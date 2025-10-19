@@ -295,7 +295,10 @@ class PrintStuff(commands.Cog):
         await ctx.reply("Deltarune tomorrow", mention_author=False)
         await self.bot.process_commands(ctx)
 
-
+    # ----------------------------------:__: sender---------------------------------------------3
+    @commands.hybrid_command(name = "o__o")
+    async def dread(self, ctx):
+        await ctx.reply("<:o__o:1429555147238805684>")
     # ----------------------------------Quote series--------------------------------------------#
     @commands.hybrid_group(brief = "from | random")
     async def quote(self, ctx):
