@@ -19,11 +19,6 @@ class SetStuff(commands.Cog):
         print("obsolete")
 
 
-    @hybrid_group.group(name = "reaction", brief = "branch for toggling message reactions")
-    async def reaction_group(self, ctx):
-        print("obsolete")
-
-
 #Helper method every setting uses to access nested json of user and set value
     async def setValue(self, ctx, setting, value: bool):
         # the data structure for all settings is a 2d dict.
@@ -51,6 +46,34 @@ class SetStuff(commands.Cog):
             print(type(e))
             await ctx.send("something broke, ", str(e))
 
+    @hybrid_group.command(name = "tings", brief = "view settings (non displayed settings are true)")
+    async def tings(self, ctx):
+        outer = {}
+        try:
+            with open("settings.json", 'r') as f:
+                outer = json.load(f)
+                inner = outer.get(str(ctx.author.id), {})
+                response = str(inner)
+                response = response.replace("'", "")
+                response = response.replace("{", "")
+                response = response.replace("}", "")
+                response = response.replace(", ", "\n")
+                response = response.replace(":", " =")
+                await ctx.send(response)
+        except FileNotFoundError:
+            with open("settings.json", "x") as f:
+                outer = {str(ctx.author.id): {}}
+                json.dump(outer, f, indent=2)
+                print("made a settings file since it wasn't there")
+                await ctx.send(str({}))
+        except Exception as e:
+            print(e)
+            print(type(e))
+            await ctx.send("something broke, ", str(e))
+
+    @hybrid_group.group(name = "reaction", brief = "branch for toggling message reactions")
+    async def reaction_group(self, ctx):
+        print("obsolete")
 
 
     @reaction_group.command(name = "kys", brief = "toggles kys reaction")
