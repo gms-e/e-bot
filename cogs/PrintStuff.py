@@ -197,6 +197,12 @@ class PrintStuff(commands.Cog):
     async def task(self):
         try:
             channel = self.bot.get_channel(1282010600322629652)
+
+            if channel is None:
+                print("channel was none, trying with fetch")
+                channel = await self.bot.fetch_channel(1282010600322629652)
+                print(channel)
+
             if datetime.datetime.now().hour == 0 or datetime.datetime.now().hour == 23:
                 day = -1
                 try:
@@ -212,8 +218,7 @@ class PrintStuff(commands.Cog):
                 day -= 1
                 match day:
                     case 3:
-
-                        await channel.send("3 days left :D\n**procrastinate.**")
+                        await channel.send("3 days left :D")
                     case 2:
                         await channel.send("2 days left :)")
                         await channel.send(file=discord.File("timesatickin.png"))
@@ -221,7 +226,7 @@ class PrintStuff(commands.Cog):
                     case 1:
                         await channel.send("https://tenor.com/view/majoras-mask-majora-zelda-final-day-gif-26658556")
                     case 0:
-                        await channel.send("well, this is ackward. Hopefully you never see this message, 'cause it means I done did messed up and missed the deadline")
+                        await channel.send("well, this is awkward. Hopefully you never see this message, 'cause it means I done did messed up and missed the deadline")
                     case _:
                         await channel.send(f"I don't know what I am doing. {day} days left, this message shouldn't be possible to see and only exists for error handling.")
 
