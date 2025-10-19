@@ -174,13 +174,15 @@ async def on_message(message):
         print(f"Racist time")
         await message.add_reaction("🇨🇦")
     # ----------------------------------so sad catcher--------------------------------------------#
-    if await "so sad" in lower and "play" not in lower and "." not in lower:
-        if usettings.get_value(message, message.author, "sadeyes"):
+    print("pre if")
+    if "so sad" in lower and "play" not in lower and "." not in lower:
+        print("found so sad")
+
+        if await usettings.get_value(message, message.author, "sadeyes"):
             await message.add_reaction("🇪")
             await message.add_reaction("👀")
-            print("Saw so sad")
 
-        if random.random() < 0.01 and usettings.get_value(message, message.author, "sosad"):
+        if random.random() < 0.01 and await usettings.get_value(message, message.author, "sosad"):
             print("HOW SAD???")
             await message.channel.send(file=discord.File("how sad.png"))
             await asyncio.sleep(20)
