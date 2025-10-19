@@ -174,7 +174,6 @@ async def on_message(message):
         print(f"Racist time")
         await message.add_reaction("🇨🇦")
     # ----------------------------------so sad catcher--------------------------------------------#
-    print("pre if")
     if "so sad" in lower and "play" not in lower and "." not in lower:
         print("found so sad")
 
