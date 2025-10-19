@@ -39,17 +39,17 @@ class SetStuff(commands.Cog):
             with open("settings.json", 'w') as f:
                 json.dump(outer, f, indent=2)
                 print(f"updated {ctx.author} {setting} to {value}")
-                await ctx.send(outer)
+                await ctx.send(f"updated {setting} to {value} for {ctx.author}")
         except FileNotFoundError:
             with open("settings.json", "x") as f:
                 outer = {str(ctx.author.id): {setting:value}}
                 json.dump(outer, f, indent=2)
                 print("made a settings file since it wasn't there")
-                await ctx.send(outer)
+                await ctx.send(f"updated {setting} to {value} for {ctx.author}")
         except Exception as e:
             print(e)
             print(type(e))
-            await ctx.send(str(e))
+            await ctx.send("something broke, ", str(e))
 
 
 
@@ -161,7 +161,7 @@ class SetStuff(commands.Cog):
         except Exception as e:
             print(e)
             print(type(e))
-            await ctx.send(str(e))
+            await ctx.send("something broke, ", str(e))
 
 
 async def setup(bot):
