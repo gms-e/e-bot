@@ -24,11 +24,12 @@ class PrintStuff(commands.Cog):
     #-----------------------------------------
     @commands.Cog.listener()
     async def on_message(self, message):
+        usettings = self.bot.get_cog("SetStuff")
         # Ignore messages from the bot itself to prevent infinite loops
         if message.author == self.bot.user:
             return
         #TODO: implement user settings for ALL non command and random functionality
-        if "Today" in message.content and random.random() < 0.5:
+        if random.random() < 0.5 and "today" in message.content.lower() and await usettings.get_value(message, message.author, "tetoday"):
             await self.kasane(message)
         # -------------------------------------wordle e bot collab------------------------------------------#
         if message.author.id == 1211781489931452447 and ("X/6" in message.content or "6/6" in message.content):
@@ -104,11 +105,12 @@ class PrintStuff(commands.Cog):
         print("obsolete")
     @server.command(name = "up")
     async def up(self, ctx):
+        usettings = self.bot.get_cog("SetStuff")
         sessage = await ctx.send("uh")
         try:
             server = mcstatus.JavaServer.lookup("true-cigarette.gl.joinmc.link")
             server.status().players.online
-            if random.random() < 1/90:
+            if random.random() < 1/90 and await usettings.get_value(ctx, ctx.author, "serverlie"):
                 await sessage.edit(content="Nope...")
                 return
             else:
@@ -124,7 +126,7 @@ class PrintStuff(commands.Cog):
                 await ctx.send(f"{dudelist}")
             print(server.status())
         except Exception as e:
-            if random.random() < 1/90:
+            if random.random() < 1/90 and await usettings.get_value(ctx, ctx.author, "serverlie"):
                 await sessage.edit(content="Yeah One guy one there")
                 await sessage.channel.send("Mariofan527")
 
@@ -170,6 +172,7 @@ class PrintStuff(commands.Cog):
         print("obsolete")
     @daily.command(name="teto", brief = "posts the day's teto")
     async def kasane(self, ctx):
+        usettings = self.bot.get_cog("SetStuff")
         tetos = ["https://tenor.com/view/kasane-gif-10240710281900746822",
                  "https://tenor.com/view/teto-kasane-teto-teto-tuesday-utauloid-gif-25302042",
                  "https://tenor.com/view/kasane-gif-17215851662996724170",
@@ -179,7 +182,7 @@ class PrintStuff(commands.Cog):
                  "https://tenor.com/view/kasane-gif-17280510370772186668",
                  "https://tenor.com/view/miku-hatsune-miku-anime-dance-silly-gif-7439677361449276795"]
         try:
-            if random.random() < 1/20:
+            if random.random() < 1/20 and await usettings.get_value(ctx, ctx.author, "tetnot"):
                 print("wait that's not teto")
                 await ctx.reply(tetos[7], mention_author=False)
             else:

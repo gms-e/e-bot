@@ -136,28 +136,32 @@ async def main():
 
 @bot.event
 async def on_message(message):
-
+    usettings = bot.get_cog("SetStuff")
     if message.author == bot.user:
         return
     lower = message.content.lower()
 
 #----------------------------------Kys catcher--------------------------------------------#
-    if "kys" in lower or "kill yourself" in lower:
+    try:
+        if ("kys" in lower or "kill yourself" in lower) and await usettings.get_value(message, message.author, "kys"):
 
-        print(f"saw kys")
-        await message.add_reaction("🇪")
-        await message.add_reaction("<:kyours:1377804377540137010>")
-        return
+            print(f"saw kys")
+            await message.add_reaction("🇪")
+            await message.add_reaction("<:kyours:1377804377540137010>")
+            return
+    except Exception as error:
+        print(error)
+        print(str(error))
 
 # -----------------------------Omar anim catcher------------------------------------------#
-    if "omar" in lower:
+    if "omar" in lower and await usettings.get_value(message, message.author, "omaranim"):
         if "animate" in lower or "animation" in lower or "animating" in lower:
             await message.reply("shut up, I'm a cooler project", mention_author=False)
             await message.add_reaction("<:ughmar:1307892558063468606>")
 
 # -----------------------------Skill issue catcher------------------------------------------#
 
-    if "skill issue" in lower or "too hard"  in lower or "died"  in lower:
+    if ("skill issue" in lower or "too hard"  in lower or "died"  in lower) and await usettings.get_value(message, message.author, "skillissue"):
 
         print(f"saw skill issue")
         await message.add_reaction("🇪")
@@ -170,11 +174,13 @@ async def on_message(message):
         print(f"Racist time")
         await message.add_reaction("🇨🇦")
     # ----------------------------------so sad catcher--------------------------------------------#
-    if "so sad" in lower and "play" not in message.content.lower() and "." not in message.content.lower():
-        await message.add_reaction("🇪")
-        print("Saw so sad")
-        await message.add_reaction("👀")
-        if random.random() < 0.01:
+    if await "so sad" in lower and "play" not in lower and "." not in lower:
+        if usettings.get_value(message, message.author, "sadeyes"):
+            await message.add_reaction("🇪")
+            await message.add_reaction("👀")
+            print("Saw so sad")
+
+        if random.random() < 0.01 and usettings.get_value(message, message.author, "sosad"):
             print("HOW SAD???")
             await message.channel.send(file=discord.File("how sad.png"))
             await asyncio.sleep(20)
@@ -213,10 +219,10 @@ async def on_message(message):
                 await message.author.send("oi")
 
     #------------------------------------krusty krab------------------------------------------------------#
-    if "cr" in message.content and "a" in message.content and "b" in message.content and "i" not in message.content and "o" not in message.content and "h" not in message.content:
+    if "cr" in message.content and "a" in message.content and "b" in message.content and "i" not in message.content and "o" not in message.content and "h" not in message.content and await usettings.get_value(message, message.author, "crab"):
         await message.channel.send(file=discord.File("crabbethy.jpg"))
     #----------------------------------Plays yosh when phrase--------------------------------------------#
-    if "play yoshi and me" in lower:
+    if "play yoshi and me" in lower and await usettings.get_value(message, message.author, "yoshiandme"):
         print("saw yosh")
         voices = bot.get_cog("VoiceStuff")
         if "e," not in lower and "." in lower and "so sad" in lower:
@@ -229,30 +235,30 @@ async def on_message(message):
             print("norm yosh time")
             await voices.jam(message, 0)
     #------------------------------------Plays boost when phrase-------------------------------------------#
-    if "boost" in lower and "debate" in lower and "play" in lower:
+    if "boost" in lower and "debate" in lower and "play" in lower and await usettings.get_value(message, message.author, "boost"):
         voices = bot.get_cog("VoiceStuff")
         await voices.debate(message)
 
-    if ("world" in lower or "server" in lower) and ("custody" in lower or "mine" in lower):
+    if ("world" in lower or "server" in lower) and ("custody" in lower or "mine" in lower) and await usettings.get_value(message, message.author, "worldismine"):
         voices = bot.get_cog("VoiceStuff")
         await voices.playSong(message, "music/World is Mine - Kasane Teto (Synthesizer V Cover) [0eaeiSjh7pU].mp3")
     #-----------------------------------Stop music command------------------------------------------------#
-    if ("good" in lower and "music" in lower) or "e, shut up nobody loves you and go away right now" in lower:
+    if (("good" in lower and "music" in lower) or "e, shut up" in lower) and await usettings.get_value(message, message.author, "leavevc"):
         print("saw stop command")
         voices = bot.get_cog("VoiceStuff")
         await voices.setStop(True)
     #----------------------------------Random mock chance--------------------------------------------#
     global messageCount
-    if random.random() < 1/1000:
+    if random.random() < 1/1000  and await usettings.get_value(message, message.author, "mock"):
         messageCount = 1
         print("Wow, you're so LUCKY")
 
     #-----------------------------------TTSn't------------------------------------------------------#
-    if ",join" in lower and random.random() < 1/500:
+    if random.random() < 1/500 and ",join" in message.content and await usettings.get_value(message, message.author, "fakejoin"):
         voices = bot.get_cog("VoiceStuff")
         await voices.soundboard(message.author)
     #-------------------------------------Deltarune tomorrow---------------------------------------------#
-    if random.random() < 1/3:
+    if random.random() < 1/3 and await usettings.get_value(message, message.author, "deltarune"):
         if "deltarune" in lower or "delta rune" in lower:
             if "tomorrow" not in lower:
                 await message.reply("deltarune tomorrow", mention_author=False)
@@ -263,7 +269,7 @@ async def on_message(message):
 
 
     #----------------------------------respond to pings--------------------------------------------#
-    if bot.user.mentioned_in(message):
+    if  await usettings.get_value(message, message.author, "replyeyes") and bot.user.mentioned_in(message):
         await message.add_reaction("👀")
         #------------------Calls mock when mock count over 0 and not escaped------------------------------#
     elif messageCount > 0 and message.author != bot.user and not "_ _" in message.content:

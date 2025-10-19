@@ -30,6 +30,7 @@ class VoiceStuff(commands.Cog):
     async def jam(self, ctx, count: Optional[int] = commands.parameter(
         displayed_name="song", description="song queue, starts at 0 and goes to 2",default=0),
         censored: Optional[bool] = discord.ext.commands.parameter(displayed_name="beep?", description="beep the name?", default=False)):
+        usettings = self.bot.get_cog("SetStuff")
 
         queue = []
         voice_channel = ctx.author.voice.channel
@@ -56,13 +57,13 @@ class VoiceStuff(commands.Cog):
                     queue[i] = que[i]
 
 
-        if random.random() < 1 / 84:
+        if random.random() < 1 / 84 and await usettings.get_value(ctx, ctx.author, "boost"):
             await ctx.reply("womp womp, boost debate time", mention_author=False)
             await self.debate(ctx)
             return
         j = 0
         for cue in queue:
-            if random.random() < 1 / 100:
+            if random.random() < 1 / 100 and await usettings.get_value(ctx, ctx.author, "boss"):
                 print(f"{j} : {cue} is now lonk")
                 queue[j] = "music/LonkPastBoss.mp3"
 
@@ -104,6 +105,8 @@ class VoiceStuff(commands.Cog):
 #------------------------------------------Playsong helper method------------------------------------------------------#
 
     async def playSong(self, ctx, s: string, quit: Optional[bool] = True):
+        usettings = self.bot.get_cog("SetStuff")
+
         voice_channel = ctx.author.voice.channel
         song = ""
         if s == "":
@@ -115,7 +118,7 @@ class VoiceStuff(commands.Cog):
 
             vc = await voice_channel.connect(timeout=5)
             await asyncio.sleep(2)
-            if random.random() < 1 / 100:
+            if random.random() < 1 / 100 and await usettings.get_value(ctx, ctx.author, "boss"):
                 song = "music/LonkPastBoss.mp3"
                 print("lucky link")
             vc.play(discord.FFmpegPCMAudio(song))
