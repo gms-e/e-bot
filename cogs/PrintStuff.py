@@ -80,7 +80,6 @@ class PrintStuff(commands.Cog):
         if bluff and "e, " in message.content:
             await message.reply("o7 on it", mention_author=False)
             bluff = False
-        await self.bot.process_commands(message) # Crucial for commands to run
     # ------------------------------------------Bluff----------------------------------------------------------#
     @commands.hybrid_command(name="bluff", brief = "Tell e bot to do something, even if it can't.")
     async def fakeit(self, ctx):
