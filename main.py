@@ -181,9 +181,12 @@ async def on_message(message):
             await message.add_reaction("🇪")
             await message.add_reaction("👀")
 
-        if random.random() < 0.01 and await usettings.get_value(message, message.author, "sosad"):
+        if random.random() < 0.01 * 5 and await usettings.get_value(message, message.author, "sosad"):
             print("HOW SAD???")
-            await message.channel.send(file=discord.File("how sad.png"))
+            if random.random() < 0.5:
+                await message.channel.send(file=discord.File("how sad.png"))
+            else:
+                await message.channel.send(file=discord.File("erg.png"))
             await asyncio.sleep(20)
             voices = bot.get_cog("VoiceStuff")
             await voices.jam(message, 0)
