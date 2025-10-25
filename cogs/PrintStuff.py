@@ -225,9 +225,13 @@ class PrintStuff(commands.Cog):
                     case 1:
                         await channel.send("https://tenor.com/view/majoras-mask-majora-zelda-final-day-gif-26658556")
                     case 0:
-                        await channel.send("well, this is awkward. Hopefully you never see this message, 'cause it means I done did messed up and missed the deadline")
+                        await channel.send("IT AIN'T OVER TILL THE FAT LADY CHIMES 12 AND *YOUR MOTHER DIDN'T FIT INT THE CUCKOO CLOCK*")
+                        await asyncio.sleep(hours = 24 - datetime.datetime.now().hour)
+                        await channel.send("ok *now* it's over ._. \n(I think, the code for this message is kinda jank)\n Did I do it in time?")
+                    case x if x > 5:
+                        print("eh")
                     case _:
-                        await channel.send(f"I don't know what I am doing. {day} days left, this message shouldn't be possible to see and only exists for error handling.")
+                        await channel.send(f"I don't know what I am doing. {day} days left, this message shouldn't be possible to see and only exists for error handling. \n PLEASE tell me I didn't go negative in days remaining")
 
                 with open("updayt.txt", "w") as f:
                     f.write(f"{day}")
