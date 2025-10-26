@@ -23,13 +23,14 @@ class EiStuff(commands.Cog):
             response = requests.post(
                 url="https://openrouter.ai/api/v1/chat/completions",
                 headers={
-                    "Authorization": "Bearer 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",
+                    # "Authorization": "Bearer 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",
                     # "Authorization": "Bearer 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",
+                    "Authorization" : "Bearer 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",
                     "Content-Type": "application/json",
                 },
                 data=json.dumps({
-                    # "model": "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
-                    "model" : "arliai/qwq-32b-arliai-rpr-v1:free", #schitzo
+                    "model": "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
+                    # "model" : "arliai/qwq-32b-arliai-rpr-v1:free", #schitzo
                     "messages": [
                         {
                             "role": "user",
@@ -55,14 +56,15 @@ class EiStuff(commands.Cog):
 
                 })
             )
+            print(response.json())
             print(response.json()["choices"][0]["message"]["content"])
-            if 0 < len(response.json()["choices"][0]["message"]["reasoning"]) < len(response.json()["choices"][0]["message"]["content"]):
+            if response.json()["choices"][0]["message"]["reasoning"] is not None and response.json()["choices"][0]["message"]["content"] is not None and 0 < len(response.json()["choices"][0]["message"]["reasoning"]) < len(response.json()["choices"][0]["message"]["content"]):
                 await initial_message.edit(content= f"{guy.display_name}" + ":\n" + response.json()["choices"][0]["message"]["reasoning"])
             else:
                 await initial_message.edit(content = f"{guy.display_name}" + ":\n" + response.json()["choices"][0]["message"]["content"])
         except Exception as e:
             print(response.json())
-            await initial_message.edit(content=f"{e}")
+            await initial_message.edit(content=f"{type(e)}")
             print(e)
             print(type(e))
 
