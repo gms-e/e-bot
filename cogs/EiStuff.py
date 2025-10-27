@@ -60,10 +60,12 @@ class EiStuff(commands.Cog):
             )
             print(response.json())
             print(response.json()["choices"][0]["message"]["content"])
-            if response.json()["choices"][0]["message"]["reasoning"] is not None and response.json()["choices"][0]["message"]["content"] is not None and 0 < len(response.json()["choices"][0]["message"]["reasoning"]) < len(response.json()["choices"][0]["message"]["content"]):
-                await initial_message.edit(content= f"{ctx.author}: \n{inputted}\n{person}" + ":\n" + response.json()["choices"][0]["message"]["reasoning"])
-            else:
-                await initial_message.edit(content = f"{person}" + ":\n" + response.json()["choices"][0]["message"]["content"])
+            try:
+                await initial_message.edit(content= f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
+            except KeyError:
+                await initial_message.edit(content = f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["reasoning"])
+            except TypeError:
+                await initial_message.edit(content = f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["content"][0]["message"]["content"])
         except Exception as e:
             print(response.json())
             await initial_message.edit(content=f"{type(e)}\n{str(e)}")
