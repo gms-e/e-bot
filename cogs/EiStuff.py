@@ -19,7 +19,7 @@ class EiStuff(commands.Cog):
     async def on_ready(self):
         print("Ei Stuff online")
     @commands.hybrid_command(name = "testpingai")
-    async def ei(self, ctx, guy: Literal["Astro", "CB"], inputted: str):
+    async def ei(self, ctx, person: Literal["Astro", "CB"], inputted: str):
         API_KEY_1 = os.getenv("API_KEY_1")
         try:
 
@@ -36,7 +36,7 @@ class EiStuff(commands.Cog):
                     "messages": [
                         {
                             "role": "user",
-                            "content": f"based on the following messages from {guy}, generate only one sentence message seed {random.random()}as them with no additional commentary"
+                            "content": f"based on the following messages from {person}, generate only one sentence message seed {random.random()}as them with no additional commentary"
                         },
                         {
                             "role": "assistant",
@@ -44,7 +44,7 @@ class EiStuff(commands.Cog):
                         },
                         {
                             "role": "user",
-                            "content": f"Here are messages: {await self.pullQaM(ctx, guy)}"
+                            "content": f"Here are messages: {await self.pullQaM(ctx, person)}"
                         },
                         {
                             "role": "assistant",
@@ -61,9 +61,9 @@ class EiStuff(commands.Cog):
             print(response.json())
             print(response.json()["choices"][0]["message"]["content"])
             if response.json()["choices"][0]["message"]["reasoning"] is not None and response.json()["choices"][0]["message"]["content"] is not None and 0 < len(response.json()["choices"][0]["message"]["reasoning"]) < len(response.json()["choices"][0]["message"]["content"]):
-                await initial_message.edit(content= f"{ctx.author}: \n{inputted}\n{guy}" + ":\n" + response.json()["choices"][0]["message"]["reasoning"])
+                await initial_message.edit(content= f"{ctx.author}: \n{inputted}\n{person}" + ":\n" + response.json()["choices"][0]["message"]["reasoning"])
             else:
-                await initial_message.edit(content = f"{guy}" + ":\n" + response.json()["choices"][0]["message"]["content"])
+                await initial_message.edit(content = f"{person}" + ":\n" + response.json()["choices"][0]["message"]["content"])
         except Exception as e:
             print(response.json())
             await initial_message.edit(content=f"{type(e)}\n{str(e)}")
