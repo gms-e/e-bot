@@ -34,9 +34,9 @@ class EiStuff(commands.Cog):
                     "Content-Type": "application/json",
                 },
                 data=json.dumps({
-                    # "model": "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
+                    "model": "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
                     # "model" : "arliai/qwq-32b-arliai-rpr-v1:free", #schitzo
-                    "model" : "mistralai/mistral-small-24b-instruct-2501:free", #idk I got a random one
+                    # "model" : "mistralai/mistral-small-24b-instruct-2501:free", #idk I got a random one
                     "messages": [
                         {
                             "role": "user",
@@ -82,6 +82,10 @@ class EiStuff(commands.Cog):
                         await me.send(e)
 
             except KeyError:
+                me = await self.bot.fetch_user(702906770003198003)
+                await me.send(str(e))
+                await me.send(e)
+                await me.send(response.json())
                 await ctx.send("idk man")
             print(response.json())
             await initial_message.edit(content=f"if this message stays on screen it's double broken")
