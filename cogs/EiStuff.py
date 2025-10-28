@@ -70,7 +70,8 @@ class EiStuff(commands.Cog):
         except Exception as e:
             print(response.json())
             await initial_message.edit(content=f"if this message stays on screen it's double broken")
-            await self.bot.fetch_user(702906770003198003).send(response.json())
+            me = await self.bot.fetch_user(702906770003198003)
+            await me.send(response.json())
             await initial_message.edit(content=f"{type(e)}\n{str(e)}")
             print(e)
             print(type(e))
