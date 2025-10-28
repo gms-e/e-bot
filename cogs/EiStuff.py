@@ -9,25 +9,27 @@ import json
 from dotenv import load_dotenv
 import os
 
+key = os.getenv("API_KEY_1")
 class EiStuff(commands.Cog):
     load_dotenv()  # This loads the .env file into the environment
     # Now you can access the variables
     def __init__(self, bot):
         self.bot = bot
 
+
     @commands.Cog.listener()
     async def on_ready(self):
         print("Ei Stuff online")
     @commands.hybrid_command(name = "testpingai")
     async def ei(self, ctx, person: Literal["Astro", "CB", "Josh"], inputted: str):
-        API_KEY_1 = os.getenv("API_KEY_1")
+
         try:
 
             initial_message = await ctx.send(".   .     .")
             response = requests.post(
                 url="https://openrouter.ai/api/v1/chat/completions",
                 headers={
-                    "Authorization" : "Bearer " + API_KEY_1,
+                    "Authorization" : "Bearer " + key,
                     "Content-Type": "application/json",
                 },
                 data=json.dumps({
@@ -68,6 +70,12 @@ class EiStuff(commands.Cog):
             except TypeError:
                 await initial_message.edit(content = f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["content"][0]["message"]["content"])
         except Exception as e:
+            try:
+                if "Rate limit" in str(response.json()["error"]["message"]):
+                    key = os.getenv("API_KEY_2")
+                    await ctx.send("it ran out of credits but I swapped accounts :D")
+            except KeyError:
+                await ctx.send("idk man")
             print(response.json())
             await initial_message.edit(content=f"if this message stays on screen it's double broken")
             me = await self.bot.fetch_user(702906770003198003)
