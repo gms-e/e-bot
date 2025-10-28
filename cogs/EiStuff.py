@@ -31,8 +31,8 @@ class EiStuff(commands.Cog):
                     "Content-Type": "application/json",
                 },
                 data=json.dumps({
-                    "model": "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
-                    # "model" : "arliai/qwq-32b-arliai-rpr-v1:free", #schitzo
+                    # "model": "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
+                    "model" : "arliai/qwq-32b-arliai-rpr-v1:free", #schitzo
                     "messages": [
                         {
                             "role": "user",
