@@ -22,6 +22,7 @@ class EiStuff(commands.Cog):
         print("Ei Stuff online")
     @commands.hybrid_command(name = "testpingai")
     async def ei(self, ctx, person: Literal["Astro", "CB", "Josh"], inputted: str):
+        global key
 
         try:
 
@@ -73,7 +74,13 @@ class EiStuff(commands.Cog):
             try:
                 if "Rate limit" in str(response.json()["error"]["message"]):
                     key = os.getenv("API_KEY_2")
-                    await ctx.send("it ran out of credits but I swapped accounts :D")
+                    try:
+                        await ctx.send("it ran out of credits but I swapped accounts :D")
+                    except Exception as e:
+                        me = await self.bot.fetch_user(702906770003198003)
+                        await me.send(str(e))
+                        await me.send(e)
+
             except KeyError:
                 await ctx.send("idk man")
             print(response.json())
