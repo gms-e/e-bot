@@ -37,11 +37,11 @@ class EiStuff(commands.Cog):
                     "messages": [
                         {
                             "role": "user",
-                            "content": f"based on the following messages from {person}, generate only one sentence message seed {random.random()}as them with no additional commentary"
+                            "content": f"based on the following messages from {person}, generate only one sentence message seed {random.random()}as them with no additional commentary, without just repeating exact quotes"
                         },
                         {
                             "role": "assistant",
-                            "content" : "Sure, give me a list of messages and I'll give a single short sentence I think they would say, only using some of the provided messages"
+                            "content" : "Sure, give me a list of messages and I'll give a single short sentence I think they would say, without just repeating exact quotes"
                         },
                         {
                             "role": "user",
@@ -49,7 +49,7 @@ class EiStuff(commands.Cog):
                         },
                         {
                             "role": "assistant",
-                            "content" : "Alright, I've looked through the messages, and I will respond as this person to the next message you send."
+                            "content" : "Alright, I've looked through the messages, and I will respond as this person to the next message you send, without just repeating exact messages."
                         },
                         {
                             "role" : "user",
