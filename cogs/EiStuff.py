@@ -105,6 +105,18 @@ class EiStuff(commands.Cog):
                     try:
                         await ctx.send(f"it ran out of credits, swap to account {"2" if os.getenv("API_KEY_1") == key else "1"}")
                     except Exception as e:
+                        if "00" in str(e):
+                            with open("airesponsethatwasreallylongsoitsafilenow.txt", "w") as f:
+                                f.write(response.json()["choices"][0]["message"])
+                                await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
+
+                        if "Provider returned error" in response.json()["error"]["message"]:
+                            global model
+                            await ctx.send(f"The ai was busy, you can try again or switch off the {
+                                "Schitzo" if model == "arliai/qwq-32b-arliai-rpr-v1:free" 
+                                else "Uncensored" if model == "cognitivecomputations/dolphin-mistral-24b-venice-edition:free" 
+                                else "Normalish"} model ._. \nnot a me problem")
+
                         me = await self.bot.fetch_user(702906770003198003)
                         await me.send(str(e))
                         await me.send(e)
