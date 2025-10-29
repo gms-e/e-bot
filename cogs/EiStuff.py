@@ -29,9 +29,9 @@ class EiStuff(commands.Cog):
     async def ai_change(self, ctx):
         print("obsolete")
     @ai_change.command(name = "model")
-    async def ai_change_model(self, ctx, changeTo: Literal["Schitzo", "Uncensored", "Normalish"]):
+    async def ai_change_model(self, ctx, models: Literal["Schitzo", "Uncensored", "Normalish"]):
         global model
-        match changeTo:
+        match models:
             case "Schitzo":
                 model = "arliai/qwq-32b-arliai-rpr-v1:free"
             case "Uncensored":
