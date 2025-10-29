@@ -303,6 +303,29 @@ class PrintStuff(commands.Cog):
         await ctx.reply("Deltarune tomorrow", mention_author=False)
         await self.bot.process_commands(ctx)
 
+    #---------------------------------KILL IT WITH FIRE--------------------------------------------------#
+    @commands.hybrid_group()
+    async def killit(self, ctx):
+        print("obsolete")
+    @killit.group(name = "with")
+    async def using(self, ctx):
+        print("obsolete")
+    @using.command(name = "fire")
+    async def fire(self, ctx):
+        if ctx.message.reference:
+            replied_message_id = ctx.message.reference.message_id
+            try:
+                replied_message = await ctx.channel.fetch_message(replied_message_id)
+                if replied_message.author == self.bot.user:
+                    await ctx.send("It's gone, we're safe now.\n YOU ALL SAW NOTHING")
+                    await replied_message.delete()
+                else:
+                    await ctx.send("uh... that's not one of mine, that's your problem.\n Ask them really, REALLY, **REALLY** nicely to delete it, I'm sure that'll go well.")
+            except discord.NotFound:
+                await ctx.send("That, uh... doesn't exist anymore?")
+        else:
+            await ctx.send("WHERE \nWHAT\nREPLY TO IT WHERE IS IT AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+
     # ----------------------------------:__: sender---------------------------------------------3
     @commands.hybrid_command(name = "o__o")
     async def dread(self, ctx):
