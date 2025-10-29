@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 import os
 
 key = os.getenv("API_KEY_1")
+model = "cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
 class EiStuff(commands.Cog):
     load_dotenv()  # This loads the .env file into the environment
     # Now you can access the variables
@@ -20,8 +21,35 @@ class EiStuff(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print("Ei Stuff online")
+
+    @commands.hybrid_group(name="ei")
+    async def ai(self, ctx):
+        print("obsolete")
+    @ai.group(name = "change")
+    async def ai_change(self, ctx):
+        print("obsolete")
+    @ai_change.command(name = "model")
+    async def ai_change_model(self, ctx, changeTo: Literal["Schitzo", "Uncensored", "Normalish"]):
+        global model
+        match changeTo:
+            case "Schitzo":
+                model = "arliai/qwq-32b-arliai-rpr-v1:free"
+            case "Uncensored":
+                model = "cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
+            case "Normalish":
+                model = "mistralai/mistral-small-24b-instruct-2501:free"
+
+    @ai_change.command(name = "account")
+    async def ai_change_account(self, ctx, account: Literal["Acc 1", "Acc 2"]):
+        global key
+        match account:
+            case "Acc 1":
+                key = os.getenv("API_KEY_1")
+            case "Acc 2":
+                key = os.getenv("API_KEY_2")
+
     @commands.hybrid_command(name = "testpingai")
-    async def ei(self, ctx, person: Literal["Astro", "CB", "Josh"], inputted: str):
+    async def ei(self, ctx, person: Literal["Astro", "CB", "Josh", "Omar"], inputted: str):
         global key
 
         try:
@@ -34,7 +62,8 @@ class EiStuff(commands.Cog):
                     "Content-Type": "application/json",
                 },
                 data=json.dumps({
-                    "model": "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
+                    "model": model,
+                    # "model": "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
                     # "model" : "arliai/qwq-32b-arliai-rpr-v1:free", #schitzo
                     # "model" : "mistralai/mistral-small-24b-instruct-2501:free", #idk I got a random one
                     "messages": [
@@ -73,9 +102,8 @@ class EiStuff(commands.Cog):
         except Exception as e:
             try:
                 if "Rate limit" in str(response.json()["error"]["message"]):
-                    key = os.getenv("API_KEY_2")
                     try:
-                        await ctx.send("it ran out of credits but I swapped accounts :D")
+                        await ctx.send(f"it ran out of credits, swap to account {"2" if os.getenv("API_KEY_1") == key else "1"}")
                     except Exception as e:
                         me = await self.bot.fetch_user(702906770003198003)
                         await me.send(str(e))
@@ -123,8 +151,11 @@ class EiStuff(commands.Cog):
                     print(iconic)
                 case 925472450962141195:#meawor
                     pulled = 6
-                case 702906770003198003:#om
-                    pulled = 7
+                case "Omar":
+                    iconic = "Lag is homophobic as we all know, so gay LAN makes it less laggy\nIt's just because I'm racist\nmy diagonals are gay up working now\nedwosk doesn't consume much anime so his immune system rejected the miku\nI had a brain eating amobia once, poor fella died of hungry\nHe has plenty of practice stoning children\nnow that I think about it, I should wear someone's skin\nThree japanese furry men coming at him\nall 271 days of the year\nI exported astro like 3 times and I don't know where he's exporting to\nOh no, I accidentally made it racist\ncan't believe Astro went to gay baby jail\nMore like I'm laughing the same way astro does while you guys threaten me my family and everything I've ever love\nBye Garrett we're gonna be racist\nApplegus supports child slavery\nI speak freedom eagles and foot fetish in math\nThat feeling when murder isn't rewarded... relatable\nEat. The. Panda.\nIf Garrett fights me for the bot I'll drink him\nWe're currently watching Mariofan commit animal abuse\nY'all gonna lock me up just because of three consecutive murders and one attempted one?\nThis one is gonna go through puberty soon don't worry about it\nGreat, all the boys are dead\nWhy have morals when you can have money\nDon't worry all the kids are either blind or lost their innocence\nI'm trying to figure out how to make the fabulous eyebrows while trying to figure out why the spike pit exists\nThat thought made me go through puberty\nthe moon phases are the piss flowing\nNow nobody gets opinion privileges, it's just like China\nScamming and/or blackmailing people to side with you is allowed and encouraged\nFiiiiine, you get 10 minutes break from breathing"
+                    async for m in message.channel.history(limit=75):
+                        if m.author == guy and len(iconic) < 900:
+                            iconic = iconic + "\n" + m.content
                 case 8:#invalid
                     print("idk")
                     pulled = 8
