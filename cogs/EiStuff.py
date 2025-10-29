@@ -105,17 +105,6 @@ class EiStuff(commands.Cog):
                     try:
                         await ctx.send(f"it ran out of credits, swap to account {"2" if os.getenv("API_KEY_1") == key else "1"}")
                     except Exception as e:
-                        if "00" in str(e):
-                            with open("airesponsethatwasreallylongsoitsafilenow.txt", "w") as f:
-                                f.write(response.json()["choices"][0]["message"])
-                                await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
-
-                        if "Provider returned error" in response.json()["error"]["message"]:
-                            await ctx.send(f"The ai was busy, you can try again or switch off the {
-                                "Schitzo" if model == "arliai/qwq-32b-arliai-rpr-v1:free" 
-                                else "Uncensored" if model == "cognitivecomputations/dolphin-mistral-24b-venice-edition:free" 
-                                else "Normalish"} model ._. \nnot a me problem")
-
                         me = await self.bot.fetch_user(702906770003198003)
                         await me.send(str(e))
                         await me.send(e)
@@ -130,7 +119,19 @@ class EiStuff(commands.Cog):
             await initial_message.edit(content=f"if this message stays on screen it's double broken")
             me = await self.bot.fetch_user(702906770003198003)
             await me.send(response.json())
-            await initial_message.edit(content=f"{type(e)}\n{str(e)}")
+
+            if "Provider returned error" in response.json()["error"]["message"]:
+                await initial_message.edit(content = f"The ai was busy, you can try again or switch off the {
+                "Schitzo" if model == "arliai/qwq-32b-arliai-rpr-v1:free"
+                else "Uncensored" if model == "cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
+                else "Normalish"} model ._. \nnot a me problem")
+            elif "00" in str(e):
+                with open("airesponsethatwasreallylongsoitsafilenow.txt", "w") as f:
+                    f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
+                    await initial_message.edit(content=f"{ctx.author}: {inputted}\nthe personification of e bot: that was kinda long, I had to make a file ._.")
+                    await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
+            else:
+                await initial_message.edit(content=f"{type(e)}\n{str(e)}")
             print(e)
             print(type(e))
 
