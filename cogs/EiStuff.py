@@ -111,7 +111,6 @@ class EiStuff(commands.Cog):
                                 await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
 
                         if "Provider returned error" in response.json()["error"]["message"]:
-                            global model
                             await ctx.send(f"The ai was busy, you can try again or switch off the {
                                 "Schitzo" if model == "arliai/qwq-32b-arliai-rpr-v1:free" 
                                 else "Uncensored" if model == "cognitivecomputations/dolphin-mistral-24b-venice-edition:free" 
