@@ -77,7 +77,7 @@ class EiStuff(commands.Cog):
                         },
                         {
                             "role": "user",
-                            "content": f"Here are messages: {await self.pullQaM(ctx, person)}"
+                            "content": f"Here are messages: {await self.pullQaM(ctx, person)}, rover is a catboy"
                         },
                         {
                             "role": "assistant",
