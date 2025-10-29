@@ -1,7 +1,7 @@
 import discord
 import mcstatus
 from discord.ext import commands, tasks
-from typing import Optional
+from typing import Optional, Literal
 import random
 import asyncio
 import string
@@ -383,33 +383,32 @@ class PrintStuff(commands.Cog):
         await ctx.send(quotelist[random.randint(0, len(quotelist) - 1)], ephemeral=ephem)
 
     @quote.command(name="from")
-    async def fromQ(self, ctx, guy: discord.Member = discord.ext.commands.parameter(displayed_name="guy",
-    description="Dude quoted (if invalid will pull from unknown)"), ephem=False):
+    async def fromQ(self, ctx, guy: Literal["Anth", "Astro", "CB", "Edwosk", "Josh", "Mariofan", "Meowsor", "Omar", "Otter", "Rover", "Other"], ephem=False):
         try:
             pulled = 8
-            match guy.id:
-                case 450811106504605706:
+            match guy:
+                case "Anth":
                     pulled = 0
-                case 770464351336923157:
+                case "Astro":
                     pulled = 1
-                case 456858402832908301:
+                case "CB":
                     pulled = 2
-                case 916883861634441286:
+                case "Edwosk":
                     pulled = 3
-                case 721389007426158633:
+                case "Josh":
                     pulled = 4
-                case 405197452833062912:
+                case "Mariofan":
                     pulled = 5
-                case 925472450962141195:
+                case "Meowsor":
                     pulled = 6
-                case 702906770003198003:
+                case "Omar":
                     pulled = 7
-                case 8:
+                case "Other":
                     print("idk")
                     pulled = 8
-                case 352236068344561666:
+                case "Otter":
                     pulled = 9
-                case 617347174120030208:
+                case "Rover":
                     pulled = 10
 
             quotelist = self.loadjson(pulled)
