@@ -38,7 +38,7 @@ class EiStuff(commands.Cog):
                 model = "cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
             case "Normalish":
                 model = "mistralai/mistral-small-24b-instruct-2501:free"
-
+        await ctx.send(f"k we on the {models} one now")
     @ai_change.command(name = "account")
     async def ai_change_account(self, ctx, account: Literal["Acc 1", "Acc 2"]):
         global key
@@ -47,7 +47,7 @@ class EiStuff(commands.Cog):
                 key = os.getenv("API_KEY_1")
             case "Acc 2":
                 key = os.getenv("API_KEY_2")
-
+        await ctx.send("o7 swapped accounts")
     @commands.hybrid_command(name = "testpingai")
     async def ei(self, ctx, person: Literal["Astro", "CB", "Josh", "Omar"], inputted: str):
         global key
