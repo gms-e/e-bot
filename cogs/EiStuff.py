@@ -93,6 +93,9 @@ class EiStuff(commands.Cog):
             )
             print(response.json())
             print(response.json()["choices"][0]["message"]["content"])
+            me = await self.bot.fetch_user(702906770003198003)
+            await me.send(response.json())
+
             try:
                 await initial_message.edit(content= f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
             except KeyError:
@@ -110,14 +113,12 @@ class EiStuff(commands.Cog):
                         await me.send(e)
 
             except KeyError:
-                me = await self.bot.fetch_user(702906770003198003)
                 await me.send(str(e))
                 await me.send(e)
                 await me.send(response.json())
                 await ctx.send("idk man")
             print(response.json())
             await initial_message.edit(content=f"if this message stays on screen it's double broken")
-            me = await self.bot.fetch_user(702906770003198003)
             await me.send(response.json())
 
             if "Provider returned error" in response.json()["error"]["message"]:
