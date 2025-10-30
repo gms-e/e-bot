@@ -246,7 +246,7 @@ class PrintStuff(commands.Cog):
     @animation.group(name = "dev", hidden = True)
     async def dev(self):
         print("obsolete")
-    @dev.group(name = "set", hidden = True)
+    @dev.command(name = "set", hidden = True)
     async def set(self, ctx, days: int):
         with open("updayt.txt", 'w') as f:
             f.write(str(days))
