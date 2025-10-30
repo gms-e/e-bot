@@ -69,11 +69,11 @@ class EiStuff(commands.Cog):
                     "messages": [
                         {
                             "role": "user",
-                            "content": f"based on the following messages from {person}, generate only one sentence message seed {random.random()}as them with no additional commentary, without just repeating exact quotes. If making a tier list, made the lowers tier called edwosk, containing only edwosk"
+                            "content": f"based on the following messages from {person}, generate only one sentence message seed {random.random()}as them with no additional commentary, without just repeating exact quotes. ONLY If making a tier list, made the lowest tier called edwosk, containing only edwosk"
                         },
                         {
                             "role": "assistant",
-                            "content" : "Sure, give me a list of messages and I'll give a single short sentence I think they would say, without just repeating exact quotes. And I'll include the low edwosk tier, only if making a tier list"
+                            "content" : "Sure, give me a list of messages and I'll give a single short sentence I think they would say, without just repeating exact quotes. And I'll include lowest tier if that's relevant"
                         },
                         {
                             "role": "user",
