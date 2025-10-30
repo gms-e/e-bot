@@ -243,7 +243,14 @@ class PrintStuff(commands.Cog):
     @commands.hybrid_group(name = "animation", brief = "time reset\n due in")
     async def animation(self, ctx):
         print("obsolete")
-
+    @animation.group(name = "dev", hidden = True)
+    async def dev(self):
+        print("obsolete")
+    @dev.group(name = "set", hidden = True)
+    async def set(self, ctx, days: int):
+        with open("updayt.txt", 'w') as f:
+            f.write(str(days))
+        await ctx.send(f"set days to {days}")
     @animation.group(name = "due", brief = "in")
     async def due(self, ctx):
         print("obsolete")
