@@ -128,7 +128,12 @@ class EiStuff(commands.Cog):
                 else "Normalish"} model ._. \nnot a me problem")
             elif "00" in str(e):
                 with open("airesponsethatwasreallylongsoitsafilenow.txt", "w") as f:
-                    f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
+                    try:
+                        f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
+                    except Exception as e:
+                        await initial_message.edit(
+                            content=f"{e}\n {str(e)}\n {type(e)}")
+                        f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
                     await initial_message.edit(content=f"{ctx.author}: {inputted}\nthe personification of e bot: that was kinda long, I had to make a file ._.")
                     await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
             else:
