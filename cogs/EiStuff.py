@@ -77,7 +77,7 @@ class EiStuff(commands.Cog):
                         },
                         {
                             "role": "user",
-                            "content": f"Here are messages: {await self.pullQaM(ctx, person)}, rover is a catboy, tier lists have an edwosk tier"
+                            "content": f"Here are messages: {await self.pullQaM(ctx, person)}, rover is a catboy"
                         },
                         {
                             "role": "assistant",
@@ -85,7 +85,7 @@ class EiStuff(commands.Cog):
                         },
                         {
                             "role" : "user",
-                            "content" : f"{inputted}"
+                            "content" : f"{inputted}, if making a tier list, made a tier called edwosk, containing only edwosk"
                         }
                     ],
 
