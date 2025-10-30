@@ -244,7 +244,7 @@ class PrintStuff(commands.Cog):
     async def animation(self, ctx):
         print("obsolete")
     @animation.group(name = "dev", hidden = True)
-    async def dev(self):
+    async def dev(self, ctx):
         print("obsolete")
     @dev.command(name = "set", hidden = True)
     async def set(self, ctx, days: int):
