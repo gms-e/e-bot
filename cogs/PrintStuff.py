@@ -252,7 +252,7 @@ class PrintStuff(commands.Cog):
         if "dev" in ctx.author.nick:
             with open("updayt.txt", 'r+') as f:
                 prev = f.readline()
-                f.write(str(days))
+                f.write(str(days) + "     ")
                 await ctx.send(f"changed {prev} days to {days}")
     @animation.group(name = "due", brief = "in")
     async def due(self, ctx):
