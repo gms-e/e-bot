@@ -94,21 +94,34 @@ class EiStuff(commands.Cog):
             print(response.json())
             print(response.json()["choices"][0]["message"]["content"])
             me = await self.bot.fetch_user(702906770003198003)
-            await me.send(response.json())
 
             try:
+                await me.send(response.json())
                 await initial_message.edit(content= f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
             except KeyError:
                 await initial_message.edit(content = f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["reasoning"])
             except TypeError:
                 await initial_message.edit(content = f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["content"][0]["message"]["content"])
         except Exception as e:
+            if "400 Bad Request" in str(e):
+                print("too long, trying to send file")
+                with open("airesponsethatwasreallylongsoitsafilenow.txt", "w") as f:
+                    try:
+                        f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
+                        await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
+                    except Exception as e:
+                        await initial_message.edit(
+                            content=f"{e}\n {str(e)}\n {type(e)}")
+                        f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["reasoning"])
+                    await initial_message.edit(content=f"{ctx.author}: {inputted}\nthe personification of e bot: that was kinda long, I had to make a file ._.")
+                    await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
+                return
             try:
                 if "Rate limit" in str(response.json()["error"]["message"]):
                     try:
                         await ctx.send(f"it ran out of credits, swap to account {"2" if os.getenv("API_KEY_1") == key else "1"}")
+                        return
                     except Exception as e:
-                        me = await self.bot.fetch_user(702906770003198003)
                         await me.send(str(e))
                         await me.send(e)
 
@@ -116,9 +129,7 @@ class EiStuff(commands.Cog):
                 await me.send(str(e))
                 await me.send(e)
                 await me.send(response.json())
-                await ctx.send("idk man")
             print(response.json())
-            await initial_message.edit(content=f"if this message stays on screen it's double broken")
             await me.send(response.json())
 
             if "Provider returned error" in response.json()["error"]["message"]:
@@ -126,18 +137,7 @@ class EiStuff(commands.Cog):
                 "Schitzo" if model == "arliai/qwq-32b-arliai-rpr-v1:free"
                 else "Uncensored" if model == "cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
                 else "Normalish"} model ._. \nnot a me problem")
-            elif "00" in str(e):
-                with open("airesponsethatwasreallylongsoitsafilenow.txt", "w") as f:
-                    try:
-                        f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
-                    except Exception as e:
-                        await initial_message.edit(
-                            content=f"{e}\n {str(e)}\n {type(e)}")
-                        f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
-                    await initial_message.edit(content=f"{ctx.author}: {inputted}\nthe personification of e bot: that was kinda long, I had to make a file ._.")
-                    await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
-            else:
-                await initial_message.edit(content=f"{type(e)}\n{str(e)}")
+
             print(e)
             print(type(e))
 
