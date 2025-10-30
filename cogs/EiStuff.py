@@ -108,7 +108,6 @@ class EiStuff(commands.Cog):
                 with open("airesponsethatwasreallylongsoitsafilenow.txt", "w") as f:
                     try:
                         f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
-                        await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
                     except Exception as e:
                         await initial_message.edit(
                             content=f"{e}\n {str(e)}\n {type(e)}")
