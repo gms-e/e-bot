@@ -48,7 +48,7 @@ class EiStuff(commands.Cog):
             case "Acc 2":
                 key = os.getenv("API_KEY_2")
         await ctx.send("o7 swapped accounts")
-    @commands.hybrid_command(name = "testpingai")
+    @commands.hybrid_command(name = "testpingei")
     async def ei(self, ctx, person: Literal["Astro", "CB", "Josh", "Omar"], inputted: str):
         global key
 
@@ -116,25 +116,23 @@ class EiStuff(commands.Cog):
                 return
             try:
                 if "Rate limit" in str(response.json()["error"]["message"]):
-                    try:
-                        await ctx.send(f"it ran out of credits, swap to account {"2" if os.getenv("API_KEY_1") == key else "1"}")
-                        return
-                    except Exception as e:
-                        await me.send(str(e))
-                        await me.send(e)
+                    await ctx.send(f"it ran out of credits, swap to account {"2" if os.getenv("API_KEY_1") == key else "1"}")
+
+                elif "Provider returned error" in str(response.json()["error"]["message"]):
+                    await initial_message.edit(content=f"The ai was busy, you can try again or switch off the {
+                    "Schitzo" if model == "arliai/qwq-32b-arliai-rpr-v1:free"
+                    else "Uncensored" if model == "cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
+                    else "Normalish"} model ._. \nnot a me problem")
 
             except KeyError:
                 await me.send(str(e))
                 await me.send(e)
                 await me.send(response.json())
+
             print(response.json())
             await me.send(response.json())
 
-            if "Provider returned error" in response.json()["error"]["message"]:
-                await initial_message.edit(content = f"The ai was busy, you can try again or switch off the {
-                "Schitzo" if model == "arliai/qwq-32b-arliai-rpr-v1:free"
-                else "Uncensored" if model == "cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
-                else "Normalish"} model ._. \nnot a me problem")
+
 
             print(e)
             print(type(e))
