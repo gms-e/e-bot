@@ -106,13 +106,12 @@ class EiStuff(commands.Cog):
             if "400 Bad Request" in str(e):
                 print("too long, trying to send file")
                 with open("airesponsethatwasreallylongsoitsafilenow.txt", "w") as f:
-                    try:
-                        f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
-                    except Exception as e:
-                        await initial_message.edit(
-                            content=f"{e}\n {str(e)}\n {type(e)}")
-                        f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["reasoning"])
                     await initial_message.edit(content=f"{ctx.author}: {inputted}\nthe personification of e bot: that was kinda long, I had to make a file ._.")
+                    if response.json()["choices"][0]["message"]["content"] is not None and response.json()["choices"][0]["message"]["content"] is not "":
+                        f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
+                    else:
+                        f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["reasoning"])
+                    await asyncio.sleep(2)
                     await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
                 return
             try:
