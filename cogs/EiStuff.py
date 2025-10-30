@@ -111,8 +111,8 @@ class EiStuff(commands.Cog):
                         f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
                     else:
                         f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["reasoning"])
-                    await asyncio.sleep(2)
-                    await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
+                await asyncio.sleep(2)
+                await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
                 return
             try:
                 if "Rate limit" in str(response.json()["error"]["message"]):
