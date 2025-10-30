@@ -49,7 +49,7 @@ class EiStuff(commands.Cog):
                 key = os.getenv("API_KEY_2")
         await ctx.send("o7 swapped accounts")
     @commands.hybrid_command(name = "testpingei")
-    async def ei(self, ctx, person: Literal["Astro", "CB", "Josh", "Omar"], inputted: str):
+    async def ei(self, ctx, person: Literal["Astro", "CB", "Josh", "Omar", "Rover"], inputted: str):
         global key
 
         try:
@@ -69,11 +69,11 @@ class EiStuff(commands.Cog):
                     "messages": [
                         {
                             "role": "user",
-                            "content": f"based on the following messages from {person}, generate only one sentence message seed {random.random()}as them with no additional commentary, without just repeating exact quotes. If making a tier list, made a tier called edwosk, containing only edwosk"
+                            "content": f"based on the following messages from {person}, generate only one sentence message seed {random.random()}as them with no additional commentary, without just repeating exact quotes. If making a tier list, made the lowers tier called edwosk, containing only edwosk"
                         },
                         {
                             "role": "assistant",
-                            "content" : "Sure, give me a list of messages and I'll give a single short sentence I think they would say, without just repeating exact quotes. And I'll include an edwosk tier, only if that's relevant"
+                            "content" : "Sure, give me a list of messages and I'll give a single short sentence I think they would say, without just repeating exact quotes. And I'll include the low edwosk tier, only if making a tier list"
                         },
                         {
                             "role": "user",
@@ -175,8 +175,11 @@ class EiStuff(commands.Cog):
                     pulled = 8
                 case 352236068344561666: #otter
                     pulled = 9
-                case 617347174120030208: #rover
-                    pulled = 10
+                case "Rover": #rover
+                    iconic = "Like I HATE black people so much\nI HATE gay peope\nWhat if you go to hell- because I KNOW you're going to hell\nI'ma go beat up some more gays\nI, Rovuh, Hate the gays\nI'm the resident catboy furry\nWhenever I hear gay people crying I like to imagine myself beating them\nDiamonds invented minecraft, this is the truth the government doesn't want you to know this\nI'm harassing this woman, please die already!\nThis is why I don't like Women >:(\nI want to find and dropkick homos\nI'm racist guys\nMy slave is actually so overpowered\ngays is federal propaganda\ni forgot i can speak brb\nI'm actually about to commit abuse\nwe should put weakness in this room considering... astro is going to kill us all"
+                    async for m in message.channel.history(limit=275):
+                        if m.author == guy and len(iconic) < 900:
+                            iconic = iconic + "\n" + m.content
         except Exception as error:
             print("An error occurred:", type(error).__name__)
             print(str(error))
