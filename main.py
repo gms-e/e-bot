@@ -141,6 +141,7 @@ async def on_message(message):
         try:
             m = await message.channel.fetch_message(message.id)
             await m.edit(content=message.content.replace("h", "**e**"))
+            await m.edit(content=message.content.replace("H", "**E**"))
         except Exception as error:
             print(error)
         return
