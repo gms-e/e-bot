@@ -138,11 +138,17 @@ async def main():
 async def on_message(message):
     usettings = bot.get_cog("SetStuff")
     if message.author == bot.user:
+        try:
+            m = await message.channel.fetch_message(message.id)
+            await m.edit(content=message.content.replace("h", "**e**"))
+        except Exception as error:
+            print(error)
         return
     lower = message.content.lower()
 
 #----------------------------------Kys catcher--------------------------------------------#
     try:
+
         if ("kys" in lower or "kill yourself" in lower) and await usettings.get_value(message, message.author, "kys"):
 
             print(f"saw kys")
