@@ -138,12 +138,12 @@ async def main():
 async def on_message(message):
     usettings = bot.get_cog("SetStuff")
     if message.author == bot.user:
-        try:
-            m = await message.channel.fetch_message(message.id)
-            await m.edit(content=message.content.replace("h", "**e**"))
-            await m.edit(content=message.content.replace("H", "**E**"))
-        except Exception as error:
-            print(error)
+        # try:
+        #     m = await message.channel.fetch_message(message.id)
+        #     await m.edit(content=message.content.replace("h", "**e**"))
+        #     await m.edit(content=message.content.replace("H", "**E**"))
+        # except Exception as error:
+        #     print(error)
         return
     lower = message.content.lower()
 
