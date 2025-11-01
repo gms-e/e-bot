@@ -17,9 +17,32 @@ class PrintStuff(commands.Cog):
         self.bot = bot
         self.task.start()
 
+    async def printto(self, m: str):
+        print(m)
+        channel = await self.bot.fetch_channel(1434085176320852018)
+        if channel is None:
+            channel = await self.bot.get_channel(1434085176320852018)
+
+        try:
+            if len(str(m)) > 2000:
+                n = []
+                i = 0
+                for i in range(0, len(m), 1900):
+                    await channel.send(m[i:i + 1900])
+            else:
+                await channel.send(m)
+        except Exception as error:
+            print(str(error))
+            print(error)
+            try:
+                await channel.send(str(error))
+                await channel.send(error)
+            except Exception as error:
+                print("ok that's enough try catch")
+
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Print Stuff online")
+        await self.printto("Print Stuff online")
 
     #-----------------------------------------
     @commands.Cog.listener()
@@ -49,27 +72,27 @@ class PrintStuff(commands.Cog):
                 words = words.replace("\n", " ")
                 words = words.split(" ")
 
-                print(words)
+                await self.printto(words)
 
                 for g in words:
-                    print(g)
+                    await self.printto(g)
                     if "<@" in g and len(g) > 10:
                         wid = int(g[2:len(g) - 1])
-                        print(wid)
+                        await self.printto(wid)
 
                         peep = await self.bot.fetch_user(wid)
-                        print(peep)
+                        await self.printto(peep)
                         currlist.append(peep)
                     elif "X/6" in g:
-                        print("use da failures list")
+                        await self.printto("use da failures list")
                         currlist = exlist
                     elif "6/6" in g:
-                        print("use almost failures list")
+                        await self.printto("use almost failures list")
                         currlist = sixlist
                     else:
-                        print("frick is that, that ain't an ID")
-                print("6/6: ", sixlist)
-                print("X/6: ", exlist)
+                        await self.printto("frick is that, that ain't an ID")
+                await self.printto("6/6: ", sixlist)
+                await self.printto("X/6: ", exlist)
                 for guy in exlist:
                     await guy.send("bro failed the wordle smh my head emoji skill issue")
                 for guy in sixlist:
@@ -83,15 +106,15 @@ class PrintStuff(commands.Cog):
     # ------------------------------------------Bluff----------------------------------------------------------#
     @commands.hybrid_command(name="bluff", brief = "Tell e bot to do something, even if it can't.")
     async def fakeit(self, ctx):
-        print("bluff")
+        await self.printto("bluff")
         global bluff
         bluff = True
-        print("worked")
+        await self.printto("worked")
         await ctx.bot.process_commands(ctx)
     # ----------------------------------Date since made--------------------------------------------#
     @commands.hybrid_group(brief="created")
     async def time(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
         await self.bot.process_commands(ctx)
     @time.command()
     async def created(self, ctx):
@@ -101,56 +124,75 @@ class PrintStuff(commands.Cog):
     #-------------------------------Reports mc server status & players when requested--------------------------------#
     @commands.hybrid_group(name = "server", brief = "up\n role add | remove")
     async def server(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
     @server.command(name = "up")
     async def up(self, ctx):
         usettings = self.bot.get_cog("SetStuff")
         sessage = await ctx.send("uh")
         try:
             server = mcstatus.JavaServer.lookup("true-cigarette.gl.joinmc.link")
-            server.status().players.online
+            st = server.status()
+            await self.printto(st.players.online)
+            count = st.players.online
             if random.random() < 1/90 and await usettings.get_value(ctx, ctx.author, "serverlie"):
+                sessage = await sessage.channel.fetch_message(sessage.id)
                 await sessage.edit(content="Nope...")
                 return
             else:
-                await sessage.edit(content = f"yea {server.status().players.online} {"guys" if server.status().players.online > 1 else "guy" if server.status().players.online == 1 else "nobody"} on there")
-            dudes = server.status().players.sample
-            dudelist = ""
-            if len(dudes) > 1:
-                for dude in dudes:
-                    dudelist = dudelist + dude.name + ", "
-            elif len(dudes) == 1:
-                dudelist = dudes[0].name
-            if len(dudes) >=1:
-                await ctx.send(f"{dudelist}")
-            print(server.status())
+                sessage = await sessage.channel.fetch_message(sessage.id)
+                await sessage.edit(content = f"yea, {f"{count} guys on." if count > 1 else "1 guy on." if count == 1 else "but nobody's on ._."}")
+            try:
+                dudes = st.players.sample
+                dudelist = ""
+                if len(dudes) > 1:
+                    for dude in dudes:
+                        dudelist = dudelist + dude.name + ", "
+                elif len(dudes) == 1:
+                    dudelist = dudes[0].name
+                if len(dudes) >=1:
+                    await ctx.send(f"{dudelist}.")
+
+            except Exception as error:
+                await self.printto(str(error))
+                await self.printto("error handling for error that made empty server = offline server bc error handling is funny")
+        except BrokenPipeError as e:
+            sessage = await sessage.channel.fetch_message(sessage.id)
+            await sessage.edit(content = "idk it failed in a weird way do it again")
         except Exception as e:
+            await self.printto("error: " + str(e))
             if random.random() < 1/90 and await usettings.get_value(ctx, ctx.author, "serverlie"):
+                sessage = await sessage.channel.fetch_message(sessage.id)
                 await sessage.edit(content="Yeah One guy one there")
                 await sessage.channel.send("Mariofan527")
 
             else:
-                await sessage.edit(content = "nope")
-
-    @up.error
-    async def mcstatus_error(self, ctx, error):
-        print(f"trying, but {error}")
-        await ctx.channel.send("idk something broke")
+                sessage = await sessage.channel.fetch_message(sessage.id)
+                await sessage.edit(content = f"nah")
+    #
+    # @up.error
+    # async def mcstatus_error(self, ctx, error):
+    #     await self.printto(f"trying, but {error}")
+    #     await ctx.channel.send("idk something broke")
 
     #helper command for checking if server is up in main, exists to avoid importing mcstatus *again* in main
     async def sup(self):
         try:
             server = mcstatus.JavaServer.lookup("true-cigarette.gl.joinmc.link")
             server.status().players.online
-            print("Server online")
+            await self.printto("Server online")
             return 1
+        except BrokenPipeError as e:
+            await self.printto("weird error with sup, ", str(e), "\n time to try again :D")
+            return await self.sup()
         except Exception as e:
-            print("Server offline")
+            await self.printto(str(e))
+            await self.printto(e)
+            await self.printto("Server offline")
             return 0
     #------------------------------------Server role management---------------------------------------------#
     @server.group(name = "role")
     async def role(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
 
     @role.command(name = "add")
     async def role_add(self, ctx):
@@ -168,7 +210,7 @@ class PrintStuff(commands.Cog):
 
     @commands.hybrid_group(name = "daily", breif = "teto")
     async def daily(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
     @daily.command(name="teto", brief = "posts the day's teto")
     async def kasane(self, ctx):
         usettings = self.bot.get_cog("SetStuff")
@@ -182,14 +224,14 @@ class PrintStuff(commands.Cog):
                  "https://tenor.com/view/miku-hatsune-miku-anime-dance-silly-gif-7439677361449276795"]
         try:
             if random.random() < 1/20 and await usettings.get_value(ctx, ctx.author, "tetnot"):
-                print("wait that's not teto")
+                await self.printto("wait that's not teto")
                 await ctx.reply(tetos[7], mention_author=False)
             else:
-                print("teto")
+                await self.printto("teto")
                 await ctx.reply(tetos[datetime.date.today().weekday()], mention_author=False)
         except Exception as e:
-            print(e)
-            print(str(e))
+            await self.printto(e)
+            await self.printto(str(e))
 
     #-----------------------------------Anim progress tracker-----------------------------------------#
     @tasks.loop(minutes=120)
@@ -198,9 +240,8 @@ class PrintStuff(commands.Cog):
             channel = self.bot.get_channel(1282010600322629652)
 
             if channel is None:
-                print("channel was none, trying with fetch")
+                await self.printto("channel was none, trying with fetch")
                 channel = await self.bot.fetch_channel(1282010600322629652)
-                print(channel)
 
             if datetime.datetime.now().hour == 0 or datetime.datetime.now().hour == 23:
                 day = -1
@@ -212,7 +253,7 @@ class PrintStuff(commands.Cog):
                     with open("updayt.txt", "x") as f:
                         f.write("2")
                         day= 2
-                        print("made a file since it wasn't there, running as if was offline")
+                        await self.printto("made a file since it wasn't there, running as if was offline")
 
                 day -= 1
                 match day:
@@ -229,23 +270,23 @@ class PrintStuff(commands.Cog):
                         await asyncio.sleep(hours = 24 - datetime.datetime.now().hour)
                         await channel.send("ok *now* it's over ._. \n(I think, the code for this message is kinda jank)\n Did I do it in time?")
                     case x if x > 5:
-                        print("eh")
+                        await self.printto("eh")
                     case _:
                         await channel.send(f"I don't know what I am doing. {day} days left, this message shouldn't be possible to see and only exists for error handling. \n PLEASE tell me I didn't go negative in days remaining")
 
                 with open("updayt.txt", "w") as f:
                     f.write(f"{day}")
         except Exception as e:
-            print(e)
-            print(str(e))
+            await self.printto(e)
+            await self.printto(str(e))
 
     #--------------------------------Check anim days left----------------------------------------------#
     @commands.hybrid_group(name = "animation", brief = "time reset\n due in")
     async def animation(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
     @commands.group(name = "dev", hidden = True)
     async def dev(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
     @dev.command(name = "set", hidden = True)
     async def set(self, ctx, days: int):
 
@@ -258,7 +299,7 @@ class PrintStuff(commands.Cog):
                 await ctx.send(f"changed {prev} days to {days}")
     @animation.group(name = "due", brief = "in")
     async def due(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
     @due.command(name = "in")
     async def within(self, ctx):
         day = -1
@@ -270,7 +311,7 @@ class PrintStuff(commands.Cog):
             with open("updayt.txt", "x") as f:
                 f.write("2")
                 day = 2
-                print("made a file since it wasn't there, running as if was offline")
+                await self.printto("made a file since it wasn't there, running as if was offline")
         match day:
             case 4:
                 await ctx.send("4 days left technically, made progress today .-.")
@@ -287,7 +328,7 @@ class PrintStuff(commands.Cog):
 
     @animation.group(name = "time", brief = "reset")
     async def tiempo(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
     @tiempo.command(name = "reset")
     async def reset(self, ctx):
         if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912):
@@ -308,7 +349,7 @@ class PrintStuff(commands.Cog):
     # ----------------------------------Deltarune tomorrow--------------------------------------------#
     @commands.hybrid_group(name="deltarune", brief="tomorrow")
     async def deltarune(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
         await self.bot.process_commands(ctx)
     @deltarune.command(name="tomorrow", brief="deltarune tomorrow")
     async def tomorrow(self, ctx):
@@ -318,10 +359,10 @@ class PrintStuff(commands.Cog):
     #---------------------------------KILL IT WITH FIRE--------------------------------------------------#
     @commands.hybrid_group()
     async def killit(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
     @killit.group(name = "with")
     async def using(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
     @using.command(name = "fire")
     async def fire(self, ctx):
         if ctx.message.reference:
@@ -345,7 +386,7 @@ class PrintStuff(commands.Cog):
     # ----------------------------------Quote series--------------------------------------------#
     @commands.hybrid_group(brief = "from | random")
     async def quote(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
     #quote helper command
     def loadjson(self, value) -> list:
         global ql
@@ -439,7 +480,7 @@ class PrintStuff(commands.Cog):
                 case "Omar":
                     pulled = 7
                 case "Other":
-                    print("idk")
+                    await self.printto("idk")
                     pulled = 8
                 case "Otter":
                     pulled = 9
@@ -449,8 +490,8 @@ class PrintStuff(commands.Cog):
             quotelist = self.loadjson(pulled)
             await ctx.send(quotelist[random.randint(0, len(quotelist) - 1)], ephemeral=ephem)
         except Exception as error:
-            print("An error occurred:", type(error).__name__)
-            print(str(error))
+            await self.printto("An error occurred:", type(error).__name__)
+            await self.printto(str(error))
 
 
 
