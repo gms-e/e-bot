@@ -35,18 +35,31 @@ messageCount = 0
 #@bot.event
 #async def on_ready():
 #    print("tree ready!")
+async def printto(m: str):
+    print(m)
+    channel = await bot.fetch_channel(1434085056393252904)
+    if channel is None:
+        channel = await bot.get_channel(1434085056393252904)
 
+    try:
+        await channel.send(m)
+    except Exception as error:
+        print(str(error))
+        try:
+            await channel.send(str(error))
+        except Exception as error:
+            print("ok that's enough try catch")
 
 @bot.event
 async def on_ready():
-    print(f'{bot.user} has connected to Discord! Version {discord.__version__}')
+    await printto(f'{bot.user} has connected to Discord! Version {discord.__version__}')
     synced = await bot.tree.sync()
     try:
         await timechecks.start()
     except Exception as error:
-        print(error)
-        print(str(error))
-    print(f"bot ready")
+        await printto(error)
+        await printto(str(error))
+    await printto(f"bot ready")
 
 @tasks.loop(minutes=30) # Runs every 60 seconds (adjust as needed)
 async def timechecks():
@@ -60,17 +73,17 @@ async def timechecks():
     except FileNotFoundError:
         with open("serverStat.txt", "x") as f:
             f.write("0")
-            print("made a file since it wasn't there, running as if was offline")
+            await printto("made a file since it wasn't there, running as if was offline")
 
     if await checker.sup() == 1 and servNum <= 0:
-        print("server up and used to be offline")
+        await printto("server up and used to be offline")
         with open("serverStat.txt", "w") as f:
             f.write("1")
         await bot.get_channel(1264704750633619486).send("<@&1426289745784340591> server people,\nServer up")
     elif await checker.sup() == 1 and servNum == 1:
-        print("server up and used to be online")
+        await printto("server up and used to be online")
     else:
-        print("Server not up")
+        await printto("Server not up")
         with open("serverStat.txt", "w") as f:
             f.write("0")
 
@@ -143,7 +156,7 @@ async def on_message(message):
         #     await m.edit(content=message.content.replace("h", "**e**"))
         #     await m.edit(content=message.content.replace("H", "**E**"))
         # except Exception as error:
-        #     print(error)
+        #     await printto(error)
         return
     lower = message.content.lower()
 
@@ -152,13 +165,13 @@ async def on_message(message):
 
         if ("kys" in lower or "kill yourself" in lower) and await usettings.get_value(message, message.author, "kys"):
 
-            print(f"saw kys")
+            await printto(f"saw kys")
             await message.add_reaction("🇪")
             await message.add_reaction("<:kyours:1377804377540137010>")
             return
     except Exception as error:
-        print(error)
-        print(str(error))
+        await printto(error)
+        await printto(str(error))
 
 # -----------------------------Omar anim catcher------------------------------------------#
     if "omar" in lower and await usettings.get_value(message, message.author, "omaranim"):
@@ -170,7 +183,7 @@ async def on_message(message):
 
     if ("skill issue" in lower or "too hard"  in lower or "died"  in lower) and await usettings.get_value(message, message.author, "skillissue"):
 
-        print(f"saw skill issue")
+        await printto(f"saw skill issue")
         await message.add_reaction("🇪")
         await message.add_reaction("<:skillissue:1120782165483978802>")
         # await message.add_reaction("<1377804377540137010>")
@@ -178,18 +191,18 @@ async def on_message(message):
 
     # ----------------------------------Ohh Canadaa--------------------------------------------#
     if message.author.id == 405197452833062912 and message.channel.name == "monoday-chat":
-        print(f"Racist time")
+        await printto(f"Racist time")
         await message.add_reaction("🇨🇦")
     # ----------------------------------so sad catcher--------------------------------------------#
     if "so sad" in lower and "play" not in lower and "." not in lower:
-        print("found so sad")
+        await printto("found so sad")
 
         if await usettings.get_value(message, message.author, "sadeyes"):
             await message.add_reaction("🇪")
             await message.add_reaction("👀")
 
         if random.random() < 0.01 * 5 and await usettings.get_value(message, message.author, "sosad"):
-            print("HOW SAD???")
+            await printto("HOW SAD???")
             if random.random() < 0.5:
                 await message.channel.send(file=discord.File("how sad.png"))
             else:
@@ -234,16 +247,16 @@ async def on_message(message):
         await message.channel.send(file=discord.File("crabbethy.jpg"))
     #----------------------------------Plays yosh when phrase--------------------------------------------#
     if "play yoshi and me" in lower and await usettings.get_value(message, message.author, "yoshiandme"):
-        print("saw yosh")
+        await printto("saw yosh")
         voices = bot.get_cog("VoiceStuff")
         if "e," not in lower and "." in lower and "so sad" in lower:
-            print("prankd")
+            await printto("prankd")
             await voices.playSong(message, "music/Yoshi and nah.mp3")
         elif "censor" in lower or "beep" in lower or "less" in lower:
-            print("saw censored in yosh")
+            await printto("saw censored in yosh")
             await voices.jam(message, 0, True)
         else:
-            print("norm yosh time")
+            await printto("norm yosh time")
             await voices.jam(message, 0)
     #------------------------------------Plays boost when phrase-------------------------------------------#
     if "boost" in lower and "debate" in lower and "play" in lower and await usettings.get_value(message, message.author, "boost"):
@@ -255,14 +268,14 @@ async def on_message(message):
         await voices.playSong(message, "music/World is Mine - Kasane Teto (Synthesizer V Cover) [0eaeiSjh7pU].mp3")
     #-----------------------------------Stop music command------------------------------------------------#
     if (("good" in lower and "music" in lower) or "e, shut up" in lower) and await usettings.get_value(message, message.author, "leavevc"):
-        print("saw stop command")
+        await printto("saw stop command")
         voices = bot.get_cog("VoiceStuff")
         await voices.setStop(True)
     #----------------------------------Random mock chance--------------------------------------------#
     global messageCount
     if random.random() < 1/1000  and await usettings.get_value(message, message.author, "mock"):
         messageCount = 1
-        print("Wow, you're so LUCKY")
+        await printto("Wow, you're so LUCKY")
 
     #-----------------------------------TTSn't------------------------------------------------------#
     if random.random() < 1/500 and ",join" in message.content and await usettings.get_value(message, message.author, "fakejoin"):
@@ -275,7 +288,7 @@ async def on_message(message):
                 await message.reply("deltarune tomorrow", mention_author=False)
             else:
                 await message.reply("deltarune tomorrow :D", mention_author=False)
-            print("deltarune tomorrow")
+            await printto("deltarune tomorrow")
 
 
 
@@ -289,7 +302,7 @@ async def on_message(message):
         else:
             await message.reply("\"" + capi_sentence(message.content) + "\"", mention_author=False)
         messageCount -= 1
-        print(messageCount)
+        await printto(messageCount)
 
     await bot.process_commands(message)
 
@@ -319,7 +332,7 @@ marle = ["<:CircleFairy:1400643761528111105>", "<:Parlor:1400314790232199248>", 
 @bot.tree.context_menu(name = "Random Marle Message")
 async def reactMarle(interaction: discord.Interaction, message: discord.Message):
     cmarle = marle[random.randint(0, len(marle) - 1)]
-    print(cmarle, interaction.user.name)
+    await printto(cmarle, interaction.user.name)
     await message.add_reaction(cmarle)
     await interaction.response.send_message(f"{cmarle}'d it.", ephemeral=True)
 
@@ -330,7 +343,7 @@ async def dropMarle(interaction: discord.Interaction, message: discord.Message):
     async def cb(self, interaction: discord.Interaction):
         # Handle the user's selection here
         selected_value = self.values[0]  # For single-selection
-        print(f"{selected_value} from {interaction.user}")
+        await printto(f"{selected_value} from {interaction.user}")
         await message.add_reaction(selected_value)
         nonlocal rcount
         rcount += 1
@@ -372,15 +385,15 @@ async def dropMarle(interaction: discord.Interaction, message: discord.Message):
     try:
         await interaction.response.send_message(f"Pick yer marle, ANY marle", view=MyView(), ephemeral=True)
     except Exception as error:
-        print(error)
-        print(str(error))
+        await printto(error)
+        await printto(str(error))
 
 
 #----------------------------------Mocks message used on--------------------------------------------#
 @bot.tree.context_menu(name = "mock this")
 async def this(interaction: discord.Interaction, message: discord.Message):
 
-    print("mocking this:")
+    await printto("mocking this:")
     if "http" in message.content:
         await message.reply(mocks[random.randint(0, len(mocks)-1)], mention_author=False)
     else:
@@ -389,16 +402,16 @@ async def this(interaction: discord.Interaction, message: discord.Message):
 #-------------------------------------------------------------Mock branches--------------------------------------------#
 @bot.hybrid_group(brief = "next | that | this(app menu)")
 async def mock(ctx):
-   print("obsolete")
+   await printto("obsolete")
 
 @mock.command(brief="Mocks specified amount of future messages")
 async def next(ctx,  number: Optional[int] = None):
-    print("mocking next " + str(number))
+    await printto("mocking next " + str(number))
     global messageCount
-    print(messageCount)
+    await printto(messageCount)
     if 16 > number > -1 and messageCount <= 0:  # apparantly if two people use -1 at once it overflows, so <=0 it is
-        print(f"saw {number}")
-        print(ctx.message.author)
+        await printto(f"saw {number}")
+        await printto(ctx.message.author)
         messageCount = number
         await ctx.send(f"o7 on it", ephemeral=True)
     elif messageCount > 0:
@@ -410,25 +423,25 @@ async def next(ctx,  number: Optional[int] = None):
 #----------------------------------Mocks user who was pinged--------------------------------------------#
 @mock.command(name = "that", brief = "Mocks last message of given user")
 async def that(ctx, guy: discord.User):
-    #print("mockprev")
+    #await printto("mockprev")
     words = ctx.history(limit = 20, oldest_first = False)
 
     #await ctx.channel.last_message.reply("e")god, getting the user pinged was SO HARD for literally no reason
-    print(words)
-    #print(f"assigned fetched message")
+    await printto(words)
+    #await printto(f"assigned fetched message")
 
     foundMessage = False
     mockee = None
     async for message in words:
         if message.author == guy and not foundMessage:
-            print(message)
+            await printto(message)
             mockee = message
             foundMessage = True
 
     await mockee.reply("\"" + capi_sentence(mockee.content) + "\"", mention_author=False)
     await ctx.send(f"k", ephemeral=True)
 
-    print("mocking")
+    await printto("mocking")
     await bot.process_commands(ctx)
 
 
