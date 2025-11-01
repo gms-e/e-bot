@@ -18,16 +18,38 @@ class EiStuff(commands.Cog):
         self.bot = bot
 
 
+    async def printto(self, m: str):
+        print(m)
+        channel = await self.bot.fetch_channel(1434085153369620510)
+        if channel is None:
+            channel = await self.bot.get_channel(1434085153369620510)
+
+        try:
+            if len(str(m)) > 2000:
+                n = []
+                i = 0
+                for i in range(0, len(m), 1900):
+                    await channel.send(m[i:i + 1900])
+            else:
+                await channel.send(m)
+
+        except Exception as error:
+            print(str(error))
+            try:
+                await channel.send(str(error))
+            except Exception as error:
+                print("ok that's enough try catch")
+
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Ei Stuff online")
+        await self.printto("Ei Stuff online")
 
     @commands.hybrid_group(name="ei")
     async def ai(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
     @ai.group(name = "change")
     async def ai_change(self, ctx):
-        print("obsolete")
+        await self.printto("obsolete")
     @ai_change.command(name = "model")
     async def ai_change_model(self, ctx, models: Literal["Schitzo", "Uncensored", "Normalish"]):
         global model
@@ -91,12 +113,10 @@ class EiStuff(commands.Cog):
 
                 })
             )
-            print(response.json())
-            print(response.json()["choices"][0]["message"]["content"])
-            me = await self.bot.fetch_user(702906770003198003)
+            await self.printto(response.json())
+            await self.printto(response.json()["choices"][0]["message"]["content"])
 
             try:
-                await me.send(response.json())
                 await initial_message.edit(content= f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
             except KeyError:
                 await initial_message.edit(content = f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["reasoning"])
@@ -104,10 +124,10 @@ class EiStuff(commands.Cog):
                 await initial_message.edit(content = f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["content"][0]["message"]["content"])
         except Exception as e:
             if "400 Bad Request" in str(e):
-                print("too long, trying to send file")
+                await self.printto("too long, trying to send file")
                 with open("airesponsethatwasreallylongsoitsafilenow.txt", "w") as f:
                     await initial_message.edit(content=f"{ctx.author}: {inputted}\nthe personification of e bot: that was kinda long, I had to make a file ._.")
-                    if response.json()["choices"][0]["message"]["content"] is not None and response.json()["choices"][0]["message"]["content"] is not "":
+                    if response.json()["choices"][0]["message"]["content"] is not None and response.json()["choices"][0]["message"]["content"] != "":
                         f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["content"])
                     else:
                         f.write(f"{ctx.author}:  {inputted}\n{person}" + ":  " + response.json()["choices"][0]["message"]["reasoning"])
@@ -125,17 +145,12 @@ class EiStuff(commands.Cog):
                     else "Normalish"} model ._. \nnot a me problem")
 
             except KeyError:
-                await me.send(str(e))
-                await me.send(e)
-                await me.send(response.json())
-
-            print(response.json())
-            await me.send(response.json())
+                await self.printto(response.json())
 
 
 
-            print(e)
-            print(type(e))
+            await self.printto(e)
+            await self.printto(type(e))
 
     async def pullQaM(self, message, guy: str):
         iconic = ""
@@ -153,7 +168,7 @@ class EiStuff(commands.Cog):
                     async for m in message.channel.history(limit=370):
                         if m.author == guy and len(iconic) < 1000:
                             iconic = iconic + "\n" + m.content
-                            print(iconic)
+                            # await self.printto(iconic)
 
                 case 916883861634441286:#edwosk
                     pulled = 3
@@ -162,7 +177,7 @@ class EiStuff(commands.Cog):
                     async for m in message.channel.history(limit=250):
                         if m.author == guy and len(iconic) < 1000:
                             iconic = iconic + "\n" + m.content
-                    print(iconic)
+                    # await self.printto(iconic)
                 case 925472450962141195:#meawor
                     pulled = 6
                 case "Omar":
@@ -171,7 +186,7 @@ class EiStuff(commands.Cog):
                         if m.author == guy and len(iconic) < 900:
                             iconic = iconic + "\n" + m.content
                 case 8:#invalid
-                    print("idk")
+                    await self.printto("idk")
                     pulled = 8
                 case 352236068344561666: #otter
                     pulled = 9
@@ -181,8 +196,8 @@ class EiStuff(commands.Cog):
                         if m.author == guy and len(iconic) < 900:
                             iconic = iconic + "\n" + m.content
         except Exception as error:
-            print("An error occurred:", type(error).__name__)
-            print(str(error))
+            await self.printto("An error occurred:", type(error).__name__)
+            await self.printto(str(error))
         return iconic
 
 async def setup(bot):
