@@ -135,7 +135,7 @@ class PrintStuff(commands.Cog):
     @up.error
     async def mcstatus_error(self, ctx, error):
         print(f"trying, but {error}")
-        await ctx.send("idk something broke")
+        await ctx.channel.send("idk something broke")
 
     #helper command for checking if server is up in main, exists to avoid importing mcstatus *again* in main
     async def sup(self):
