@@ -263,9 +263,9 @@ async def on_message(message):
         voices = bot.get_cog("VoiceStuff")
         await voices.debate(message)
 
-    if ("world" in lower or "server" in lower) and ("custody" in lower or "mine" in lower) and await usettings.get_value(message, message.author, "worldismine"):
-        voices = bot.get_cog("VoiceStuff")
-        await voices.playSong(message, "music/World is Mine - Kasane Teto (Synthesizer V Cover) [0eaeiSjh7pU].mp3")
+    # if ("world" in lower or "server" in lower) and ("custody" in lower or "mine" in lower) and await usettings.get_value(message, message.author, "worldismine"):
+    #     voices = bot.get_cog("VoiceStuff")
+    #     await voices.playSong(message, "music/World is Mine - Kasane Teto (Synthesizer V Cover) [0eaeiSjh7pU].mp3")
     #-----------------------------------Stop music command------------------------------------------------#
     if (("good" in lower and "music" in lower) or "e, shut up" in lower) and await usettings.get_value(message, message.author, "leavevc"):
         await printto("saw stop command")
@@ -400,7 +400,7 @@ async def this(interaction: discord.Interaction, message: discord.Message):
         await message.reply("\"" + capi_sentence(message.content) + "\"", mention_author=False)
     await interaction.response.send_message("k", ephemeral=True)
 #-------------------------------------------------------------Mock branches--------------------------------------------#
-@bot.hybrid_group(brief = "next | that | this(app menu)")
+@bot.hybrid_group(brief = "next | ~~that~~ | this(app menu)")
 async def mock(ctx):
    await printto("obsolete")
 
@@ -420,29 +420,29 @@ async def next(ctx,  number: Optional[int] = None):
 
     await bot.process_commands(ctx)
 
-#----------------------------------Mocks user who was pinged--------------------------------------------#
-@mock.command(name = "that", brief = "Mocks last message of given user")
-async def that(ctx, guy: discord.User):
-    #await printto("mockprev")
-    words = ctx.history(limit = 20, oldest_first = False)
-
-    #await ctx.channel.last_message.reply("e")god, getting the user pinged was SO HARD for literally no reason
-    await printto(words)
-    #await printto(f"assigned fetched message")
-
-    foundMessage = False
-    mockee = None
-    async for message in words:
-        if message.author == guy and not foundMessage:
-            await printto(message)
-            mockee = message
-            foundMessage = True
-
-    await mockee.reply("\"" + capi_sentence(mockee.content) + "\"", mention_author=False)
-    await ctx.send(f"k", ephemeral=True)
-
-    await printto("mocking")
-    await bot.process_commands(ctx)
+# #----------------------------------Mocks user who was pinged--------------------------------------------#
+# @mock.command(name = "that", brief = "Mocks last message of given user")
+# async def that(ctx, guy: discord.User):
+#     #await printto("mockprev")
+#     words = ctx.history(limit = 20, oldest_first = False)
+#
+#     #await ctx.channel.last_message.reply("e")god, getting the user pinged was SO HARD for literally no reason
+#     await printto(words)
+#     #await printto(f"assigned fetched message")
+#
+#     foundMessage = False
+#     mockee = None
+#     async for message in words:
+#         if message.author == guy and not foundMessage:
+#             await printto(message)
+#             mockee = message
+#             foundMessage = True
+#
+#     await mockee.reply("\"" + capi_sentence(mockee.content) + "\"", mention_author=False)
+#     await ctx.send(f"k", ephemeral=True)
+#
+#     await printto("mocking")
+#     await bot.process_commands(ctx)
 
 
 asyncio.run(main())#, log_handler=handler, log_level=logging.DEBUG)
