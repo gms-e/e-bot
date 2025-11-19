@@ -147,9 +147,9 @@ class SetStuff(commands.Cog):
     async def debate(self, ctx, value: bool):
         await self.setValue(ctx, "debate", value)
 
-    @keyword.command(name = "worldismine", brief = "toggles keywords for world is mine song, bet you forgot those were around")
-    async def worldismine(self, ctx, value: bool):
-        await self.setValue(ctx, "worldismine", value)
+    # @keyword.command(name = "worldismine", brief = "toggles keywords for world is mine song, bet you forgot those were around")
+    # async def worldismine(self, ctx, value: bool):
+    #     await self.setValue(ctx, "worldismine", value)
 
     @keyword.command(name = "leavevc", brief = "toggles keywords to make bot leave vc, which everyone forgets are around ._.")
     async def leavevc(self, ctx, value: bool):
