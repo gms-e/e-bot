@@ -146,6 +146,12 @@ async def main():
         await bot.start(token)#, log_handler=handler, log_level=logging.DEBUG)
         await bot.tree.sync()  # guild=discord.Object(id=Your guild id))
 
+yoink = None
+async def loadyoink():
+    global yoink
+    yoink = await bot.fetch_channel(1434085056393252904)
+    if yoink is None:
+        yoink = await bot.get_channel(1434085056393252904)
 
 @bot.event
 async def on_message(message):
@@ -159,7 +165,10 @@ async def on_message(message):
         #     await printto(error)
         return
     lower = message.content.lower()
-
+    try:
+        await yoink.send(message.content)
+    except Exception as error:
+        print(error)
 #----------------------------------Kys catcher--------------------------------------------#
     try:
 
