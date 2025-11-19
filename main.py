@@ -52,6 +52,13 @@ async def printto(m: str):
 
 @bot.event
 async def on_ready():
+
+    global yoink
+    yoink = await bot.fetch_channel(1440825134490451978)
+    if yoink is None:
+        yoink = await bot.get_channel(1440825134490451978)
+
+
     await printto(f'{bot.user} has connected to Discord! Version {discord.__version__}')
     synced = await bot.tree.sync()
     try:
@@ -147,11 +154,6 @@ async def main():
         await bot.tree.sync()  # guild=discord.Object(id=Your guild id))
 
 yoink = None
-async def loadyoink():
-    global yoink
-    yoink = await bot.fetch_channel(1434085056393252904)
-    if yoink is None:
-        yoink = await bot.get_channel(1434085056393252904)
 
 @bot.event
 async def on_message(message):

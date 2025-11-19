@@ -10,19 +10,18 @@ import json
 class MfStuff(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    @commands.hybrid_group(guild=discord.Object(1086880428650143765))
-    async def asterisk(self):
-        print("asterisk")
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if "Frames" in message.content:
+        if message.channel.id != 1282010600322629652 and message.channel.id != 784923833932709889:
+            return
+        if "(+" in message.content:
             num = ""
             try:
                 num = message.content.split("(+")[1][:-1]
                 print(num)
                 num = int(num)
-                self.incCurrFrames(num)
+                await self.incCurrFrames(num)
                 await message.add_reaction("🇪")
             except Exception:
                 print("what the FRICK are the frames")
@@ -44,14 +43,39 @@ class MfStuff(commands.Cog):
         except Exception as e:
             print(e)
             print(type(e))
-    @asterisk.command(name = "set_frames", guild=discord.Object(1086880428650143765))
+
+    @commands.hybrid_group(guild=discord.Object(id=1086880428650143765))
+    async def asterisk(self, ctx):
+        print("asterisk")
+    @asterisk.group()
+    async def frames(self, ctx):
+        print("obsolete")
+
+    @frames.command(name = "add", guild=discord.Object(id=1086880428650143765))
+    async def add(self, ctx, frames: int):
+        if ctx.channel.id != 1282010600322629652 and ctx.channel.id != 784923833932709889:
+            return
+        try:
+            await self.incCurrFrames(frames)
+            await ctx.send("o7")
+        except Exception as e:
+            print(e)
+            print(type(e))
+
+    @frames.command(name = "set", guild=discord.Object(id=1086880428650143765))
+    async def set(self, ctx, frames: int):
+        if ctx.channel.id != 1282010600322629652 and ctx.channel.id != 784923833932709889:
+            return
+        await self.setCurrFrames(frames)
+        await ctx.send("o7")
+
+    async def incCurrFrames(self, frameIncrement: int):
+        frames = await self.getCurrFrames()
+        await self.setCurrFrames(frames + frameIncrement)
     async def setCurrFrames(self, frames: int):
         with open("mframes.txt", 'w') as f:
             f.write(str(frames))
-    @asterisk.command(name = "add_frames", guild=discord.Object(1086880428650143765))
-    async def incCurrFrames(self, frameIncrement: int):
-        frames = self.getCurrFrames()
-        self.setCurrFrames(frames + frameIncrement)
+
     async def getStartDate(self):
         return datetime.date(2025, 10, 21)
     async def getEndDate(self):
@@ -89,8 +113,10 @@ class MfStuff(commands.Cog):
         daysLater = await self.getProjPace()
         projDate = datetime.date.today() + datetime.timedelta(days=int(daysLater))
         return projDate
-    @asterisk.command(guild=discord.Object(1086880428650143765))
+    @asterisk.command()
     async def progress(self, ctx):#I'm not making the s not appear if in 1 day, future me's syntax error.
+        if ctx.channel.id != 1282010600322629652 and ctx.channel.id != 784923833932709889:
+            return
         try:
             if ctx.channel.id != 1430330064855236648 and ctx.channel.id != 784923833932709889:
                 await ctx.send("wouldn't YOU like to know.")

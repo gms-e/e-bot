@@ -38,16 +38,16 @@ class VoiceStuff(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.printto("Voice Stuff online")
+        await self.printto("Voice Stuff online")
 
     @commands.command()
     async def name(self, ctx):
-        self.printto("template")
+        await self.printto("template")
 
     # --------------------------------------------jim jam--------------------------------------------------------------#
     @commands.hybrid_group(name="jim", brief="jam - actual command that plays yoshi and me")
     async def jim(self, ctx):
-        self.printto("obsolete")
+        await self.printto("obsolete")
         await ctx.bot.process_commands(ctx)
 
     @jim.command(name="jam")
@@ -59,25 +59,25 @@ class VoiceStuff(commands.Cog):
         queue = []
         voice_channel = ctx.author.voice.channel
 
-        self.printto(type(censored))
+        await self.printto(type(censored))
         if "False" in str(censored):
             censored = False
         else:
             censored = True
-        self.printto("Censored =", censored)
+        await self.printto("Censored =", censored)
         if ctx.guild.id != 773015467753209888 or censored:
-            self.printto("Censored ver")
+            await self.printto("Censored ver")
             queue = ["music/YoshiAndMePartI-Censored.mp3", "music/YoshiAndMePartII-Censored.mp3",
                      "music/YoshiAndMePartIII-Censored.mp3"]
         else:
-            self.printto("Normal ver")
+            await self.printto("Normal ver")
             queue = ["music/YoshiAndMePartI.mp3", "music/YoshiAndMePartII.mp3", "music/YoshiAndMePartIII.mp3"]
             i = 0
             for cue in queue:
                 if random.random() < 0.05:
                     que = ["music/YOSHI AND ALT Part I.mp3", "music/YOSHI AND ALT Part II.mp3",
                              "music/YOSHI AND ALT Part III.mp3"]
-                    self.printto(f"alt for {i}")
+                    await self.printto(f"alt for {i}")
                     queue[i] = que[i]
 
 
@@ -88,28 +88,28 @@ class VoiceStuff(commands.Cog):
         j = 0
         for cue in queue:
             if random.random() < 1 / 100 and await usettings.get_value(ctx, ctx.author, "boss"):
-                self.printto(f"{j} : {cue} is now lonk")
+                await self.printto(f"{j} : {cue} is now lonk")
                 queue[j] = "music/LonkPastBoss.mp3"
 
         try:
-            self.printto(queue[count])
+            await self.printto(queue[count])
             vc = await self.playSong(ctx, queue[count], count > 2)
 
         except Exception as error:
-            self.printto("An error occurred:", type(error).__name__)
+            await self.printto("An error occurred:", type(error).__name__)
 
         while count < 3 and voice_channel is not None:
-            self.printto(count)
+            await self.printto(count)
 
             global stopp
             while vc.is_playing():
                 await asyncio.sleep(.1)
                 if stopp:
-                    self.printto("Stopping...")
+                    await self.printto("Stopping...")
                     self.bot.voice_clients[0].stop()
-                    self.printto("Stopped")
+                    await self.printto("Stopped")
                     await self.bot.voice_clients.pop().disconnect()
-                    self.printto("disconnected")
+                    await self.printto("disconnected")
                     stopp = False
                     return
 
@@ -144,20 +144,20 @@ class VoiceStuff(commands.Cog):
             await asyncio.sleep(2)
             if random.random() < 1 / 100 and await usettings.get_value(ctx, ctx.author, "boss"):
                 song = "music/LonkPastBoss.mp3"
-                self.printto("lucky link")
+                await self.printto("lucky link")
             vc.play(discord.FFmpegPCMAudio(song))
             # Sleep while audio is playing.
-            self.printto("Built in leave =", quit)
+            await self.printto("Built in leave =", quit)
             global stopp
             if quit:
                 while vc.is_playing():
                     await asyncio.sleep(.1)
                     if stopp:
-                        self.printto("Stopping...")
+                        await self.printto("Stopping...")
                         self.bot.voice_clients[0].stop()
-                        self.printto("Stopped")
+                        await self.printto("Stopped")
                         await self.bot.voice_clients.pop().disconnect()
-                        self.printto("disconnected")
+                        await self.printto("disconnected")
                         stopp = False
                         return
                 await vc.disconnect()
@@ -171,18 +171,18 @@ class VoiceStuff(commands.Cog):
 #----------------------------------------Actual boost debate command that NOBODY uses----------------------------------#
     @commands.hybrid_group(name="boost", brief="debate")
     async def boost(self, ctx):
-        self.printto("obsolete")
+        await self.printto("obsolete")
         await ctx.bot.process_commands(ctx)
 
     @boost.command(name="debate")
     async def debate(self, ctx):
-        self.printto("trying debate")
+        await self.printto("trying debate")
         try:
             await self.playSong(ctx,"music/boost.mp3", True)
         except Exception as error:
-            self.printto("An error occurred:", type(error).__name__)
-            self.printto(str(error))
-        self.printto("worked")
+            await self.printto("An error occurred:", type(error).__name__)
+            await self.printto(str(error))
+        await self.printto("worked")
         await self.bot.process_commands(ctx)
 
 #--------------------------------------------command to move people across vc's----------------------------------------#
@@ -190,7 +190,7 @@ class VoiceStuff(commands.Cog):
     @commands.hybrid_command(name="kidnap", brief="Kidnaps person to vc")
     async def kidnap(self, ctx, guy: discord.Member = discord.ext.commands.parameter(displayed_name="guy",
                                                                                description="The sucker getting kidnapped (has to be in another vc)")):
-        self.printto("kidnapped " + guy.name)
+        await self.printto("kidnapped " + guy.name)
         await ctx.send("This person no longer exists (here)", ephemeral=True)
         await guy.move_to(ctx.author.voice.channel)
         await self.bot.process_commands(ctx)
@@ -203,17 +203,17 @@ class VoiceStuff(commands.Cog):
         await self.sendSound(ctx, guy, False)
 
     async def sendSound(self, ctx, guy, redo):
-        self.printto("soundboarding " + guy.name)
+        await self.printto("soundboarding " + guy.name)
         voice_channel = guy.voice.channel
-        self.printto(voice_channel)
+        await self.printto(voice_channel)
 
         if voice_channel is not None:
             channel = voice_channel.name
-            self.printto(channel)
+            await self.printto(channel)
             sound = self.bot.soundboard_sounds[random.randint(0, len(self.bot.soundboard_sounds) - 1)]
-            self.printto(self.bot.soundboard_sounds)
+            await self.printto(self.bot.soundboard_sounds)
 
-            self.printto("picked " + sound.name)
+            await self.printto("picked " + sound.name)
 
             try:
                 if not redo:
@@ -224,10 +224,10 @@ class VoiceStuff(commands.Cog):
                 await vc.disconnect()
 
             except Exception as error:
-                self.printto("An error occurred:", type(error).__name__)
-                self.printto("gonna try sending as such")
+                await self.printto("An error occurred:", type(error).__name__)
+                await self.printto("gonna try sending as such")
                 if "Already connected" in str(error) and not redo:
-                    self.printto("already connected")
+                    await self.printto("already connected")
                     await ctx.send("DON'T YOU FRICKIN INTERRUPT ME")
                     return
                 elif redo:
@@ -237,11 +237,11 @@ class VoiceStuff(commands.Cog):
                     await ctx.send("An error occurred: " + str(error) + "\n I can't frickin use that sound",
                                    ephemeral=True)
                     await self.sendSound(ctx, guy, True)
-                    self.printto("I can't frickin use that sound")
+                    await self.printto("I can't frickin use that sound")
                     self.bot.voice_clients[0].stop()
-                    self.printto("Stopped")
+                    await self.printto("Stopped")
                     await self.bot.voice_clients.pop().disconnect()
-                    self.printto("disconnected")
+                    await self.printto("disconnected")
 
 async def setup(bot):
     await bot.add_cog(VoiceStuff(bot))
