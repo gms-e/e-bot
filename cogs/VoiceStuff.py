@@ -53,17 +53,24 @@ class VoiceStuff(commands.Cog):
     @jim.command(name="jam")
     async def jam(self, ctx, count: Optional[int] = commands.parameter(
         displayed_name="song", description="song queue, starts at 0 and goes to 2",default=0),
-        censored: Optional[bool] = discord.ext.commands.parameter(displayed_name="beep?", description="beep the name?", default=False)):
+        censored: Optional[bool] = discord.ext.commands.parameter(displayed_name="beep?", description="beep the name?", default=False),
+                  alt: Optional[bool] = discord.ext.commands.parameter(default=False)):
         usettings = self.bot.get_cog("SetStuff")
 
         queue = []
         voice_channel = ctx.author.voice.channel
 
-        await self.printto(type(censored))
         if "False" in str(censored):
             censored = False
         else:
             censored = True
+
+        if "False" in str(alt):
+            alt = False
+        else:
+            alt = True
+
+
         await self.printto("Censored =", censored)
         if ctx.guild.id != 773015467753209888 or censored:
             await self.printto("Censored ver")
@@ -73,12 +80,11 @@ class VoiceStuff(commands.Cog):
             await self.printto("Normal ver")
             queue = ["music/YoshiAndMePartI.mp3", "music/YoshiAndMePartII.mp3", "music/YoshiAndMePartIII.mp3"]
             i = 0
-            for cue in queue:
-                if random.random() < 0.05:
-                    que = ["music/YOSHI AND ALT Part I.mp3", "music/YOSHI AND ALT Part II.mp3",
-                             "music/YOSHI AND ALT Part III.mp3"]
-                    await self.printto(f"alt for {i}")
-                    queue[i] = que[i]
+
+            if alt:
+                await self.printto("alt = ", alt)
+                queue = ["music/YOSHI AND ALT Part I.mp3", "music/YOSHI AND ALT Part II.mp3",
+                         "music/YOSHI AND ALT Part III.mp3"]
 
 
         if random.random() < 1 / 84 and await usettings.get_value(ctx, ctx.author, "boost"):
