@@ -202,7 +202,7 @@ async def on_message(message):
             await message.add_reaction("🇪")
             await message.add_reaction("👀")
 
-        if random.random() < 0.01 * 5 and await usettings.get_value(message, message.author, "sosad"):
+        if random.random() < 0.01 * (5/5) and await usettings.get_value(message, message.author, "sosad"):
             await printto("HOW SAD???")
             if random.random() < 0.5:
                 await message.channel.send(file=discord.File("how sad.png"))
