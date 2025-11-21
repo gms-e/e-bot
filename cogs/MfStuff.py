@@ -13,7 +13,7 @@ class MfStuff(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.channel.id != 1282010600322629652 and message.channel.id != 784923833932709889:
+        if message.channel.id != 1430330064855236648 and message.channel.id != 784923833932709889:
             return
         if "(+" in message.content:
             num = ""
@@ -45,15 +45,15 @@ class MfStuff(commands.Cog):
             print(type(e))
 
     @commands.hybrid_group(guild=discord.Object(id=1086880428650143765))
-    async def asterisk(self, ctx):
+    async def marioanim(self, ctx):
         print("asterisk")
-    @asterisk.group()
+    @marioanim.group()
     async def frames(self, ctx):
         print("obsolete")
 
     @frames.command(name = "add", guild=discord.Object(id=1086880428650143765))
     async def add(self, ctx, frames: int):
-        if ctx.channel.id != 1282010600322629652 and ctx.channel.id != 784923833932709889:
+        if ctx.channel.id != 1430330064855236648 and ctx.channel.id != 784923833932709889:
             return
         try:
             await self.incCurrFrames(frames)
@@ -64,7 +64,7 @@ class MfStuff(commands.Cog):
 
     @frames.command(name = "set", guild=discord.Object(id=1086880428650143765))
     async def set(self, ctx, frames: int):
-        if ctx.channel.id != 1282010600322629652 and ctx.channel.id != 784923833932709889:
+        if ctx.channel.id != 1430330064855236648 and ctx.channel.id != 784923833932709889:
             return
         await self.setCurrFrames(frames)
         await ctx.send("o7")
@@ -113,9 +113,9 @@ class MfStuff(commands.Cog):
         daysLater = await self.getProjPace()
         projDate = datetime.date.today() + datetime.timedelta(days=int(daysLater))
         return projDate
-    @asterisk.command()
+    @marioanim.command()
     async def progress(self, ctx):#I'm not making the s not appear if in 1 day, future me's syntax error.
-        if ctx.channel.id != 1282010600322629652 and ctx.channel.id != 784923833932709889:
+        if ctx.channel.id != 1430330064855236648 and ctx.channel.id != 784923833932709889:
             return
         try:
             if ctx.channel.id != 1430330064855236648 and ctx.channel.id != 784923833932709889:
