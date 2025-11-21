@@ -53,11 +53,6 @@ async def printto(m: str):
 @bot.event
 async def on_ready():
 
-    global yoink
-    yoink = await bot.fetch_channel(1440825134490451978)
-    if yoink is None:
-        yoink = await bot.get_channel(1440825134490451978)
-
 
     await printto(f'{bot.user} has connected to Discord! Version {discord.__version__}')
     synced = await bot.tree.sync()
@@ -153,7 +148,6 @@ async def main():
         await bot.start(token)#, log_handler=handler, log_level=logging.DEBUG)
         await bot.tree.sync()  # guild=discord.Object(id=Your guild id))
 
-yoink = None
 
 @bot.event
 async def on_message(message):
@@ -167,10 +161,6 @@ async def on_message(message):
         #     await printto(error)
         return
     lower = message.content.lower()
-    try:
-        await yoink.send(message.content)
-    except Exception as error:
-        print(error)
 #----------------------------------Kys catcher--------------------------------------------#
     try:
 
