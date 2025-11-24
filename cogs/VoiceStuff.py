@@ -151,7 +151,6 @@ class VoiceStuff(commands.Cog):
         if voice_channel is not None:
 
             vc = await voice_channel.connect(timeout=5)
-            await asyncio.sleep(2)
             if random.random() < 1 / 100 and await usettings.get_value(ctx, ctx.author, "boss"):
                 song = "music/LonkPastBoss.mp3"
                 await self.printto("lucky link")
