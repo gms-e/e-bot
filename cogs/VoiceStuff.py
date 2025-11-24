@@ -12,17 +12,21 @@ class VoiceStuff(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def printto(self, m: str):
+    async def printto(self, m):
+        m = str(m)
         print(m)
         channel = await self.bot.fetch_channel(1434085237914075277)
         if channel is None:
             channel = await self.bot.get_channel(1434085237914075277)
 
         try:
+            print(len(str(m)))
             if len(str(m)) >= 1000:
+
                 n = []
                 i = 0
                 for i in range(0, len(m), 1000):
+                    print(f"correctly found")
                     await channel.send(m[i:i + 1000])
             else:
                 await channel.send(m)
@@ -217,7 +221,7 @@ class VoiceStuff(commands.Cog):
             channel = voice_channel.name
             await self.printto(channel)
             sound = self.bot.soundboard_sounds[random.randint(0, len(self.bot.soundboard_sounds) - 1)]
-            await self.printto(self.bot.soundboard_sounds)
+            # await self.printto(self.bot.soundboard_sounds)
 
             await self.printto("picked " + sound.name)
 
@@ -231,7 +235,6 @@ class VoiceStuff(commands.Cog):
 
             except Exception as error:
                 await self.printto(f"An error occurred: {type(error).__name__}")
-                await self.printto("gonna try sending as such")
                 if "Already connected" in str(error) and not redo:
                     await self.printto("already connected")
                     await ctx.send("DON'T YOU FRICKIN INTERRUPT ME")
