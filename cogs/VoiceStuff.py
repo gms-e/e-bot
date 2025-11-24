@@ -19,11 +19,11 @@ class VoiceStuff(commands.Cog):
             channel = await self.bot.get_channel(1434085237914075277)
 
         try:
-            if len(str(m)) >= 2000:
+            if len(str(m)) >= 1000:
                 n = []
                 i = 0
-                for i in range(0, len(m), 1900):
-                    await channel.send(m[i:i + 1900])
+                for i in range(0, len(m), 1000):
+                    await channel.send(m[i:i + 1000])
             else:
                 await channel.send(m)
         except Exception as error:
