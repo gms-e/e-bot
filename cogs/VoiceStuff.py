@@ -19,7 +19,7 @@ class VoiceStuff(commands.Cog):
             channel = await self.bot.get_channel(1434085237914075277)
 
         try:
-            if len(str(m)) > 2000:
+            if len(str(m)) >= 2000:
                 n = []
                 i = 0
                 for i in range(0, len(m), 1900):
@@ -230,7 +230,7 @@ class VoiceStuff(commands.Cog):
                 await vc.disconnect()
 
             except Exception as error:
-                await self.printto("An error occurred:", type(error).__name__)
+                await self.printto(f"An error occurred: {type(error).__name__}")
                 await self.printto("gonna try sending as such")
                 if "Already connected" in str(error) and not redo:
                     await self.printto("already connected")
