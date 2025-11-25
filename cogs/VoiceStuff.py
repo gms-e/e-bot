@@ -196,7 +196,7 @@ class VoiceStuff(commands.Cog):
 
 #--------------------------------------------super censored song----------------------------------------#
     @commands.hybrid_command(name="chinasong")
-    async def chinasong(self, ctx):
+    async def russiasong(self, ctx):
         try:
             await ctx.send("||o7||")
             await self.playSong(ctx, 'music/__ and _.mp3', True)
