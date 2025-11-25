@@ -194,7 +194,11 @@ class VoiceStuff(commands.Cog):
         await self.printto("worked")
         await self.bot.process_commands(ctx)
 
-#--------------------------------------------command to move people across vc's----------------------------------------#
+#--------------------------------------------super censored song----------------------------------------#
+    @commands.hybrid_command(name="chinasong")
+    async def chinasong(self, ctx):
+        self.playsong(ctx, "music/__ and _.mp3", True)
+        await ctx.send("||o7||")
     # ----------------------------------Bring user to vc--------------------------------------------#
     @commands.hybrid_command(name="kidnap", brief="Kidnaps person to vc")
     async def kidnap(self, ctx, guy: discord.Member = discord.ext.commands.parameter(displayed_name="guy",
