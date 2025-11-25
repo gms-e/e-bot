@@ -195,7 +195,7 @@ class VoiceStuff(commands.Cog):
         await self.bot.process_commands(ctx)
 
 #--------------------------------------------super censored song----------------------------------------#
-    @commands.hybrid_command(name="chinasong")
+    @commands.hybrid_command(name="russiasong")
     async def russiasong(self, ctx):
         try:
             await ctx.send("||o7||")
