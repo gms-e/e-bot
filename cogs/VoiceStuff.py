@@ -197,8 +197,12 @@ class VoiceStuff(commands.Cog):
 #--------------------------------------------super censored song----------------------------------------#
     @commands.hybrid_command(name="chinasong")
     async def chinasong(self, ctx):
-        self.playsong(ctx, "music/__ and _.mp3", True)
-        await ctx.send("||o7||")
+        try:
+            await self.playSong(ctx, 'music/"__ and _.mp3"', True)
+            await ctx.send("||o7||")
+        except Exception as error:
+            await self.printto(f"An error occurred: {type(error).__name__}")
+            await self.printto(str(error))
     # ----------------------------------Bring user to vc--------------------------------------------#
     @commands.hybrid_command(name="kidnap", brief="Kidnaps person to vc")
     async def kidnap(self, ctx, guy: discord.Member = discord.ext.commands.parameter(displayed_name="guy",
