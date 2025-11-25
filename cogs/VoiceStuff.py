@@ -198,8 +198,8 @@ class VoiceStuff(commands.Cog):
     @commands.hybrid_command(name="chinasong")
     async def chinasong(self, ctx):
         try:
-            await self.playSong(ctx, 'music/"__ and _.mp3"', True)
             await ctx.send("||o7||")
+            await self.playSong(ctx, 'music/__ and _.mp3', True)
         except Exception as error:
             await self.printto(f"An error occurred: {type(error).__name__}")
             await self.printto(str(error))
