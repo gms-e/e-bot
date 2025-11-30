@@ -266,9 +266,7 @@ class PrintStuff(commands.Cog):
                     case 1:
                         await channel.send("https://tenor.com/view/majoras-mask-majora-zelda-final-day-gif-26658556")
                     case 0:
-                        await channel.send("IT AIN'T OVER TILL THE FAT LADY CHIMES 12 AND *YOUR MOTHER DIDN'T FIT INT THE CUCKOO CLOCK*")
-                        await asyncio.sleep(hours = 24 - datetime.datetime.now().hour)
-                        await channel.send("ok *now* it's over ._. \n(I think, the code for this message is kinda jank)\n Did I do it in time?")
+                        await channel.send("oopsie? I guess I've either accepted my fate or I'm speedrunning.")
                     case x if x > 5:
                         await self.printto("eh")
                     case _:
