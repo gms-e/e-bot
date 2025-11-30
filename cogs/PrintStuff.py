@@ -182,7 +182,7 @@ class PrintStuff(commands.Cog):
             await self.printto("Server online")
             return 1
         except BrokenPipeError as e:
-            await self.printto("weird error with sup, ", str(e), "\n time to try again :D")
+            await self.printto("weird error with sup, " + str(e) + "\n time to try again :D\n(This used to cause false negatives)")
             return await self.sup()
         except Exception as e:
             await self.printto(str(e))
