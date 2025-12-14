@@ -51,9 +51,31 @@ class PrintStuff(commands.Cog):
         # Ignore messages from the bot itself to prevent infinite loops
         if message.author == self.bot.user:
             return
-        #TODO: implement user settings for ALL non command and random functionality
         if random.random() < 0.5 and "today" in message.content.lower() and await usettings.get_value(message, message.author, "tetoday"):
             await self.kasane(message)
+        if "https://" in message.content and "?si=" in message.content:
+            time = ""
+            if "&t=" in message.content:
+                time = message.content[message.content.index("&t="):]
+                if " " in time:
+                    time = time[:time.index(" ")]
+                if "\n" in time:
+                    time = time[:time.index(" ")]
+                print(f"length: {len(time)}, string: {time}")
+            bettermessage = message.content[:message.content.index("?si=")]
+            print(bettermessage)
+            print(bettermessage.index("https://"))
+            bettermessage = bettermessage[bettermessage.index("https://"):]
+            bettermessage = bettermessage + time
+            await message.reply("oi I don't wanna get TRACKED. Click this instead, it won't give you a virus :D\n" + bettermessage, mention_author=False)
+        if "https://" in message.content and "fandom" in message.content and "anti" not in message.content:
+            bettermessage = message.content[message.content.index("https://"):]
+            bettermessage = bettermessage.replace("fandom", "antifandom")
+            if " " in bettermessage:
+                bettermessage = bettermessage[:bettermessage.index(" ")]
+            if "\n" in bettermessage:
+                bettermessage = bettermessage[:bettermessage.index(" ")]
+            await message.reply("ewwwwwwwwwwww FANDOM? in THIS economy??? nah go here instead.\n" + bettermessage)
         # -------------------------------------wordle e bot collab------------------------------------------#
         if message.author.id == 1211781489931452447 and ("X/6" in message.content or "6/6" in message.content):
             wmess = message
