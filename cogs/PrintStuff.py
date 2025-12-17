@@ -122,16 +122,15 @@ class PrintStuff(commands.Cog):
 
         # -------------------------------------responds to bluff------------------------------------------#
         global bluff
-        if bluff and "e, " in message.content:
+        if bluff and "e, " in message.content and "bluff" not in message.content:
             await message.reply("o7 on it", mention_author=False)
             bluff = False
     # ------------------------------------------Bluff----------------------------------------------------------#
     @commands.hybrid_command(name="bluff", brief = "Tell e bot to do something, even if it can't.")
     async def fakeit(self, ctx):
-        await self.printto("bluff")
         global bluff
         bluff = True
-        await self.printto("worked")
+        await ctx.send(content = "o7", ephemeral = True)
         await ctx.bot.process_commands(ctx)
     # ----------------------------------Date since made--------------------------------------------#
     @commands.hybrid_group(brief="created")
