@@ -300,12 +300,12 @@ class PrintStuff(commands.Cog):
             await self.printto(str(e))
 
     #--------------------------------Check anim days left----------------------------------------------#
-    @commands.hybrid_group(name = "animation", brief = "time reset\n due in")
+    @commands.hybrid_group(name = "animation", brief = "time reset\n due in\n favors owed\ndays reserved")
     async def animation(self, ctx):
         await self.printto("obsolete")
     @commands.group(name = "dev", hidden = True)
     async def dev(self, ctx):
-        await self.printto("obsolete")
+        print("obsolete")
     @dev.command(name = "set", hidden = True)
     async def set(self, ctx, days: int):
 
@@ -364,6 +364,71 @@ class PrintStuff(commands.Cog):
                 break
         await ctx.send("o7 he gets time... *for now*...")
 
+#--------------------------------------------Favor tracking---------------------------------------------
+    @animation.group(name = "favors")
+    async def favor(self, ctx):
+        await self.printto("obsolete")
+    @favor.command(name = "add")
+    async def favadd(self, ctx, number: int):
+        if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912):
+            await ctx.send("Imma don't think you're allowed to do dat")
+            await ctx.send("https://tenor.com/view/luigi-coo-coo-crazy-luigis-mansion-dark-moon-gif-1213275346224547321")
+            return
+        curr = 0
+        try:
+            with open("favors.txt", 'r') as f:
+                curr = int(f.readline().strip())
+        except FileNotFoundError:
+            with open("favors.txt", "x") as f:
+                f.write("0")
+        with open("favors.txt", "w") as f:
+            f.write(f"{curr + number}")
+        await ctx.send(f"o7 added {number}")
+
+    @favor.command(name = "owed")
+    async def favowed(self, ctx):
+        favors = 0
+        try:
+            with open("favors.txt", 'r') as f:
+                favors = int(f.readline().strip())
+        except FileNotFoundError:
+            with open("favors.txt", "x") as f:
+                f.write("0")
+        await ctx.send(f"{favors} favors owed\n ._.")
+
+    # --------------------------------------------reserve tracking---------------------------------------------
+    @animation.group(name="reserves")
+    async def reserve(self, ctx):
+        await self.printto("obsolete")
+
+    @reserve.command(name="add")
+    async def resadd(self, ctx, number: int):
+        if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912):
+            await ctx.send("Imma don't think you're allowed to do dat")
+            await ctx.send(
+                "https://tenor.com/view/luigi-coo-coo-crazy-luigis-mansion-dark-moon-gif-1213275346224547321")
+            return
+        curr = 0
+        try:
+            with open("reserve.txt", 'r') as f:
+                curr = int(f.readline().strip())
+        except FileNotFoundError:
+            with open("reserve.txt", "x") as f:
+                f.write("0")
+        with open("reserve.txt", "w") as f:
+            f.write(f"{curr + number}")
+        await ctx.send(f"o7 added {number}")
+
+    @reserve.command(name="stored")
+    async def resget(self, ctx):
+        reserve = 0
+        try:
+            with open("reserve.txt", 'r') as f:
+                reserve = int(f.readline().strip())
+        except FileNotFoundError:
+            with open("reserve.txt", "x") as f:
+                f.write("0")
+        await ctx.send(f"{reserve} days reserved\n \\_._")
 
     # ----------------------------------Deltarune tomorrow--------------------------------------------#
     @commands.hybrid_group(name="deltarune", brief="tomorrow")
