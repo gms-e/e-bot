@@ -291,7 +291,7 @@ class DoorStuff(commands.Cog):
     @of_group.command(name="daily")
     async def daily(self, ctx, ephem: Optional[bool]):
         #checks if day has changed and resets dailist if so
-        tempmes = await ctx.send("Ya did it already -. -", ephemeral=ephem)
+        tempmes = await ctx.send("_ _", ephemeral=True)
         currday = datetime.datetime.today().weekday()
         serday = -1
         # TODO: combine all persistent memory into one dict JSON file, because this is getting ridiculous
