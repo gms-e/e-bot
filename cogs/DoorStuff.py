@@ -291,7 +291,7 @@ class DoorStuff(commands.Cog):
     @of_group.command(name="daily")
     async def daily(self, ctx, ephem: Optional[bool]):
         #checks if day has changed and resets dailist if so
-        tempmes = await ctx.send("_ _", ephemeral=True)
+        await ctx.typing()
         currday = datetime.datetime.today().weekday()
         serday = -1
         # TODO: combine all persistent memory into one dict JSON file, because this is getting ridiculous
@@ -358,7 +358,6 @@ class DoorStuff(commands.Cog):
             await self.printto("An error occurred:", type(error).__name__)
             await self.printto(str(error))
 
-        await tempmes.delete()
         try:
            if random.random() < 1 / 2:
                 await ctx.send("Doors of Daily, think you're lucky?\nhttps://tenor.com/view/oneshot-ballin-gif-8940602852183524649", view=views[1], ephemeral=ephem)
