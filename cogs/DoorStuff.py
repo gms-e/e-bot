@@ -214,16 +214,27 @@ class DoorStuff(commands.Cog):
                 else:
                     gdict[str(interaction.user.id)] = gdict.get(str(interaction.user.id), 0) + 1
                     if gdict.get(str(interaction.user.id), 0) >=5:
-                        other = "\n(also +1 https://discord.com/channels/773015467753209888/1461631744955514932 hours for every point past here)"
                         times = {}
                         try:
                             with open("opendoors.json", 'r') as f:
                                 times = eval(f.read())
-                            times[str(interaction.user.id)] = times.get(str(interaction.user.id), 0) + 1
+                            channelrole = ctx.author.guild.get_role(1462230075503149299)
+                            if times[str(interaction.user.id)] >=0:
+                                await ctx.author.add_roles(channelrole)
+                                times[str(interaction.user.id)] = times.get(str(interaction.user.id), 0) + 1
+                                other = "\n(also +1 https://discord.com/channels/773015467753209888/1461631744955514932 hours for every point past here)"
+                            else:
+                                other = "\n(also +1 https://discord.com/channels/773015467753209888/1461631744955514932 hours you can steal for every point past here)"
+                                times[str(interaction.user.id)] = times.get(str(interaction.user.id), 0) - 1
+
+
 
                         except FileNotFoundError:
                             await self.printto("file didn't exist, making and setting to 1")
                             times[str(interaction.user.id)] = 1
+                            channelrole = ctx.author.guild.get_role(1462230075503149299)
+                            await ctx.author.add_roles(channelrole)
+
                         await self.printto(f"their hours are now at {times.get(str(interaction.user.id), 0)}")
                         with open("opendoors.json", 'w') as f:
                             f.write(str(times))
