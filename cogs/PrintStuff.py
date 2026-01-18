@@ -125,6 +125,14 @@ class PrintStuff(commands.Cog):
         if bluff and "e, " in message.content and "bluff" not in message.content:
             await message.reply("o7 on it", mention_author=False)
             bluff = False
+        #---------------------------------------door stuff print stuff collab-----------------------------------#
+        if message.channel.id == 1461631744955514932:
+            channelrole = message.author.guild.get_role(1462230075503149299)
+            if channelrole not in message.author.roles:
+                await message.author.send("you should GAMBLE WITH DOORS\neven normal doors will give time")
+                await message.delete()
+
+
     # ------------------------------------------Bluff----------------------------------------------------------#
     @commands.hybrid_command(name="bluff", brief = "Tell e bot to do something, even if it can't.")
     async def fakeit(self, ctx):
