@@ -197,42 +197,42 @@ class PrintStuff(commands.Cog):
             else:
                 sessage = await sessage.channel.fetch_message(sessage.id)
                 await sessage.edit(content = f"nah")
-    #
-    # @up.error
-    # async def mcstatus_error(self, ctx, error):
-    #     await self.printto(f"trying, but {error}")
-    #     await ctx.channel.send("idk something broke")
+
+    @up.error
+    async def mcstatus_error(self, ctx, error):
+        await self.printto(f"trying, but {error}")
+        await ctx.channel.send("idk something broke")
 
     #helper command for checking if server is up in main, exists to avoid importing mcstatus *again* in main
-    async def sup(self):
-        try:
-            server = mcstatus.JavaServer.lookup("true-cigarette.gl.joinmc.link")
-            server.status().players.online
-            await self.printto("Server online")
-            return 1
-        except BrokenPipeError as e:
-            await self.printto("weird error with sup, " + str(e) + "\n time to try again :D\n(This used to cause false negatives)")
-            return await self.sup()
-        except Exception as e:
-            await self.printto(str(e))
-            await self.printto(e)
-            await self.printto("Server offline")
-            return 0
-    #------------------------------------Server role management---------------------------------------------#
-    @server.group(name = "role")
-    async def role(self, ctx):
-        await self.printto("obsolete")
-
-    @role.command(name = "add")
-    async def role_add(self, ctx):
-        await ctx.author.add_roles(ctx.author.guild.get_role(1426289745784340591))
-        await ctx.send("o7 you're in")
-
-    @role.command(name = "remove")
-    async def role_remove(self, ctx):
-        await ctx.author.remove_roles(ctx.author.guild.get_role(1426289745784340591))
-        await ctx.send("o7 it's gone")
-
+    # async def sup(self):
+    #     try:
+    #         server = mcstatus.JavaServer.lookup("true-cigarette.gl.joinmc.link")
+    #         server.status().players.online
+    #         await self.printto("Server online")
+    #         return 1
+    #     except BrokenPipeError as e:
+    #         await self.printto("weird error with sup, " + str(e) + "\n time to try again :D\n(This used to cause false negatives)")
+    #         return await self.sup()
+    #     except Exception as e:
+    #         await self.printto(str(e))
+    #         await self.printto(e)
+    #         await self.printto("Server offline")
+    #         return 0
+    # #------------------------------------Server role management---------------------------------------------#
+    # @server.group(name = "role")
+    # async def role(self, ctx):
+    #     await self.printto("obsolete")
+    #
+    # @role.command(name = "add")
+    # async def role_add(self, ctx):
+    #     await ctx.author.add_roles(ctx.author.guild.get_role(1426289745784340591))
+    #     await ctx.send("o7 you're in")
+    #
+    # @role.command(name = "remove")
+    # async def role_remove(self, ctx):
+    #     await ctx.author.remove_roles(ctx.author.guild.get_role(1426289745784340591))
+    #     await ctx.send("o7 it's gone")
+    #
 
 
     #----------------------------------------Hit singer Kasane Teto----------------------------------------------------#

@@ -56,38 +56,38 @@ async def on_ready():
 
     await printto(f'{bot.user} has connected to Discord! Version {discord.__version__}')
     synced = await bot.tree.sync()
-    try:
-        await timechecks.start()
-    except Exception as error:
-        await printto(error)
-        await printto(str(error))
+#     try:
+#         await timechecks.start()
+#     except Exception as error:
+#         await printto(error)
+#         await printto(str(error))
     await printto(f"bot ready")
-
-@tasks.loop(minutes=30) # Runs every 60 seconds (adjust as needed)
-async def timechecks():
-    checker = bot.get_cog("PrintStuff")
-
-    servNum = -1
-    try:
-        with open("serverStat.txt", 'r') as f:
-            line = f.readline()
-            servNum = int(line.strip())  # Strip whitespace and convert to int
-    except FileNotFoundError:
-        with open("serverStat.txt", "x") as f:
-            f.write("0")
-            await printto("made a file since it wasn't there, running as if was offline")
-
-    if await checker.sup() == 1 and servNum <= 0:
-        await printto("server up and used to be offline")
-        with open("serverStat.txt", "w") as f:
-            f.write("1")
-        await bot.get_channel(1264704750633619486).send("<@&1426289745784340591> server people,\nServer up")
-    elif await checker.sup() == 1 and servNum == 1:
-        await printto("server up and used to be online")
-    else:
-        await printto("Server not up")
-        with open("serverStat.txt", "w") as f:
-            f.write("0")
+#
+# # @tasks.loop(minutes=30) # Runs every 60 seconds (adjust as needed)
+# async def timechecks():
+#     checker = bot.get_cog("PrintStuff")
+#
+#     servNum = -1
+#     try:
+#         with open("serverStat.txt", 'r') as f:
+#             line = f.readline()
+#             servNum = int(line.strip())  # Strip whitespace and convert to int
+#     except FileNotFoundError:
+#         with open("serverStat.txt", "x") as f:
+#             f.write("0")
+#             await printto("made a file since it wasn't there, running as if was offline")
+#
+#     if await checker.sup() == 1 and servNum <= 0:
+#         await printto("server up and used to be offline")
+#         with open("serverStat.txt", "w") as f:
+#             f.write("1")
+#         await bot.get_channel(1264704750633619486).send("<@&1426289745784340591> server people,\nServer up")
+#     elif await checker.sup() == 1 and servNum == 1:
+#         await printto("server up and used to be online")
+#     else:
+#         await printto("Server not up")
+#         with open("serverStat.txt", "w") as f:
+#             f.write("0")
 
         #TODO: add warndle, a warning for the last 30 min of the day IF nobody's done the wordle yet
 
