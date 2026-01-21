@@ -488,7 +488,12 @@ class DoorStuff(commands.Cog):
                     await self.printto(str(e))
                 if times[key] < 0:
                     times[key] = int(times[key]/2)
-            await self.printto(f"{sucker.display_name} after: {times[key]}")
+                else:
+                    del times[key]
+            try:
+                await self.printto(f"{sucker.display_name} after: {times[key]}")
+            except KeyError:
+                await self.printto(f"{sucker.display_name} after: deleted cuz they're at 0 rip bozo")
 
         with open("opendoors.json", 'w') as f:
             f.write(str(times))
