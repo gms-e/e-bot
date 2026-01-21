@@ -1,3 +1,5 @@
+import time as ticktock
+
 import discord
 from discord.ext import commands, tasks
 from typing import Optional
@@ -470,7 +472,8 @@ class DoorStuff(commands.Cog):
             return
 
 
-        for key in times:
+        twotwentyseven = times.copy()
+        for key in twotwentyseven:
             try:
                 sucker = await mcb.fetch_member(key)
 
