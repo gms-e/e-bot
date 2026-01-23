@@ -200,7 +200,7 @@ async def on_message(message):
 
         if await usettings.get_value(message, message.author, "sadeyes"):
             await message.add_reaction("🇪")
-            await message.add_reaction("👀")
+            await message.add_reaction("<:sosad:1445204195832500396>")
 
         if random.random() < 0.01 * (5/5) and await usettings.get_value(message, message.author, "sosad"):
             await printto("HOW SAD???")
