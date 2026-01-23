@@ -221,7 +221,7 @@ class DoorStuff(commands.Cog):
                             with open("opendoors.json", 'r') as f:
                                 times = eval(f.read())
                             channelrole = ctx.author.guild.get_role(1462230075503149299)
-                            if times[str(interaction.user.id)] >=0:
+                            if times.get(str(interaction.user.id), 0) >=0:
                                 await ctx.author.add_roles(channelrole)
                                 times[str(interaction.user.id)] = times.get(str(interaction.user.id), 0) + 1
                                 other = "\n(also +1 https://discord.com/channels/773015467753209888/1461631744955514932 hours for every point past here)"
