@@ -619,29 +619,28 @@ class PrintStuff(commands.Cog):
                 leftcat = "images/left cat/meowzakil.png"
             case 770464351336923157: #Astro
                 leftcat = "images/left cat/astrokil.png"
-        print(f"leftcat: {leftcat}")
+        await self.printto(f"leftcat: {leftcat}")
         skip = False
         try:
             quotee = message.content[message.content.lower().index("killing ") + 8:]
-            print(quotee)
+            await self.printto(quotee)
             quotee = quotee.lower()
             if " " in quotee:
                 quotee = quotee[:quotee.index(" ")]
-                print(quotee)
+                await self.printto(quotee)
         except Exception as e:
-            print(e)
+            await self.printto(e)
             return
         if leftcat is None:
             await message.reply("who r u", ephemeral=True)
             return
         rightcat = None
         if "you" in quotee:
-            print("...")
             m = [msg async for msg in message.channel.history(limit=2)]
             quotee = m.pop()
-            print(quotee.content)
+            await self.printto(quotee.content)
             quotee = quotee.author.name
-            print(quotee)
+            await self.printto(quotee)
         if "self" in quotee:
             quotee = message.author.name
 
@@ -668,9 +667,13 @@ class PrintStuff(commands.Cog):
             rightcat = "images/right cat/meowzadie.png"
 
 
-        print(f"rightcat: {rightcat}")
+        await self.printto(f"rightcat: {rightcat}")
         if rightcat is None:
             await message.reply("who?", ephemeral=True)
+            return
+        if leftcat == "images/left cat/edwoskkil.png" and rightcat == "images/right cat/omardie.png":
+            await self.printto("hard coded image")
+            await message.reply(discord.File("images/icastgun.png"))
             return
         try:
             leftcat = Image.open(leftcat)
