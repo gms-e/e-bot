@@ -635,6 +635,14 @@ class PrintStuff(commands.Cog):
             await message.reply("who r u", ephemeral=True)
             return
         rightcat = None
+        if "you" in quotee:
+            print("...")
+            m = [msg async for msg in message.channel.history(limit=2)]
+            quotee = m.pop()
+            print(quotee.content)
+            quotee = quotee.author.name
+            print(quotee)
+
         if "mario" in quotee or "mf" in quotee:
             skip = True
             rightcat = "images/right cat/marlefandie.png"
@@ -644,17 +652,18 @@ class PrintStuff(commands.Cog):
             rightcat = "images/right cat/cbdie.png"
         if "josh" in quotee:
             rightcat = "images/right cat/yosheedie.png"
-        if "anth" in quotee:
+        if "anth" in quotee or "ante" in quotee:
             rightcat = "images/right cat/anthdie.png"
         if "ed" in quotee:
             rightcat = "images/right cat/edwoskdie.png"
-        if "om" in quotee:
+        if "om" in quotee or "gamerside" in quotee:
             skip = True
             rightcat = "images/right cat/omardie.png"
         if "rov" in quotee:
             rightcat = "images/right cat/rovuhdie.png"
         if "m" in quotee and "r" in quotee and not skip:
             rightcat = "images/right cat/meowzadie.png"
+
 
         print(f"rightcat: {rightcat}")
         if rightcat is None:
