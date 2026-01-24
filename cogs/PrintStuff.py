@@ -673,7 +673,7 @@ class PrintStuff(commands.Cog):
             return
         if leftcat == "images/left cat/edwoskkil.png" and rightcat == "images/right cat/omardie.png":
             await self.printto("hard coded image")
-            await message.reply(discord.File("images/icastgun.png"))
+            await message.reply(file=discord.File("images/icastgun.png"))
             return
         try:
             leftcat = Image.open(leftcat)
