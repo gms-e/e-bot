@@ -109,21 +109,22 @@ class DoorStuff(commands.Cog):
                             except Exception as e:
                                 await self.printto(f"{e}\n{str(e)}")
                                 return
-                        elif gdict.get(str(interaction.user.id), 0) <= -4:
+                        elif gdict.get(str(interaction.user.id), 0) < 0:
                             channelrole = ctx.author.guild.get_role(1462230075503149299)
                             await ctx.author.remove_roles(channelrole)
-                            extra = extra + f"\n btw you get to steal {round(gdict.get(str(interaction.user.id), 0) * (-2.718281828))} hours from someone with doors time commands :D"
+                            hrs =  -1 * round(abs(pow(gdict.get(str(interaction.user.id), 0), 2.718281828)))
+                            extra = extra + f"\n btw you get to steal {abs(hrs)} hours from someone with doors time commands :D"
                             doorlist = {}
                             try:
                                 try:
                                     with open("opendoors.json", 'r') as f:
                                         doorlist = eval(f.read())
-                                    doorlist[str(ctx.author.id)] = round(gdict.get(str(interaction.user.id), 0) * 2.718281828)
+                                    doorlist[str(ctx.author.id)] = hrs
                                     with open("opendoors.json", 'w') as f:
                                         f.write(str(doorlist))
                                 except FileNotFoundError:
                                     with open("opendoors.json", "x") as f:
-                                        doorlist[str(ctx.author.id)] = round(gdict.get(str(interaction.user.id), 0) * 2.718281828)
+                                        doorlist[str(ctx.author.id)] = hrs
                                         f.write(str(doorlist))
                                         await self.printto("made a file since it wasn't there")
                                 except ValueError:
@@ -277,9 +278,9 @@ class DoorStuff(commands.Cog):
             vfail.add_item(r)
         else:
             vfail.add_item(k)
-        b = Button(label="🚪")
+        b = Button(label="🚪O")
         b.callback = corr
-        b2 = Button(label="🚪")
+        b2 = Button(label="🚪X")
         b2.callback = fail
 
 
