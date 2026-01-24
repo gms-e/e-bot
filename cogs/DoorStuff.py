@@ -278,9 +278,9 @@ class DoorStuff(commands.Cog):
             vfail.add_item(r)
         else:
             vfail.add_item(k)
-        b = Button(label="🚪O")
+        b = Button(label="🚪")
         b.callback = corr
-        b2 = Button(label="🚪X")
+        b2 = Button(label="🚪")
         b2.callback = fail
 
 
