@@ -642,6 +642,8 @@ class PrintStuff(commands.Cog):
             print(quotee.content)
             quotee = quotee.author.name
             print(quotee)
+        if "self" in quotee:
+            quotee = message.author.name
 
         if "mario" in quotee or "mf" in quotee:
             skip = True
@@ -653,6 +655,7 @@ class PrintStuff(commands.Cog):
         if "josh" in quotee:
             rightcat = "images/right cat/yosheedie.png"
         if "anth" in quotee or "ante" in quotee:
+            skip = True
             rightcat = "images/right cat/anthdie.png"
         if "ed" in quotee:
             rightcat = "images/right cat/edwoskdie.png"
