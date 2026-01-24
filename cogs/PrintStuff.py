@@ -1,3 +1,5 @@
+import os
+
 import discord
 import mcstatus
 from discord.ext import commands, tasks
@@ -9,6 +11,8 @@ import json
 import re
 global stopp
 import datetime
+from PIL import Image
+
 stopp = False
 bluff = False
 
@@ -131,6 +135,11 @@ class PrintStuff(commands.Cog):
             if channelrole not in message.author.roles:
                 await message.author.send("you should GAMBLE WITH DOORS\neven normal doors will give time")
                 await message.delete()
+        #----------------------------------------killing x image sender----------------------------------------#
+        if "killing" in message.content.lower():
+            print("saw killing")
+
+            await self.catimg(message)
 
 
     # ------------------------------------------Bluff----------------------------------------------------------#
@@ -462,14 +471,17 @@ class PrintStuff(commands.Cog):
             try:
                 replied_message = await ctx.channel.fetch_message(replied_message_id)
                 if replied_message.author == self.bot.user:
-                    await ctx.send("It's gone, we're safe now.\n YOU ALL SAW NOTHING")
+                    await ctx.send("It's gone, we're safe now.\n YOU ALL SAW NOTHING", ephemeral=True)
                     await replied_message.delete()
                 else:
                     await ctx.send("uh... that's not one of mine, that's your problem.\n Ask them really, REALLY, **REALLY** nicely to delete it, I'm sure that'll go well.")
             except discord.NotFound:
                 await ctx.send("That, uh... doesn't exist anymore?")
         else:
-            await ctx.send("WHERE \nWHAT\nREPLY TO IT WHERE IS IT AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+            async for m in ctx.channel.history(limit=26):
+                if m.author == self.bot.user:
+                    await m.delete()
+                    await ctx.send("o7 found it", ephemeral=True)
 
     # ----------------------------------:__: sender---------------------------------------------3
     @commands.hybrid_command(name = "o__o")
@@ -584,6 +596,84 @@ class PrintStuff(commands.Cog):
         except Exception as error:
             await self.printto("An error occurred:", type(error).__name__)
             await self.printto(str(error))
+
+    async def catimg(self, message: discord.Message):
+        leftcat = None
+        match message.author.id:
+            case 405197452833062912: #mariofan
+                print("properly assigned mariofan?")
+                leftcat = "images/left cat/marlefankil.png"
+            case 702906770003198003: #me (uness someone else is reading this, which I DOUBT)
+                leftcat = "images/left cat/omarkil.png"
+            case 617347174120030208: #rovuh
+                leftcat = "images/left cat/rovuhkil.png"
+            case 916883861634441286: #edwosk
+                leftcat = "images/left cat/edwoskkil.png"
+            case 456858402832908301: #CB
+                leftcat = "images/left cat/cbkil.png"
+            case 721389007426158633: #Josh
+                leftcat = "images/left cat/yosheekil.png"
+            case 450811106504605706: #Anth
+                leftcat = "images/left cat/anthkil.png"
+            case 925472450962141195: #mafewerawr
+                leftcat = "images/left cat/meowzakil.png"
+            case 770464351336923157: #Astro
+                leftcat = "images/left cat/astrokil.png"
+        print(f"leftcat: {leftcat}")
+        skip = False
+        try:
+            quotee = message.content[message.content.lower().index("killing ") + 8:]
+            print(quotee)
+            quotee = quotee.lower()
+            if " " in quotee:
+                quotee = quotee[:quotee.index(" ")]
+                print(quotee)
+        except Exception as e:
+            print(e)
+            return
+        if leftcat is None:
+            await message.reply("who r u", ephemeral=True)
+            return
+        rightcat = None
+        if "mario" in quotee or "mf" in quotee:
+            skip = True
+            rightcat = "images/right cat/marlefandie.png"
+        if "astro" in quotee:
+            rightcat = "images/right cat/astrodie.png"
+        if "cb" in quotee:
+            rightcat = "images/right cat/cbdie.png"
+        if "josh" in quotee:
+            rightcat = "images/right cat/yosheedie.png"
+        if "anth" in quotee:
+            rightcat = "images/right cat/anthdie.png"
+        if "ed" in quotee:
+            rightcat = "images/right cat/edwoskdie.png"
+        if "om" in quotee:
+            skip = True
+            rightcat = "images/right cat/omardie.png"
+        if "rov" in quotee:
+            rightcat = "images/right cat/rovuhdie.png"
+        if "m" in quotee and "r" in quotee and not skip:
+            rightcat = "images/right cat/meowzadie.png"
+
+        print(f"rightcat: {rightcat}")
+        if rightcat is None:
+            await message.reply("who?", ephemeral=True)
+            return
+        try:
+            leftcat = Image.open(leftcat)
+            rightcat = Image.open(rightcat)
+            totalwidth = rightcat.width * 2
+            new_img = Image.new('RGB', (totalwidth, rightcat.height), color='white')
+            new_img.paste(leftcat, (0, 0), leftcat)
+            new_img.paste(rightcat, (rightcat.width, 0), rightcat)
+            new_img.save(message.content + ".png")
+            await message.reply(file=discord.File(message.content + ".png"))
+            os.remove(message.content+ ".png")
+        except Exception as e:
+            await self.printto(str(e))
+
+
 
 
 
