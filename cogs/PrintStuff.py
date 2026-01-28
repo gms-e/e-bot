@@ -295,8 +295,8 @@ class PrintStuff(commands.Cog):
 
                 day -= 1
                 match day:
-                    case 3:
-                        await channel.send("3 days left :D")
+                    # case 3:
+                    #     await channel.send("3 days left :D")
                     case 2:
                         await channel.send("2 days left :)")
                         await channel.send(file=discord.File("timesatickin.png"))
@@ -648,10 +648,13 @@ class PrintStuff(commands.Cog):
             skip = True
             rightcat = "images/right cat/marlefandie.png"
         if "astro" in quotee:
+            skip = True
             rightcat = "images/right cat/astrodie.png"
         if "cb" in quotee:
+            skip = True
             rightcat = "images/right cat/cbdie.png"
         if "josh" in quotee:
+            skip = True
             rightcat = "images/right cat/yosheedie.png"
         if "anth" in quotee or "ante" in quotee:
             skip = True
@@ -662,6 +665,7 @@ class PrintStuff(commands.Cog):
             skip = True
             rightcat = "images/right cat/omardie.png"
         if "rov" in quotee:
+            skip = True
             rightcat = "images/right cat/rovuhdie.png"
         if "m" in quotee and "r" in quotee and not skip:
             rightcat = "images/right cat/meowzadie.png"
