@@ -9,6 +9,9 @@ import asyncio
 import string
 import json
 import re
+
+from discord.ui import View, Button
+
 global stopp
 import datetime
 from PIL import Image
@@ -158,6 +161,26 @@ class PrintStuff(commands.Cog):
     async def created(self, ctx):
         await ctx.send(f"<t:{1748565600}:R>")
         await self.bot.process_commands(ctx)
+
+
+    @commands.hybrid_command(name = "omarhelpweneedyougeton")
+    async def omarhelpweneedyougeton(self, ctx):
+        response = await ctx.send("Get someone else to press this button")
+        async def pingomar(interaction: discord.Interaction):
+            if interaction.user.id == ctx.author.id:
+                await interaction.response.edit_message(content="get someone ELSE to press it.")
+                return
+            omuh = await self.bot.fetch_user(1120130858779689032)
+            await omuh.send("e")
+            await interaction.response.edit_message(content = "o7 he's *aware* now", view = None)
+        buttonholder = View(timeout=120)
+        helpbutton = Button(label="Ping Omar", style=discord.ButtonStyle.green)
+        helpbutton.callback = pingomar
+        buttonholder.add_item(helpbutton)
+        await response.edit(view = buttonholder)
+
+
+
 
     #-------------------------------Reports mc server status & players when requested--------------------------------#
     @commands.hybrid_group(name = "server", brief = "up\n role add | remove")
