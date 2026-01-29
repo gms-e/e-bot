@@ -571,13 +571,13 @@ class DoorStuff(commands.Cog):
             await ctx.send(f"they were kinda broke so you only steal {hours} hour{"s" if hours >  0 else ""} (everything they had).")
             doorlist[str(ctx.author.id)] = hours
             doorlist[str(sucker.id)] = 0
-            sucker.remove_roles(channelrole)
+            await sucker.remove_roles(channelrole)
 
         elif result == 0:
             await ctx.send(f"you steal exactly every single hour they had")
             doorlist[str(ctx.author.id)] = abs(ours)
             doorlist[str(sucker.id)] = 0
-            sucker.remove_roles(channelrole)
+            await sucker.remove_roles(channelrole)
 
         await ctx.author.add_roles(channelrole)
         with open("opendoors.json", 'w') as f:
