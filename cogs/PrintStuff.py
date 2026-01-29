@@ -293,6 +293,17 @@ class PrintStuff(commands.Cog):
         except Exception as e:
             await self.printto(e)
             await self.printto(str(e))
+    @tasks.loop(seconds=1)
+    async def aintnoway(self):
+        lotto = random.random()
+        if lotto < 0.000001:
+            await self.printto(f"{lotto} isn't quite 1 in a billion, but still kinda neat .-.")
+        if lotto < 0.00000000001:
+            await self.printto(f"AIN'T NO WAAAAAYYYYYYYYY we hit the billion chance with {lotto}") #Console server
+            thatonemf = await self.bot.fetch_user(405197452833062912)
+            await thatonemf.send("Don't forget the heart patch")
+            chat = await self.bot.get_channel(773015468201345027)
+            await chat.send("@everyone BUY A FRICKIN LOTTERY TICKET RIGHT NOW,\n and also don't forget the heart patch <:fennyalove:1466317750732455978>")
 
     #-----------------------------------Anim progress tracker-----------------------------------------#
     @tasks.loop(minutes=120)
