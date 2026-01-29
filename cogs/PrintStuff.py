@@ -513,10 +513,11 @@ class PrintStuff(commands.Cog):
             except discord.NotFound:
                 await ctx.send("That, uh... doesn't exist anymore?")
         else:
-            async for m in ctx.channel.history(limit=26):
+            async for m in ctx.channel.history(limit=30):
                 if m.author == self.bot.user:
                     await m.delete()
                     await ctx.send("o7 found it", ephemeral=True)
+                    return
 
     # ----------------------------------:__: sender---------------------------------------------3
     @commands.hybrid_command(name = "o__o")
