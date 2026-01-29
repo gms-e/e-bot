@@ -54,12 +54,27 @@ class PrintStuff(commands.Cog):
     #-----------------------------------------
     @commands.Cog.listener()
     async def on_message(self, message):
+
+
+        #---------------------------------------notices your non anon------------------------------------------#
+        if message.channel.id == 841490511390048277 and message.author.id != self.bot.user.id:
+            cnt = message.content
+            ch = message.channel
+            await message.delete()
+            cnt = await self.oddyspeak(cnt)
+            await ch.send(cnt)
+        #----------------------------------------killing x image sender----------------------------------------#
+        if "killing" in message.content.lower():
+            await self.catimg(message)
+
         usettings = self.bot.get_cog("SetStuff")
         # Ignore messages from the bot itself to prevent infinite loops
         if message.author == self.bot.user:
             return
+        #Teto of the day for today
         if random.random() < 0.5 and "today" in message.content.lower() and await usettings.get_value(message, message.author, "tetoday"):
             await self.kasane(message)
+        #Remove identifiers from youtube links & fandom
         if "https://" in message.content and "?si=" in message.content:
             time = ""
             if "&t=" in message.content:
@@ -138,11 +153,42 @@ class PrintStuff(commands.Cog):
             if channelrole not in message.author.roles:
                 await message.author.send("you should GAMBLE WITH DOORS\neven normal doors will give time")
                 await message.delete()
-        #----------------------------------------killing x image sender----------------------------------------#
-        if "killing" in message.content.lower():
-            print("saw killing")
 
-            await self.catimg(message)
+
+    #----------------------------reincarnated as a helper command :D----------------------------------------#
+    async def oddyspeak(self, message: str) -> string:
+        mess = message.lower()
+        try:
+            if "ington" in mess:
+                mess = mess.replace("ington", "")
+            if "josh" in mess:
+                mess = re.sub("josh", "Josh <:crazy:1178765587929890877>", mess, flags=re.IGNORECASE)
+            if "mariofan" in mess:
+                mess = re.sub("mariofan", "Mariofan <:mewrlefan:1399225627655147550>", mess, flags=re.IGNORECASE)
+            elif "mario" in mess and "fan" not in mess:
+                mess = re.sub("mario", "Mariofan <:mewrlefan:1399225627655147550>", mess, flags=re.IGNORECASE)
+            if "edwosk" in mess:
+                mess = re.sub("edwosk", "Edwosk <:riskwosk:1363696488068153445>", mess, flags=re.IGNORECASE)
+            if "astro" in mess:
+                mess = re.sub("astro", "Astro <:green_sus:786757714121457664>", mess, flags=re.IGNORECASE)
+                if "naut" in mess:
+                    mess.replace("naut", "")
+            if "cb" in mess:
+                mess = re.sub("cb", "CB <:SmugPac:833531321061343232>", mess, flags=re.IGNORECASE)
+            if "omar" in mess:
+                mess = re.sub("omar", "Omar <:welp:1363696460343804004>", mess, flags=re.IGNORECASE)
+            if "rover" in mess:
+                mess = re.sub("rover", "Rover <:Maxwell_I_Guess:1400716442697072651>", mess, flags=re.IGNORECASE)
+            elif "rov" in mess:
+                mess = re.sub("rov", "Rover <:Maxwell_I_Guess:1400716442697072651>", mess, flags=re.IGNORECASE)
+            if "anth" in mess:
+                mess = re.sub("anth", "Anth <:anth:1363704263402061985>", mess, flags=re.IGNORECASE)
+            return mess
+        except Exception as e:
+            print(e)
+            print(str(e))
+            return "e"
+
 
 
     # ------------------------------------------Bluff----------------------------------------------------------#
@@ -162,7 +208,15 @@ class PrintStuff(commands.Cog):
         await ctx.send(f"<t:{1748565600}:R>")
         await self.bot.process_commands(ctx)
 
+    @commands.hybrid_command()
+    async def oddesay(self, ctx, words):
+        anon = await self.bot.fetch_channel(841490511390048277)
+        words = await self.oddyspeak(words)
+        await anon.send(words)
+        nerd = await ctx.send("e", ephemeral = True)
+        await nerd.delete()
 
+    #--------------------------------------Ping omar-----------------------------------------------#
     @commands.hybrid_command(name = "omarhelpweneedyougeton")
     async def omarhelpweneedyougeton(self, ctx):
         response = await ctx.send("Get someone else to press this button")
@@ -634,52 +688,37 @@ class PrintStuff(commands.Cog):
             await self.printto(str(error))
 
     async def catimg(self, message: discord.Message):
-        leftcat = None
-        match message.author.id:
-            case 405197452833062912: #mariofan
-                print("properly assigned mariofan?")
-                leftcat = "images/left cat/marlefankil.png"
-            case 702906770003198003: #me (uness someone else is reading this, which I DOUBT)
-                leftcat = "images/left cat/omarkil.png"
-            case 617347174120030208: #rovuh
-                leftcat = "images/left cat/rovuhkil.png"
-            case 916883861634441286: #edwosk
-                leftcat = "images/left cat/edwoskkil.png"
-            case 456858402832908301: #CB
-                leftcat = "images/left cat/cbkil.png"
-            case 721389007426158633: #Josh
-                leftcat = "images/left cat/yosheekil.png"
-            case 450811106504605706: #Anth
-                leftcat = "images/left cat/anthkil.png"
-            case 925472450962141195: #mafewerawr
-                leftcat = "images/left cat/meowzakil.png"
-            case 770464351336923157: #Astro
-                leftcat = "images/left cat/astrokil.png"
-        await self.printto(f"leftcat: {leftcat}")
-        skip = False
+        content = message.content
+        quotee = message.content[message.content.lower().index("killing ") + 8:]
+        author = message.author
+        channel = message.channel
+        if author.id != self.bot.user.id and channel.id == 841490511390048277:
+            return
+        # await self.printto(quotee)
+        quotee = quotee.lower()
         try:
-            quotee = message.content[message.content.lower().index("killing ") + 8:]
-            await self.printto(quotee)
-            quotee = quotee.lower()
             if " " in quotee:
-                quotee = quotee[:quotee.index(" ")]
-                await self.printto(quotee)
+                if quotee[:5] == "e bot":
+                    quotee = "e bot"
+                else:
+                    quotee = quotee[:quotee.index(" ")]
+                # await self.printto(quotee)
         except Exception as e:
-            await self.printto(e)
+            # await self.printto(e)
             return
-        if leftcat is None:
-            await message.reply("who r u", ephemeral=True)
-            return
+
         rightcat = None
         if "you" in quotee:
-            m = [msg async for msg in message.channel.history(limit=2)]
+            m = [msg async for msg in channel.history(limit=2)]
             quotee = m.pop()
-            await self.printto(quotee.content)
+            # await self.printto(quotee.content)
             quotee = quotee.author.name
-            await self.printto(quotee)
+            # await self.printto(quotee)
         if "self" in quotee:
-            quotee = message.author.name
-
+            quotee = author.name
+        if "e." in quotee or "bot" in quotee:
+            skip = True
+            rightcat = "images/right cat/ebotdie.png"
         if "mario" in quotee or "mf" in quotee:
             skip = True
             rightcat = "images/right cat/marlefandie.png"
@@ -706,14 +745,42 @@ class PrintStuff(commands.Cog):
         if "m" in quotee and "r" in quotee and not skip:
             rightcat = "images/right cat/meowzadie.png"
 
-
-        await self.printto(f"rightcat: {rightcat}")
+        # await self.printto(f"rightcat: {rightcat}")
         if rightcat is None:
-            await message.reply("who?", ephemeral=True)
             return
+
+        leftcat = None
+        match author.id:
+            case 405197452833062912: #mariofan
+                print("properly assigned mariofan?")
+                leftcat = "images/left cat/marlefankil.png"
+            case 702906770003198003: #me (uness someone else is reading this, which I DOUBT)
+                leftcat = "images/left cat/omarkil.png"
+            case 617347174120030208: #rovuh
+                leftcat = "images/left cat/rovuhkil.png"
+            case 916883861634441286: #edwosk
+                leftcat = "images/left cat/edwoskkil.png"
+            case 456858402832908301: #CB
+                leftcat = "images/left cat/cbkil.png"
+            case 721389007426158633: #Josh
+                leftcat = "images/left cat/yosheekil.png"
+            case 450811106504605706: #Anth
+                leftcat = "images/left cat/anthkil.png"
+            case 925472450962141195: #mafewerawr
+                leftcat = "images/left cat/meowzakil.png"
+            case 770464351336923157: #Astro
+                leftcat = "images/left cat/astrokil.png"
+            case 1377752879963574384: #e bot?
+                leftcat = "images/left cat/ebotkil.png"
+
+        if leftcat is None:
+            # await message.reply("who r u", ephemeral=True)
+            return
+        # await self.printto(f"leftcat: {leftcat}")
+
         if leftcat == "images/left cat/edwoskkil.png" and rightcat == "images/right cat/omardie.png":
-            await self.printto("hard coded image")
-            await message.reply(file=discord.File("images/icastgun.png"))
+            # await self.printto("hard coded image")
+            await channel.send(file=discord.File("images/icastgun.png"))
             return
         try:
             leftcat = Image.open(leftcat)
@@ -722,11 +789,14 @@ class PrintStuff(commands.Cog):
             new_img = Image.new('RGB', (totalwidth, rightcat.height), color='white')
             new_img.paste(leftcat, (0, 0), leftcat)
             new_img.paste(rightcat, (rightcat.width, 0), rightcat)
-            new_img.save(message.content + ".png")
-            await message.reply(file=discord.File(message.content + ".png"))
-            os.remove(message.content+ ".png")
+            new_img.save(content + ".png")
+            if message:
+                await channel.send(file=discord.File(content + ".png"))
+            os.remove(content+ ".png")
         except Exception as e:
+            os.remove(content+ ".png")
             await self.printto(str(e))
+
 
 
 
