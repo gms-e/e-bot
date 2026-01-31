@@ -71,6 +71,34 @@ class SetStuff(commands.Cog):
             print(type(e))
             await ctx.send("something broke, ", str(e))
 
+    @hybrid_group.group(name = "anon", brief = "dm")
+    async def anon(self, ctx):
+        print("obsolete")
+
+    @anon.command(name = "link", brief = "links dms with anon channel")
+    async def link(self, ctx, value: bool):
+        await self.setValue(ctx, "dmlink", value)
+
+        outer = {}
+        try:
+            with open("settings.json", 'r') as f:
+                outer = json.load(f)
+                people = outer.get("dms", [])
+                if value and ctx.author.id not in people:
+                    people.append(ctx.author.id)
+                elif not value and ctx.author.id in people:
+                    people.remove(ctx.author.id)
+                outer["dms"] = people
+            with open("settings.json", 'w') as f:
+                json.dump(outer, f, indent=2)
+        except Exception as e:
+            print(e)
+            print(type(e))
+            await ctx.send("something broke, ", str(e))
+
+
+
+
     @hybrid_group.group(name = "reaction", brief = "branch for toggling message reactions")
     async def reaction_group(self, ctx):
         print("obsolete")
@@ -185,6 +213,34 @@ class SetStuff(commands.Cog):
             print(type(e))
             await ctx.send("something broke, ", str(e))
 
+    async def get_falsey_value(self, ctx, member: discord.Member, setting):
+        outer = {}
+        try:
+            with open("settings.json", 'r') as f:
+                outer = json.load(f)
+                inner = outer.get(str(member.id), {})
+                return inner.get(setting, False)
+        except FileNotFoundError:
+            with open("settings.json", "x") as f:
+                outer = {str(member.id): {setting: False}}
+                json.dump(outer, f, indent=2)
+                print("made a settings file since it wasn't there")
+                return False
+        except Exception as e:
+            print(e)
+            print(type(e))
+            await ctx.send("something broke, ", str(e))
+    async def get_people(self):
+        try:
+            with open("settings.json", 'r') as f:
+                outer = json.load(f)
+                return outer.get("dms", [])
+        except FileNotFoundError:
+                return []
+        except Exception as e:
+            print(e)
+            print(type(e))
+            return []
 
 async def setup(bot):
     await bot.add_cog(SetStuff(bot))

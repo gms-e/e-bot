@@ -68,9 +68,22 @@ class PrintStuff(commands.Cog):
             await self.catimg(message)
 
         usettings = self.bot.get_cog("SetStuff")
-        # Ignore messages from the bot itself to prevent infinite loops
+
+        # Ignore messages from the bot itself to prevent infinite loops (and sends anons to dmlink)
         if message.author == self.bot.user:
+            if message.channel.id == 841490511390048277:
+                people = await usettings.get_people()
+                for person in people:
+                    person = await self.bot.fetch_user(int(person))
+                    await person.send(message.content)
             return
+
+        #send dms to anon chat
+        if isinstance(message.channel, discord.DMChannel) and message.author.id != self.bot.user.id:
+            if await usettings.get_falsey_value(message, message.author, "dmlink"):
+                anon = await self.bot.fetch_channel(841490511390048277)
+                await anon.send(await self.oddyspeak(message.content))
+
         #Teto of the day for today
         if random.random() < 0.5 and "today" in message.content.lower() and await usettings.get_value(message, message.author, "tetoday"):
             await self.kasane(message)
