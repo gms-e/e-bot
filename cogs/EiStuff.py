@@ -1,5 +1,6 @@
 import requests
 import discord
+from discord import app_commands
 from discord.ext import commands
 from typing import Optional, Literal
 import random
@@ -45,12 +46,18 @@ class EiStuff(commands.Cog):
         await self.printto("Ei Stuff online")
 
     @commands.hybrid_group(name="ei")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def ai(self, ctx):
         await self.printto("obsolete")
     @ai.group(name = "change")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def ai_change(self, ctx):
         await self.printto("obsolete")
     @ai_change.command(name = "model")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def ai_change_model(self, ctx, models: Literal["Schitzo", "Uncensored", "Normalish"]):
         global model
         match models:
@@ -62,6 +69,8 @@ class EiStuff(commands.Cog):
                 model = "mistralai/mistral-small-24b-instruct-2501:free"
         await ctx.send(f"k we on the {models} one now")
     @ai_change.command(name = "account")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def ai_change_account(self, ctx, account: Literal["Acc 1", "Acc 2"]):
         global key
         match account:
@@ -71,6 +80,8 @@ class EiStuff(commands.Cog):
                 key = os.getenv("API_KEY_2")
         await ctx.send("o7 swapped accounts")
     @commands.hybrid_command(name = "testpingei")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def ei(self, ctx, person: Literal["Astro", "CB", "Josh", "Rover"], inputted: str):
         global key
 

@@ -1,6 +1,7 @@
 import time as ticktock
 
 import discord
+from discord import app_commands
 from discord.ext import commands, tasks
 from typing import Optional
 import random
@@ -298,14 +299,20 @@ class DoorStuff(commands.Cog):
         await self.printto("Door Stuff online")
 
     @commands.hybrid_group(name="doors", brief="of doom | of scores | of daily")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def doors_group(self, ctx):
         await self.printto("obsolete")
 
     @doors_group.group(name="of", brief="doom | scores | daily")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def of_group(self, ctx):
         await self.printto("obsolete")
 
     @of_group.command(name="scores")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def scores(self, ctx):
         global HSDict
         with open('HighScore.txt', 'r') as f:
@@ -338,6 +345,8 @@ class DoorStuff(commands.Cog):
             await self.printto("An error occurred:", type(error).__name__)
 
     @of_group.command(name="doom")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def doom(self, ctx, ephem: Optional[bool], public: Optional[bool]):
         public
         if "true" in str(ephem).lower():
@@ -370,6 +379,8 @@ class DoorStuff(commands.Cog):
             await self.printto(str(error))
 
     @of_group.command(name="daily")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def daily(self, ctx, ephem: Optional[bool]):
         #checks if day has changed and resets dailist if so
         await ctx.typing()
@@ -505,10 +516,14 @@ class DoorStuff(commands.Cog):
 
 
     @doors_group.group(name="time", brief="steal | list")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def time_group(self, ctx):
         await self.printto("obsolete")
 
     @time_group.command(name="list")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def time_list(self, ctx):
         doorlist = {}
         with open('opendoors.json', 'r') as f:
@@ -537,6 +552,8 @@ class DoorStuff(commands.Cog):
             await self.printto("An error occurred:", type(error).__name__)
 
     @time_group.command(name="steal")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def steal(self, ctx, sucker: discord.Member):
         doorlist = {}
         with open('opendoors.json', 'r') as f:

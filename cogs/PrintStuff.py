@@ -2,6 +2,7 @@ import os
 
 import discord
 import mcstatus
+from discord import app_commands
 from discord.ext import commands, tasks
 from typing import Optional, Literal
 import random
@@ -80,7 +81,7 @@ class PrintStuff(commands.Cog):
 
         #send dms to anon chat
         if isinstance(message.channel, discord.DMChannel) and message.author.id != self.bot.user.id:
-            if await usettings.get_falsey_value(message, message.author, "dmlink"):
+            if await usettings.get_falsey_value(message, message.author, "dmtochat"):
                 anon = await self.bot.fetch_channel(841490511390048277)
                 await anon.send(await self.oddyspeak(message.content))
 
@@ -206,6 +207,8 @@ class PrintStuff(commands.Cog):
 
     # ------------------------------------------Bluff----------------------------------------------------------#
     @commands.hybrid_command(name="bluff", brief = "Tell e bot to do something, even if it can't.")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def fakeit(self, ctx):
         global bluff
         bluff = True
@@ -213,15 +216,21 @@ class PrintStuff(commands.Cog):
         await ctx.bot.process_commands(ctx)
     # ----------------------------------Date since made--------------------------------------------#
     @commands.hybrid_group(brief="created")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def time(self, ctx):
         await self.printto("obsolete")
         await self.bot.process_commands(ctx)
     @time.command()
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def created(self, ctx):
         await ctx.send(f"<t:{1748565600}:R>")
         await self.bot.process_commands(ctx)
 
     @commands.hybrid_command()
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def oddesay(self, ctx, words):
         anon = await self.bot.fetch_channel(841490511390048277)
         words = await self.oddyspeak(words)
@@ -231,6 +240,8 @@ class PrintStuff(commands.Cog):
 
     #--------------------------------------Ping omar-----------------------------------------------#
     @commands.hybrid_command(name = "omarhelpweneedyougeton")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def omarhelpweneedyougeton(self, ctx):
         response = await ctx.send("Get someone else to press this button")
         async def pingomar(interaction: discord.Interaction):
@@ -251,9 +262,13 @@ class PrintStuff(commands.Cog):
 
     #-------------------------------Reports mc server status & players when requested--------------------------------#
     @commands.hybrid_group(name = "server", brief = "up\n role add | remove")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def server(self, ctx):
         await self.printto("obsolete")
     @server.command(name = "up")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def up(self, ctx):
         usettings = self.bot.get_cog("SetStuff")
         sessage = await ctx.send("uh")
@@ -337,9 +352,13 @@ class PrintStuff(commands.Cog):
     #----------------------------------------Hit singer Kasane Teto----------------------------------------------------#
 
     @commands.hybrid_group(name = "daily", breif = "teto")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def daily(self, ctx):
         await self.printto("obsolete")
     @daily.command(name="teto", brief = "posts the day's teto")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def kasane(self, ctx):
         usettings = self.bot.get_cog("SetStuff")
         tetos = ["https://tenor.com/view/kasane-gif-10240710281900746822",
@@ -420,6 +439,8 @@ class PrintStuff(commands.Cog):
 
     #--------------------------------Check anim days left----------------------------------------------#
     @commands.hybrid_group(name = "animation", brief = "time reset\n due in\n favors owed\ndays reserved")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def animation(self, ctx):
         await self.printto("obsolete")
     @commands.group(name = "dev", hidden = True)
@@ -436,9 +457,13 @@ class PrintStuff(commands.Cog):
                 f.write(str(days))
                 await ctx.send(f"changed {prev} days to {days}")
     @animation.group(name = "due", brief = "in")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def due(self, ctx):
         await self.printto("obsolete")
     @due.command(name = "in")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def within(self, ctx):
         day = -1
         try:
@@ -465,9 +490,13 @@ class PrintStuff(commands.Cog):
                 await ctx.send(f"like {day}, he done messed up now. what a nerd")
 
     @animation.group(name = "time", brief = "reset")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def tiempo(self, ctx):
         await self.printto("obsolete")
     @tiempo.command(name = "reset")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def reset(self, ctx):
         if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912):
             await ctx.send("Imma don't think you're allowed to do dat")
@@ -485,9 +514,13 @@ class PrintStuff(commands.Cog):
 
 #--------------------------------------------Favor tracking---------------------------------------------
     @animation.group(name = "favors")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def favor(self, ctx):
         await self.printto("obsolete")
     @favor.command(name = "add")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def favadd(self, ctx, number: int):
         if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912):
             await ctx.send("Imma don't think you're allowed to do dat")
@@ -505,6 +538,8 @@ class PrintStuff(commands.Cog):
         await ctx.send(f"o7 added {number}")
 
     @favor.command(name = "owed")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def favowed(self, ctx):
         favors = 0
         try:
@@ -517,10 +552,14 @@ class PrintStuff(commands.Cog):
 
     # --------------------------------------------reserve tracking---------------------------------------------
     @animation.group(name="reserves")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def reserve(self, ctx):
         await self.printto("obsolete")
 
     @reserve.command(name="add")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def resadd(self, ctx, number: int):
         if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912):
             await ctx.send("Imma don't think you're allowed to do dat")
@@ -539,6 +578,8 @@ class PrintStuff(commands.Cog):
         await ctx.send(f"o7 added {number}")
 
     @reserve.command(name="stored")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def resget(self, ctx):
         reserve = 0
         try:
@@ -551,22 +592,32 @@ class PrintStuff(commands.Cog):
 
     # ----------------------------------Deltarune tomorrow--------------------------------------------#
     @commands.hybrid_group(name="deltarune", brief="tomorrow")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def deltarune(self, ctx):
         await self.printto("obsolete")
         await self.bot.process_commands(ctx)
     @deltarune.command(name="tomorrow", brief="deltarune tomorrow")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def tomorrow(self, ctx):
         await ctx.reply("Deltarune tomorrow", mention_author=False)
         await self.bot.process_commands(ctx)
 
     #---------------------------------KILL IT WITH FIRE--------------------------------------------------#
     @commands.hybrid_group()
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def killit(self, ctx):
         await self.printto("obsolete")
     @killit.group(name = "with")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def using(self, ctx):
         await self.printto("obsolete")
     @using.command(name = "fire")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def fire(self, ctx):
         if ctx.message.reference:
             replied_message_id = ctx.message.reference.message_id
@@ -588,10 +639,14 @@ class PrintStuff(commands.Cog):
 
     # ----------------------------------:__: sender---------------------------------------------3
     @commands.hybrid_command(name = "o__o")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def dread(self, ctx):
         await ctx.reply("<:o__o:1429555147238805684>")
     # ----------------------------------Quote series--------------------------------------------#
     @commands.hybrid_group(brief = "from | random")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def quote(self, ctx):
         await self.printto("obsolete")
     #quote helper command
@@ -634,6 +689,8 @@ class PrintStuff(commands.Cog):
         return ql
 
     @quote.command(name="random")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def randomQ(self, ctx, ephem=False):
         rand = random.randint(0, 16 + 274 + 212 + 42 + 103 + 264 + 125 + 122 + 54 + 6 + 25 - 1)
         choice = 8
@@ -666,6 +723,8 @@ class PrintStuff(commands.Cog):
         await ctx.send(quotelist[random.randint(0, len(quotelist) - 1)], ephemeral=ephem)
 
     @quote.command(name="from")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def fromQ(self, ctx, guy: Literal["Anth", "Astro", "CB", "Edwosk", "Josh", "Mariofan", "Meowsor", "Omar", "Otter", "Rover", "Other"], ephem=False):
         try:
             pulled = 8

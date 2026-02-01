@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 from typing import Optional
 import random
@@ -50,11 +51,15 @@ class VoiceStuff(commands.Cog):
 
     # --------------------------------------------jim jam--------------------------------------------------------------#
     @commands.hybrid_group(name="jim", brief="jam - actual command that plays yoshi and me")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def jim(self, ctx):
         await self.printto("obsolete")
         await ctx.bot.process_commands(ctx)
 
     @jim.command(name="jam")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def jam(self, ctx, count: Optional[int] = commands.parameter(
         displayed_name="song", description="song queue, starts at 0 and goes to 2",default=0),
         censored: Optional[bool] = discord.ext.commands.parameter(displayed_name="beep?", description="beep the name?", default=False),
@@ -179,11 +184,15 @@ class VoiceStuff(commands.Cog):
 
 #----------------------------------------Actual boost debate command that NOBODY uses----------------------------------#
     @commands.hybrid_group(name="boost", brief="debate")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def boost(self, ctx):
         await self.printto("obsolete")
         await ctx.bot.process_commands(ctx)
 
     @boost.command(name="debate")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def debate(self, ctx):
         await self.printto("trying debate")
         try:
@@ -196,6 +205,8 @@ class VoiceStuff(commands.Cog):
 
 #--------------------------------------------super censored song----------------------------------------#
     @commands.hybrid_command(name="russiasong")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def russiasong(self, ctx):
         try:
             await ctx.send("||o7||")
@@ -205,6 +216,8 @@ class VoiceStuff(commands.Cog):
             await self.printto(str(error))
     # ----------------------------------Bring user to vc--------------------------------------------#
     @commands.hybrid_command(name="kidnap", brief="Kidnaps person to vc")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def kidnap(self, ctx, guy: discord.Member = discord.ext.commands.parameter(displayed_name="guy",
                                                                                description="The sucker getting kidnapped (has to be in another vc)")):
         await self.printto(f"kidnapped {guy.name}")
@@ -215,6 +228,8 @@ class VoiceStuff(commands.Cog):
     #-----------------------------------------------Soundboard person in vc--------------------------------------------#
 
     @commands.hybrid_command()
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def soundboard(self, ctx, guy: discord.Member = discord.ext.commands.parameter(displayed_name="guy",
                                                                                    description="Dude you wanna soundboard (must be in vc)")):
         await self.sendSound(ctx, guy, False)

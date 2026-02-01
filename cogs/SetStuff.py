@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 from typing import Optional
 import random
@@ -15,6 +16,9 @@ class SetStuff(commands.Cog):
         print("Set Stuff online")
 
     @commands.hybrid_group(name = "set")
+
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def hybrid_group(self, ctx):
         print("obsolete")
 
@@ -71,13 +75,17 @@ class SetStuff(commands.Cog):
             print(type(e))
             await ctx.send("something broke, ", str(e))
 
-    @hybrid_group.group(name = "anon", brief = "dm")
-    async def anon(self, ctx):
+    @hybrid_group.group(name = "link", brief = "dmtochat | chattodm")
+    async def link(self, ctx):
         print("obsolete")
 
-    @anon.command(name = "link", brief = "links dms with anon channel")
-    async def link(self, ctx, value: bool):
-        await self.setValue(ctx, "dmlink", value)
+    @link.command(name = "dmtochat", brief = "send dms to anon channel")
+    async def dmtochat(self, ctx, value: bool):
+        await self.setValue(ctx, "dmtochat", value)
+
+    @link.command(name = "chattodm", brief = "sends messages from anon channel to dms")
+    async def chattodm(self,  ctx, value:bool):
+        await self.setValue(ctx, "chattodm", value)
 
         outer = {}
         try:
@@ -95,9 +103,6 @@ class SetStuff(commands.Cog):
             print(e)
             print(type(e))
             await ctx.send("something broke, ", str(e))
-
-
-
 
     @hybrid_group.group(name = "reaction", brief = "branch for toggling message reactions")
     async def reaction_group(self, ctx):
