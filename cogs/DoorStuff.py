@@ -9,6 +9,7 @@ from discord.ui import Button, View
 import asyncio
 import string
 import datetime
+import traceback
 
 class DoorStuff(commands.Cog):
     def __init__(self, bot):
@@ -33,7 +34,7 @@ class DoorStuff(commands.Cog):
     async def genViewList(self, ctx, public, ephem, gdict, dailymode):
 
         async def fail(interaction: discord.Interaction):
-            if not public and str(interaction.user.name) != str(ctx.author.name):
+            if not public and str(interaction.user.id) != str(ctx.author.id):
                 await self.printto(f"oi {interaction.user.name} piss off")
                 return
 
@@ -47,7 +48,7 @@ class DoorStuff(commands.Cog):
                     await self.printto(type(error).__name__)
                     await self.printto(str(error))
                 return
-            await self.printto(f"{interaction.user.name} ended with {gdict.get(str(interaction.user.id), 0)}")
+            await self.printto(f"{interaction.user.display_name} ended with {gdict.get(str(interaction.user.id), 0)}")
 
             with open('HighScore.txt', 'r') as f:
                 try:
@@ -80,9 +81,8 @@ class DoorStuff(commands.Cog):
                 except Exception as error:
                     await self.printto(f"An error occurred:", type(error).__name__)
                     holder = "Some guy who ain't here"
-                await self.printto(str(holder))
                 if "None" in str(holder):
-                    holder = "Some guy who ain't here"
+                    holder = "From another server"
 
                 extra = "Try again?"
                 if dailymode:
@@ -97,12 +97,12 @@ class DoorStuff(commands.Cog):
                                 try:
                                     with open("opendoors.json", 'r') as f:
                                         doorlist = eval(f.read())
-                                    doorlist[str(ctx.author.id)] = 27
+                                    doorlist[str(interaction.user.id)] = 27
                                     with open("opendoors.json", 'w') as f:
                                         f.write(str(doorlist))
                                 except FileNotFoundError:
                                     with open("opendoors.json", "x") as f:
-                                        doorlist[str(ctx.author.id)] = 27
+                                        doorlist[str(interaction.user.id)] = 27
                                         f.write(str(doorlist))
                                         await self.printto("made a file since it wasn't there")
                                 except ValueError:
@@ -120,12 +120,12 @@ class DoorStuff(commands.Cog):
                                 try:
                                     with open("opendoors.json", 'r') as f:
                                         doorlist = eval(f.read())
-                                    doorlist[str(ctx.author.id)] = hrs
+                                    doorlist[str(interaction.user.id)] = hrs
                                     with open("opendoors.json", 'w') as f:
                                         f.write(str(doorlist))
                                 except FileNotFoundError:
                                     with open("opendoors.json", "x") as f:
-                                        doorlist[str(ctx.author.id)] = hrs
+                                        doorlist[str(interaction.user.id)] = hrs
                                         f.write(str(doorlist))
                                         await self.printto("made a file since it wasn't there")
                                 except ValueError:
@@ -153,28 +153,27 @@ class DoorStuff(commands.Cog):
                 await self.printto(str(error))
 
         async def retry(interaction: discord.Interaction, quick = False):
-            if not public and str(interaction.user.name) != str(ctx.author.name):
-                await self.printto(f"oi {interaction.user.name} piss off")
+            if not public and str(interaction.user.id) != str(ctx.author.id):
+                await self.printto(f"oi {interaction.user.display_name} piss off")
                 return
-            if gdict[str(interaction.user.id)] <= 0 and dailymode:
-                gdict[str(interaction.user.id)] -= 1
+            if gdict.get(str(interaction.user.id), 0) <= 0 and dailymode:
+                gdict[str(interaction.user.id)] = gdict.get(str(interaction.user.id), 0) - 1
             else:
                 gdict[str(interaction.user.id)] = 0
             extra = ""
             if quick:
-                await self.printto(f"{interaction.user.name} quick restarted")
                 if dailymode:
                     extra = " (YOU FA- actually, you know what?)\n(NEGATIVE TIME)"
                 else:
-                    extra = " (Quick Restarted)"
+                    extra = f" (Quick Resta{random.choice(string.ascii_lowercase)}ted)"
             if random.random() < 1 / 2:
                 await interaction.response.edit_message(content=f"Score: {gdict[str(interaction.user.id)]}{extra}", view=ri)
             else:
                 await interaction.response.edit_message(content=f"Score: {gdict[str(interaction.user.id)]}{extra}", view=le)
 
         async def quit(interaction: discord.Interaction):
-            if str(interaction.user.name) != str(ctx.author.name):
-                await self.printto(f"oi {interaction.user.name} piss off")
+            if str(interaction.user.id) != str(ctx.author.id):
+                await self.printto(f"oi {interaction.user.display_name} piss off")
                 return
             global HSDict
 
@@ -188,8 +187,8 @@ class DoorStuff(commands.Cog):
                 await self.printto(str(error))
 
         async def kill(interaction: discord.Interaction):
-            if str(interaction.user.name) != str(ctx.author.name):
-                await self.printto(f"oi {interaction.user.name} piss off")
+            if str(interaction.user.id) != str(ctx.author.id):
+                await self.printto(f"oi {interaction.user.display_name} piss off")
                 return
             await interaction.message.delete()
 
@@ -210,38 +209,44 @@ class DoorStuff(commands.Cog):
 
             try:
                 other = ""
-                if not public and str(interaction.user.name) != str(ctx.author.name):
-                    await self.printto(f"oi {interaction.user.name} piss off")
+                if not public and str(interaction.user.id) != str(ctx.author.id):
+                    await self.printto(f"oi {interaction.user.display_name} piss off")
                     return
-                if gdict[str(interaction.user.id)] < 0 and dailymode:
-                    gdict[str(interaction.user.id)] -= 1
+                if gdict.get(str(interaction.user.id), 0) < 0 and dailymode:
+                    gdict[str(interaction.user.id)] = gdict.get(str(interaction.user.id), 0) - 1
                 else:
                     gdict[str(interaction.user.id)] = gdict.get(str(interaction.user.id), 0) + 1
-                    if gdict.get(str(interaction.user.id), 0) >=5:
-                        times = {}
-                        try:
-                            with open("opendoors.json", 'r') as f:
-                                times = eval(f.read())
-                            channelrole = ctx.author.guild.get_role(1462230075503149299)
-                            if times.get(str(interaction.user.id), 0) >=0:
+                    try:
+                        if gdict.get(str(interaction.user.id), 0) >=5:
+                            times = {}
+                            try:
+                                with open("opendoors.json", 'r') as f:
+                                    times = eval(f.read())
+                                channelrole = ctx.author.guild.get_role(1462230075503149299)
+                                if channelrole:
+                                    if times.get(str(ctx.author.id), 0) >=0:
+                                        await ctx.author.add_roles(channelrole)
+                                        times[str(interaction.user.id)] = times.get(str(interaction.user.id), 0) + 1
+                                        other = "\n(also +1 https://discord.com/channels/773015467753209888/1461631744955514932 hours for every point past here)"
+                                    else:
+                                        other = "\n(also +1 https://discord.com/channels/773015467753209888/1461631744955514932 hours you can steal for every point past here)"
+                                        times[str(interaction.user.id)] = times.get(str(interaction.user.id), 0) - 1
+                                else:
+                                    other = "\nIf this were in the main server, you'd have earned a door (whatever that means)"
+
+
+
+                            except FileNotFoundError:
+                                await self.printto("file didn't exist, making and setting to 1")
+                                times[str(interaction.user.id)] = 1
+                                channelrole = ctx.author.guild.get_role(1462230075503149299)
                                 await ctx.author.add_roles(channelrole)
-                                times[str(interaction.user.id)] = times.get(str(interaction.user.id), 0) + 1
-                                other = "\n(also +1 https://discord.com/channels/773015467753209888/1461631744955514932 hours for every point past here)"
-                            else:
-                                other = "\n(also +1 https://discord.com/channels/773015467753209888/1461631744955514932 hours you can steal for every point past here)"
-                                times[str(interaction.user.id)] = times.get(str(interaction.user.id), 0) - 1
 
-
-
-                        except FileNotFoundError:
-                            await self.printto("file didn't exist, making and setting to 1")
-                            times[str(interaction.user.id)] = 1
-                            channelrole = ctx.author.guild.get_role(1462230075503149299)
-                            await ctx.author.add_roles(channelrole)
-
-                        await self.printto(f"their hours are now at {times.get(str(interaction.user.id), 0)}")
-                        with open("opendoors.json", 'w') as f:
-                            f.write(str(times))
+                            with open("opendoors.json", 'w') as f:
+                                f.write(str(times))
+                    except Exception as e:
+                        print(e)
+                        print(traceback.format_exc())
 
                 if random.random() < 1 / 2:
                     await interaction.response.edit_message(content=f"Score:{gdict.get(str(interaction.user.id), 0)}{other}",
@@ -281,7 +286,7 @@ class DoorStuff(commands.Cog):
             vfail.add_item(k)
         b = Button(label="🚪")
         b.callback = corr
-        b2 = Button(label="🚪")
+        b2 = Button(label="🚪X")
         b2.callback = fail
 
 
@@ -353,6 +358,13 @@ class DoorStuff(commands.Cog):
             ephem = True
         else:
             ephem = False
+
+            if ctx.channel.id == 1461631744955514932:
+                channelrole = ctx.author.guild.get_role(1462230075503149299)
+                if channelrole not in ctx.author.roles:
+                    await ctx.author.send("get ghosted anyways nerd")
+                    ephem = True
+
         if "true" in str(public).lower():
             public = True
         else:
@@ -360,7 +372,10 @@ class DoorStuff(commands.Cog):
         global scoreDict
         global HSDict
         scoreDict = {str(ctx.author.id): 0}
-        await self.printto(f"{ctx.author.name} is {ephem} a ghost")
+        if public:
+            await self.printto("someone started public doors")
+        else:
+            await self.printto(f"{ctx.author.display_name} is {ephem} a ghost")
         views = []
         try:
             views = await self.genViewList(ctx, public, ephem, scoreDict, False)
@@ -445,10 +460,16 @@ class DoorStuff(commands.Cog):
             ephem = True
         else:
             ephem = False
+            if ctx.channel.id == 1461631744955514932:
+                channelrole = ctx.author.guild.get_role(1462230075503149299)
+                if channelrole not in ctx.author.roles:
+                    await ctx.author.send("get ghosted anyways nerd")
+                    ephem = True
+
         global scoreDict2
         scoreDict2 = {str(ctx.author.id): 0}
 
-        await self.printto(f"{ctx.author.name} is {ephem} a ghost")
+        await self.printto(f"{ctx.author.display_name} is {ephem} a ghost")
         views = []
         try:
             views = await self.genViewList(ctx, False, ephem, scoreDict2, True)
@@ -566,7 +587,7 @@ class DoorStuff(commands.Cog):
                 return
         ours = doorlist.get(str(ctx.author.id), 0)
         if ours >= 0:
-            await ctx.send("you gotta get -4 or beyond in daily to steal from people\n(that lets you steal your score * e hours)\n y'ain't even broke -. -")
+            await ctx.send("you gotta get -4 or beyond in daily to steal from people\n(that lets you steal your score * e hours)\n y'ain't even in debt -. -")
             return
 
         hours = doorlist.get(str(sucker.id), 0)

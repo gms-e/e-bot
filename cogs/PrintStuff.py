@@ -172,32 +172,34 @@ class PrintStuff(commands.Cog):
     #----------------------------reincarnated as a helper command :D----------------------------------------#
     async def oddyspeak(self, message: str) -> string:
         mess = message.lower()
+        result = message
+        result = result[0].lower() + result[1:]
         try:
             if "ington" in mess:
-                mess = mess.replace("ington", "")
+                result = result.replace("ington", "")
             if "josh" in mess:
-                mess = re.sub("josh", "Josh <:crazy:1178765587929890877>", mess, flags=re.IGNORECASE)
+                result = re.sub("josh", "Josh <:crazy:1178765587929890877>", result, flags=re.IGNORECASE)
             if "mariofan" in mess:
-                mess = re.sub("mariofan", "Mariofan <:mewrlefan:1399225627655147550>", mess, flags=re.IGNORECASE)
+                result = re.sub("mariofan", "Mariofan <:mewrlefan:1399225627655147550>", result, flags=re.IGNORECASE)
             elif "mario" in mess and "fan" not in mess:
-                mess = re.sub("mario", "Mariofan <:mewrlefan:1399225627655147550>", mess, flags=re.IGNORECASE)
+                result = re.sub("mario", "Mariofan <:mewrlefan:1399225627655147550>", result, flags=re.IGNORECASE)
             if "edwosk" in mess:
-                mess = re.sub("edwosk", "Edwosk <:riskwosk:1363696488068153445>", mess, flags=re.IGNORECASE)
+                result = re.sub("edwosk", "Edwosk <:riskwosk:1363696488068153445>", result, flags=re.IGNORECASE)
             if "astro" in mess:
-                mess = re.sub("astro", "Astro <:green_sus:786757714121457664>", mess, flags=re.IGNORECASE)
+                result = re.sub("astro", "Astro <:green_sus:786757714121457664>", result, flags=re.IGNORECASE)
                 if "naut" in mess:
                     mess.replace("naut", "")
             if "cb" in mess:
-                mess = re.sub("cb", "CB <:SmugPac:833531321061343232>", mess, flags=re.IGNORECASE)
+                result = re.sub("cb", "CB <:SmugPac:833531321061343232>", result, flags=re.IGNORECASE)
             if "omar" in mess:
-                mess = re.sub("omar", "Omar <:welp:1363696460343804004>", mess, flags=re.IGNORECASE)
+                result = re.sub("omar", "Omar <:welp:1363696460343804004>", result, flags=re.IGNORECASE)
             if "rover" in mess:
-                mess = re.sub("rover", "Rover <:Maxwell_I_Guess:1400716442697072651>", mess, flags=re.IGNORECASE)
+                result = re.sub("rover", "Rover <:Maxwell_I_Guess:1400716442697072651>", result, flags=re.IGNORECASE)
             elif "rov" in mess:
-                mess = re.sub("rov", "Rover <:Maxwell_I_Guess:1400716442697072651>", mess, flags=re.IGNORECASE)
+                result = re.sub("rov", "Rover <:Maxwell_I_Guess:1400716442697072651>", result, flags=re.IGNORECASE)
             if "anth" in mess:
-                mess = re.sub("anth", "Anth <:anth:1363704263402061985>", mess, flags=re.IGNORECASE)
-            return mess
+                result = re.sub("anth", "Anth <:anth:1363704263402061985>", result, flags=re.IGNORECASE)
+            return result
         except Exception as e:
             print(e)
             print(str(e))
