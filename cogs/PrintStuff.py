@@ -87,7 +87,8 @@ class PrintStuff(commands.Cog):
         if isinstance(message.channel, discord.DMChannel) and message.author.id != self.bot.user.id:
             if await usettings.get_falsey_value(message, message.author, "dmtochat"):
                 anon = await self.bot.fetch_channel(841490511390048277)
-                await anon.send(await self.oddyspeak(message.content))
+                if message.content:
+                    await anon.send(await self.oddyspeak(message.content))
                 if message.attachments:
                     files = [await attachment.to_file() for attachment in message.attachments]
                     await anon.send(files = files)
