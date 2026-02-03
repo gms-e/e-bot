@@ -331,6 +331,8 @@ marle = ["<:CircleFairy:1400643761528111105>", "<:Parlor:1400314790232199248>", 
          "<:Spacey:1400313811705270322>","<:Technician:1400313794944827513>"]
 
 @bot.tree.context_menu(name = "Random Marle Message")
+@app_commands.allowed_installs(guilds=True, users=False)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 async def reactMarle(interaction: discord.Interaction, message: discord.Message):
     cmarle = marle[random.randint(0, len(marle) - 1)]
     await printto(cmarle, interaction.user.name)
@@ -338,6 +340,8 @@ async def reactMarle(interaction: discord.Interaction, message: discord.Message)
     await interaction.response.send_message(f"{cmarle}'d it.", ephemeral=True)
 
 @bot.tree.context_menu(name = "Marle Message With")
+@app_commands.allowed_installs(guilds=True, users=False)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 async def dropMarle(interaction: discord.Interaction, message: discord.Message):
     rcount = 0
 
@@ -392,6 +396,8 @@ async def dropMarle(interaction: discord.Interaction, message: discord.Message):
 
 #----------------------------------Mocks message used on--------------------------------------------#
 @bot.tree.context_menu(name = "mock this")
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 async def this(interaction: discord.Interaction, message: discord.Message):
 
     await printto("mocking this:")
@@ -401,11 +407,15 @@ async def this(interaction: discord.Interaction, message: discord.Message):
         await message.reply("\"" + capi_sentence(message.content) + "\"", mention_author=False)
     await interaction.response.send_message("k", ephemeral=True)
 #-------------------------------------------------------------Mock branches--------------------------------------------#
-@bot.hybrid_group(brief = "next | ~~that~~ | this(app menu)")
+@bot.hybrid_group(brief = "next | this(app menu)")
+@app_commands.allowed_installs(guilds=True, users=False)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 async def mock(ctx):
    await printto("obsolete")
 
 @mock.command(brief="Mocks specified amount of future messages")
+@app_commands.allowed_installs(guilds=True, users=False)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 async def next(ctx,  number: Optional[int] = None):
     await printto("mocking next " + str(number))
     global messageCount
