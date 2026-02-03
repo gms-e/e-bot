@@ -61,9 +61,13 @@ class PrintStuff(commands.Cog):
         if message.channel.id == 841490511390048277 and message.author.id != self.bot.user.id:
             cnt = message.content
             ch = message.channel
+            if message.attachments:
+                files = [await attachment.to_file() for attachment in message.attachments]
+                await ch.send(files=files)
             await message.delete()
             cnt = await self.oddyspeak(cnt)
             await ch.send(cnt)
+
         #----------------------------------------killing x image sender----------------------------------------#
         if "killing" in message.content.lower():
             await self.catimg(message)
