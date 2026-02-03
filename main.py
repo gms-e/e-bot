@@ -12,6 +12,7 @@ from typing import Optional
 import random
 import ffmpeg
 import datetime
+import subprocess
 load_dotenv()
 
 
@@ -392,6 +393,23 @@ async def dropMarle(interaction: discord.Interaction, message: discord.Message):
     except Exception as error:
         await printto(error)
         await printto(str(error))
+
+#---------------------------------command to reboot pc, for omar's eyes only----------------------------#
+
+@bot.hybrid_command(brief="Reboots the entire pc (for remote updating)")
+@app_commands.allowed_installs(guilds=True, users=False)
+@app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+async def sudoreboot(ctx, password, secondpassword):
+    if ctx.author.id != 702906770003198003:
+        await ctx.send("-. -\nno. You're not me.")
+        return
+    second = os.getenv("SECOND")
+    if second != int(secondpassword):
+        await ctx.send("ain't no way you forgot THAT password")
+        return
+
+    await ctx.send("goodbye world")
+    subprocess.run(["sudo", "-S", "reboot"], input=f"{password}\n", text=True)
 
 
 #----------------------------------Mocks message used on--------------------------------------------#
