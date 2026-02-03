@@ -259,8 +259,21 @@ class PrintStuff(commands.Cog):
         buttonholder.add_item(helpbutton)
         await response.edit(view = buttonholder)
 
-
-
+    #--------------------------------------Roll the dice-----------------------------------------#
+    @commands.hybrid_command(name = "roll")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def roll(self, ctx, upper_bound: int, lower_bound: int = 1):
+        try:
+            if upper_bound < lower_bound:
+                await ctx.send("If the upper bound is below 1, you gotta set the lower one too ._.")
+                return
+            elif lower_bound == upper_bound:
+                await ctx.send(f"rolled {lower_bound}\n(What a hard choice THAT was.)")
+                return
+            await ctx.send(f"rolled {random.randint(lower_bound, upper_bound)}")
+        except Exception as e:
+            print(e)
 
     #-------------------------------Reports mc server status & players when requested--------------------------------#
     @commands.hybrid_group(name = "server", brief = "up\n role add | remove")
