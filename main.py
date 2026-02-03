@@ -404,7 +404,7 @@ async def sudoreboot(ctx, password, secondpassword):
         await ctx.send("-. -\nno. You're not me.")
         return
     second = os.getenv("SECOND")
-    if second != int(secondpassword):
+    if int(second) != int(secondpassword):
         await ctx.send("ain't no way you forgot THAT password")
         return
 
