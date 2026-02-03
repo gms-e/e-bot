@@ -84,6 +84,10 @@ class PrintStuff(commands.Cog):
             if await usettings.get_falsey_value(message, message.author, "dmtochat"):
                 anon = await self.bot.fetch_channel(841490511390048277)
                 await anon.send(await self.oddyspeak(message.content))
+                if message.attachments:
+                    files = [await attachment.to_file() for attachment in message.attachments]
+                    await anon.send(files = files)
+
 
         #Teto of the day for today
         if random.random() < 0.5 and "today" in message.content.lower() and await usettings.get_value(message, message.author, "tetoday"):
