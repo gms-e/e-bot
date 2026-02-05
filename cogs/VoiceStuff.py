@@ -44,10 +44,10 @@ class VoiceStuff(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         await self.printto("Voice Stuff online")
-
-    @commands.command()
-    async def name(self, ctx):
-        await self.printto("template")
+    # I missed a deadline and had to kill this oops
+    # @commands.command()
+    # async def name(self, ctx):
+    #     await self.printto("template")
 
     # --------------------------------------------jim jam--------------------------------------------------------------#
     @commands.hybrid_group(name="jim", brief="jam - actual command that plays yoshi and me")
