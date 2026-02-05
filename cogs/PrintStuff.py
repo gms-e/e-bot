@@ -183,6 +183,20 @@ class PrintStuff(commands.Cog):
         mess = message.lower()
         result = message
         result = result[0].lower() + result[1:]
+        link = ""
+        if "https://" in result:
+            try:
+                link = message[result.index("https://"):]
+                link = link[:link.index(" ")]
+
+            except Exception as e:
+                print(e)
+
+            if result == link:
+                return link
+
+            result = result.replace(link, "1234uniquelinkidendontworryaboutitnobodywouldevertypethise271", count = 1)
+
         try:
             if "ington" in mess:
                 result = result.replace("ington", "")
@@ -208,7 +222,9 @@ class PrintStuff(commands.Cog):
                 result = re.sub("rov", "Rover <:Maxwell_I_Guess:1400716442697072651>", result, flags=re.IGNORECASE)
             if "anth" in mess:
                 result = re.sub("anth", "Anth <:anth:1363704263402061985>", result, flags=re.IGNORECASE)
+            result = result.replace("1234uniquelinkidendontworryaboutitnobodywouldevertypethise271", link, count = 1)
             return result
+
         except Exception as e:
             print(e)
             print(str(e))
