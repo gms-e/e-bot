@@ -236,7 +236,7 @@ class PrintStuff(commands.Cog):
         except Exception as e:
             print(e)
             await self.printto(str(e))
-            return "e"
+            return "(something broke go yell at omar)\n...if only there was a command of some kind to get his attention..."
 
 
 
@@ -556,7 +556,7 @@ class PrintStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def reset(self, ctx):
-        if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912):
+        if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912 or ctx.author.id == self.bot.user.id):
             await ctx.send("Imma don't think you're allowed to do dat")
             await ctx.send("https://tenor.com/view/luigi-coo-coo-crazy-luigis-mansion-dark-moon-gif-1213275346224547321")
             return
