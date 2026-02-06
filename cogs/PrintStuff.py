@@ -68,6 +68,14 @@ class PrintStuff(commands.Cog):
             cnt = await self.oddyspeak(cnt)
             await ch.send(cnt)
 
+        if "testingsomething" in message.content:
+            print("test on")
+            command = self.bot.get_command('animation time reset')
+            print(command)
+            try:
+                await command(await self.bot.get_context(message))
+            except Exception as error:
+                print(error)
         #----------------------------------------killing x image sender----------------------------------------#
         if "killing" in message.content.lower():
             await self.catimg(message)
@@ -468,8 +476,18 @@ class PrintStuff(commands.Cog):
                         await channel.send("oopsie? I guess I've either accepted my fate or I'm speedrunning.")
                     case x if x > 5:
                         await self.printto("eh")
+                    case -1:
+                        await channel.send("ok well CLEARLY nothing is happening, so I'm just gonna reset the time.\nSomeone add a favor and do the other thing\nwait the other thing is WHA-")
+                        contx = await channel.send("myself, animation time reset")
+                        command = self.bot.get_command('animation time reset')
+                        try:
+                            await command(await self.bot.get_context(contx))
+
+                        except Exception as error:
+                            print(error)
+                            await channel.send("ok well I *tried* to reset it and something broke, someone else do it ;-;")
                     case _:
-                        await channel.send(f"I don't know what I am doing. {day} days left, this message shouldn't be possible to see and only exists for error handling. \n PLEASE tell me I didn't go negative in days remaining")
+                        await channel.send(f"days are at {day} , this is the error handling message. \nEither I messed up the code REAAALLLY bad,\nor it's day 3 :D")
 
                 with open("updayt.txt", "w") as f:
                     f.write(f"{day}")
