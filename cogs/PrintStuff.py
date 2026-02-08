@@ -839,11 +839,16 @@ class PrintStuff(commands.Cog):
 
         rightcat = None
         if "you" in quotee:
-            m = [msg async for msg in channel.history(limit=2)]
-            quotee = m.pop()
-            # await self.printto(quotee.content)
-            quotee = quotee.author.name
-            # await self.printto(quotee)
+            if message.reference:
+                quotee = await message.channel.fetch_message(message.reference.message_id)
+                quotee = quotee.author.name
+                print(quotee)
+            else:
+                m = [msg async for msg in channel.history(limit=2)]
+                quotee = m.pop()
+                # await self.printto(quotee.content)
+                quotee = quotee.author.name
+                # await self.printto(quotee)
         if "self" in quotee:
             quotee = author.name
         if "e." in quotee or "bot" in quotee:
