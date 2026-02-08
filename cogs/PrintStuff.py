@@ -844,10 +844,11 @@ class PrintStuff(commands.Cog):
                 quotee = quotee.author.name
                 print(quotee)
             else:
-                m = [msg async for msg in channel.history(limit=2)]
-                quotee = m.pop()
+                m = [msg async for msg in channel.history(limit=3)]
+                quotee = m[1].author.name
+                if m[1].author == author:
+                    quotee = m[2].author.name
                 # await self.printto(quotee.content)
-                quotee = quotee.author.name
                 # await self.printto(quotee)
         if "self" in quotee:
             quotee = author.name
@@ -887,7 +888,6 @@ class PrintStuff(commands.Cog):
         leftcat = None
         match author.id:
             case 405197452833062912: #mariofan
-                print("properly assigned mariofan?")
                 leftcat = "images/left cat/marlefankil.png"
             case 702906770003198003: #me (uness someone else is reading this, which I DOUBT)
                 leftcat = "images/left cat/omarkil.png"
