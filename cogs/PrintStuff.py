@@ -304,7 +304,7 @@ class PrintStuff(commands.Cog):
             elif lower_bound == upper_bound:
                 await ctx.send(f"rolled {lower_bound}\n(What a hard choice THAT was.)")
                 return
-            await ctx.send(f"-# {upper_bound} - {lower_bound}:\nrolled {random.randint(lower_bound, upper_bound)}")
+            await ctx.send(f"-# {lower_bound} : {upper_bound}\nrolled {random.randint(lower_bound, upper_bound)}")
         except Exception as e:
             print(e)
 
