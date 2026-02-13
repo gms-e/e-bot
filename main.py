@@ -172,7 +172,7 @@ async def on_message(message):
                 lonk = "https://rootapp.gg/ACz22cAggwqlqlXkrrMaRQ"
                 propeganda = [f"join us on {lonk}", f"oi, you, get in {lonk}",f"discord? in this economy? go to {lonk}", f"all the cool kids are in {lonk}\nGET IN HERE"
                            f"you should totally go to {lonk}", f"discord's cooked, start using this instead {lonk}",
-                           f"man, I'm abandoning e bot after working on it for **8 months**. I'm honestly still kinda bitter about it, but oh well. can you just try using {lonk}\nit's not perfect but I don't wanna stay on here",
+                           f"e.\n {lonk}\n",
                            f"GO HERE INSTEAD {lonk}", f"hey, cool message. put it here instead. {lonk}", f"mc bois needs YOU\nMake things better.\ngo here instead\n{lonk}"]
                 await message.author.send(propeganda[random.randint(0, len(propeganda)-1)])
                 await printto(f"propeganda to {message.author}")
