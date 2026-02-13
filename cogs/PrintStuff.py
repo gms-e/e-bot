@@ -299,7 +299,7 @@ class PrintStuff(commands.Cog):
     async def roll(self, ctx, upper_bound: int, lower_bound: int = 1):
         try:
             if upper_bound < lower_bound:
-                await ctx.send("If the upper bound is below 1, you gotta set the lower one too ._.")
+                await ctx.send("Lower bound can't be greater than the upper bound. (default 1)")
                 return
             elif lower_bound == upper_bound:
                 await ctx.send(f"rolled {lower_bound}\n(What a hard choice THAT was.)")
