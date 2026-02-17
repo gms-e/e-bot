@@ -177,10 +177,7 @@ async def on_message(message):
                 await message.author.send(propeganda[random.randint(0, len(propeganda)-1)])
                 await printto(f"propeganda to {message.author}")
 
-        else:
-            if random.random() < 0.08:
-                await message.author.send("You're already in root, you should keep using it :D")
-                await printto(f"propeganda to {message.author}")
+
     except Exception as e:
         print(e)
 
