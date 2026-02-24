@@ -16,6 +16,7 @@ from discord.ui import View, Button
 global stopp
 import datetime
 from PIL import Image
+import io
 
 stopp = False
 bluff = False
@@ -437,7 +438,7 @@ class PrintStuff(commands.Cog):
             await thatonemf.send("Don't forget the heart patch")
             chat = await self.bot.get_channel(773015468201345027)
             await chat.send("@everyone BUY A FRICKIN LOTTERY TICKET RIGHT NOW,\n and also don't forget the heart patch <:fennyalove:1466317750732455978>")
-        elif lotto < 0.000001:
+        elif lotto < 0.00001:
             await self.printto(f"{lotto} isn't quite 1 in a billion, but still kinda neat .-.")
 
     #-----------------------------------Anim progress tracker-----------------------------------------#
@@ -817,76 +818,9 @@ class PrintStuff(commands.Cog):
             await self.printto("An error occurred:", type(error).__name__)
             await self.printto(str(error))
 
-    async def catimg(self, message: discord.Message):
-        content = message.content
-        quotee = message.content[message.content.lower().index("killing ") + 8:]
-        author = message.author
-        channel = message.channel
-        if author.id != self.bot.user.id and channel.id == 841490511390048277:
-            return
-        # await self.printto(quotee)
-        quotee = quotee.lower()
-        try:
-            if " " in quotee:
-                if quotee[:5] == "e bot":
-                    quotee = "e bot"
-                else:
-                    quotee = quotee[:quotee.index(" ")]
-                # await self.printto(quotee)
-        except Exception as e:
-            # await self.printto(e)
-            return
-
-        rightcat = None
-        if "you" in quotee:
-            if message.reference:
-                quotee = await message.channel.fetch_message(message.reference.message_id)
-                quotee = quotee.author.name
-                print(quotee)
-            else:
-                m = [msg async for msg in channel.history(limit=3)]
-                quotee = m[1].author.name
-                if m[1].author == author:
-                    quotee = m[2].author.name
-                # await self.printto(quotee.content)
-                # await self.printto(quotee)
-        if "self" in quotee:
-            quotee = author.name
-        if "e." in quotee or "bot" in quotee:
-            skip = True
-            rightcat = "images/right cat/ebotdie.png"
-        if "mario" in quotee or "mf" in quotee:
-            skip = True
-            rightcat = "images/right cat/marlefandie.png"
-        if "astro" in quotee:
-            skip = True
-            rightcat = "images/right cat/astrodie.png"
-        if "cb" in quotee:
-            skip = True
-            rightcat = "images/right cat/cbdie.png"
-        if "josh" in quotee:
-            skip = True
-            rightcat = "images/right cat/yosheedie.png"
-        if "anth" in quotee or "ante" in quotee:
-            skip = True
-            rightcat = "images/right cat/anthdie.png"
-        if "ed" in quotee:
-            rightcat = "images/right cat/edwoskdie.png"
-        if "om" in quotee or "gamerside" in quotee:
-            skip = True
-            rightcat = "images/right cat/omardie.png"
-        if "rov" in quotee:
-            skip = True
-            rightcat = "images/right cat/rovuhdie.png"
-        if "m" in quotee and "r" in quotee and not skip:
-            rightcat = "images/right cat/meowzadie.png"
-
-        # await self.printto(f"rightcat: {rightcat}")
-        if rightcat is None:
-            return
-
+    async def parseleftcat(self, num: int):
         leftcat = None
-        match author.id:
+        match num:
             case 405197452833062912: #mariofan
                 leftcat = "images/left cat/marlefankil.png"
             case 702906770003198003: #me (uness someone else is reading this, which I DOUBT)
@@ -907,30 +841,178 @@ class PrintStuff(commands.Cog):
                 leftcat = "images/left cat/astrokil.png"
             case 1377752879963574384: #e bot?
                 leftcat = "images/left cat/ebotkil.png"
+        return leftcat
 
-        if leftcat is None:
-            # await message.reply("who r u", ephemeral=True)
-            return
-        # await self.printto(f"leftcat: {leftcat}")
+    async def parserightcat(self, name: str):
+        rightcat = None
+        print("name:")
+        print(name)
 
-        if leftcat == "images/left cat/edwoskkil.png" and rightcat == "images/right cat/omardie.png":
-            # await self.printto("hard coded image")
-            await channel.send(file=discord.File("images/icastgun.png"))
-            return
+        if "e." in name or "bot" in name:
+            skip = True
+            rightcat = "images/right cat/ebotdie.png"
+        if "mario" in name or "mf" in name:
+            skip = True
+            rightcat = "images/right cat/marlefandie.png"
+        if "astro" in name:
+            skip = True
+            rightcat = "images/right cat/astrodie.png"
+        if "cb" in name:
+            skip = True
+            rightcat = "images/right cat/cbdie.png"
+        if "josh" in name:
+            skip = True
+            rightcat = "images/right cat/yosheedie.png"
+        if "anth" in name or "ante" in name:
+            skip = True
+            rightcat = "images/right cat/anthdie.png"
+        if "ed" in name and "wosk" in name:
+            rightcat = "images/right cat/edwoskdie.png"
+        if "om" in name or "gamerside" in name:
+            skip = True
+            rightcat = "images/right cat/omardie.png"
+        if "rov" in name:
+            skip = True
+            rightcat = "images/right cat/rovuhdie.png"
+        if "m" in name and "r" in name and not skip:
+            rightcat = "images/right cat/meowzadie.png"
+
+        # await self.printto(f"rightcat: {rightcat}")
+        print("result: ", rightcat)
+        return rightcat
+
+    async def gencat(self, leftcat, rightcat, content: str, channel):
+
         try:
+
             leftcat = Image.open(leftcat)
             rightcat = Image.open(rightcat)
             totalwidth = rightcat.width * 2
             new_img = Image.new('RGB', (totalwidth, rightcat.height), color='white')
             new_img.paste(leftcat, (0, 0), leftcat)
-            new_img.paste(rightcat, (rightcat.width, 0), rightcat)
+            new_img.paste(rightcat, (leftcat.width, 0), rightcat)
             new_img.save(content + ".png")
-            if message:
-                await channel.send(file=discord.File(content + ".png"))
+
+            await channel.send(file=discord.File(content + ".png"))
             os.remove(content+ ".png")
         except Exception as e:
             os.remove(content+ ".png")
             await self.printto(str(e))
+
+    async def genfetchedcat(self, leftcat, rightcat, user, author, interaction):
+        leftimg = None
+        rightimg = None
+        cross = False
+        gun = Image.open("images/gun.png")
+        use = False
+        print("left & right cats:")
+        print(leftcat, rightcat)
+
+        if leftcat is None:
+            avatar_bytes = await user.avatar.read()
+            leftimg = Image.open(io.BytesIO(avatar_bytes))
+            leftimg = leftimg.resize((160, 160), Image.Resampling.LANCZOS).convert("RGBA")
+            use = True
+        else:
+            leftimg = Image.open(leftcat)
+
+        if rightcat is None:
+            avatar_bytes = await author.avatar.read()
+            rightimg = Image.open(io.BytesIO(avatar_bytes))
+            rightimg = rightimg.resize((160, 160), Image.Resampling.LANCZOS).convert("RGBA")
+            cross = True
+
+        else:
+            rightimg = Image.open(rightcat)
+
+        print(leftimg)
+        print(rightimg)
+        print(f"leftwidth: {leftimg.width}")
+        print(f"rightwidth: {rightimg.width}")
+        print(f"use: {use}")
+        totalwidth = rightimg.width + leftimg.width
+        if use:
+            totalwidth += gun.width
+        height = rightimg.height
+
+        if leftimg.height > rightimg.height:
+            height = leftimg.height
+        if gun.height > height:
+            height = gun.height
+
+        new_img = Image.new('RGB', (totalwidth, height), color='white')
+
+        new_img.paste(leftimg, (0, 0), leftimg)
+        if use:
+            new_img.paste(gun, (leftimg.width, 0), gun)
+            new_img.paste(rightimg, (leftimg.width + gun.width, 0), rightimg)
+        else:
+            new_img.paste(rightimg, (leftimg.width, 0), rightimg)
+        if cross:
+            x = Image.open("images/X.png").resize((160, 160), Image.BICUBIC)
+            new_img.paste(x, (leftimg.width, 0), x)
+
+
+        new_img.save(f"{user.name}kills{author.name}.png")
+
+        # Send the file in the channel
+        await interaction.response.send_message(file=discord.File(f"{user.name}kills{author.name}.png"))
+        await asyncio.sleep(1)
+        os.remove(f"{user.name}kills{author.name}.png")
+
+
+    async def catimg(self, message: discord.Message):
+        content = message.content
+        author = message.author
+        channel = message.channel
+
+        quotee = content[content.lower().index("killing ") + 8:]
+
+
+        if author.id != self.bot.user.id and channel.id == 841490511390048277:
+            return
+        # await self.printto(quotee)
+        quotee = quotee.lower()
+        try:
+            if " " in quotee:
+                if quotee[:5] == "e bot":
+                    quotee = "e bot"
+                else:
+                    quotee = quotee[:quotee.index(" ")]
+                # await self.printto(quotee)
+        except Exception as e:
+            # await self.printto(e)
+            return
+        if "you" in quotee:
+            if message.reference:
+                quotee = await message.channel.fetch_message(message.reference.message_id)
+                quotee = quotee.author.name
+                print(quotee)
+            else:
+                m = [msg async for msg in channel.history(limit=3)]
+                quotee = m[1].author.name
+                if m[1].author == author:
+                    quotee = m[2].author.name
+                # await self.printto(quotee.content)
+                # await self.printto(quotee)
+        if "self" in quotee:
+            quotee = author.name
+
+
+        leftcat = await self.parseleftcat(author.id)
+        rightcat = await self.parserightcat(quotee)
+        if rightcat is None or leftcat is None:
+            return
+
+        await self.printto(f"leftcat: {leftcat}")
+        await self.printto(f"rightcat: {rightcat}")
+
+        if leftcat == "images/left cat/edwoskkil.png" and rightcat == "images/right cat/omardie.png":
+            # await self.printto("hard coded image")
+            await channel.send(file=discord.File("images/icastgun.png"))
+            return
+
+        await self.gencat(leftcat, rightcat, content, channel)
 
 
 

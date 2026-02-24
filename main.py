@@ -1,3 +1,4 @@
+import json
 import string
 from argparse import BooleanOptionalAction
 import discord
@@ -148,6 +149,7 @@ async def main():
         await load()
         await bot.start(token)#, log_handler=handler, log_level=logging.DEBUG)
         await bot.tree.sync()  # guild=discord.Object(id=Your guild id))
+
 
 
 @bot.event
@@ -415,6 +417,26 @@ async def dropMarle(interaction: discord.Interaction, message: discord.Message):
     except Exception as error:
         await printto(error)
         await printto(str(error))
+
+
+@bot.tree.context_menu(name="killing you")
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+async def killtarget(inter: discord.Interaction, mes: discord.Message):
+    parser = bot.get_cog("PrintStuff")
+    try:
+        leftcat = await parser.parseleftcat(inter.user.id)
+        rightcat = await parser.parserightcat(mes.author.name)
+        await parser.genfetchedcat(leftcat, rightcat, inter.user, mes.author, inter)
+
+    except Exception as error:
+        await printto(error)
+        await printto(str(error))
+
+
+
+
+
 
 #---------------------------------command to reboot pc, for omar's eyes only----------------------------#
 
