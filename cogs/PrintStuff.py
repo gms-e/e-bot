@@ -480,9 +480,12 @@ class PrintStuff(commands.Cog):
 
             if datetime.datetime.now().hour == 0 or datetime.datetime.now().hour == 23:
                 global killword
-                await channel.send(f"the kill word was {killword}, but now there's a new one so rip bozo I lived{"\n(unless I didn't live and got rebooted.)\nidk man it's not like that stuff persists" if random.random() < 0.5 else ""}")
-                r = RandomWord()
-                killword = r.word()
+                if len(killword) > 0:
+                    oldword = killword
+                    r = RandomWord()
+                    killword = r.word()
+                    await sixth.send(f"the kill word was {oldword}, but now there's a new one so rip bozo I lived{"\n(unless I didn't live and got rebooted.)\nidk man it's not like that stuff persists" if random.random() < 0.5 else ""}")
+
 
                 while "-" in killword or "_" in killword:
                     killword = r.word()
