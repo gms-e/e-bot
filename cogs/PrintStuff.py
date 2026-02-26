@@ -62,6 +62,9 @@ class PrintStuff(commands.Cog):
             cheekypeeker = await self.bot.fetch_user(702906770003198003)
             r = RandomWord()
             killword = r.word()
+            while "-" in killword or "_" in killword:
+                killword = r.word()
+
             await cheekypeeker.send(f"The word is {killword}, I'm sure that's not a common one, right?")
         except Exception as error:
             print(error)
@@ -480,6 +483,9 @@ class PrintStuff(commands.Cog):
                 await channel.send(f"the kill word was {killword}, but now there's a new one so rip bozo I lived{"\n(unless I didn't live and got rebooted.)\nidk man it's not like that stuff persists" if random.random() < 0.5 else ""}")
                 r = RandomWord()
                 killword = r.word()
+
+                while "-" in killword or "_" in killword:
+                    killword = r.word()
                 day = -1
                 try:
                     with open("updayt.txt", 'r') as f:
