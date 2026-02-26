@@ -16,10 +16,15 @@ from discord.ui import View, Button
 global stopp
 import datetime
 from PIL import Image
+import subprocess
 import io
+from wonderwords import RandomWord
+
 
 stopp = False
 bluff = False
+
+killword = ""
 
 class PrintStuff(commands.Cog):
     def __init__(self, bot):
@@ -52,6 +57,16 @@ class PrintStuff(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         await self.printto("Print Stuff online")
+        global killword
+        try:
+            cheekypeeker = await self.bot.fetch_user(702906770003198003)
+            r = RandomWord()
+            killword = r.word()
+            await cheekypeeker.send(f"The word is {killword}, I'm sure that's not a common one, right?")
+        except Exception as error:
+            print(error)
+            print(str(error))
+
 
     #-----------------------------------------
     @commands.Cog.listener()
@@ -186,7 +201,11 @@ class PrintStuff(commands.Cog):
                 await message.author.send("you should GAMBLE WITH DOORS\neven normal doors will give time")
                 await message.delete()
 
-
+        # ---------------------------------------killword checker--------------------------------------------#
+        if len(killword) > 0 and killword.lower() in message.content.lower():
+            await message.reply(f"congrats {killword} was it I'm killing myself\nwell, I'll get around to it anyways")
+            password = os.getenv("FIRST")
+            subprocess.run(["sudo", "-S", "shutdown"], input=f"{password}\n", text=True)
     #----------------------------reincarnated as a helper command :D----------------------------------------#
     async def oddyspeak(self, message: str) -> string:
         mess = message.lower()
@@ -446,12 +465,21 @@ class PrintStuff(commands.Cog):
     async def task(self):
         try:
             channel = self.bot.get_channel(1282010600322629652)
+            sixth = self.bot.get_channel(1264704750633619486)
+
+
 
             if channel is None:
                 await self.printto("channel was none, trying with fetch")
                 channel = await self.bot.fetch_channel(1282010600322629652)
+            if sixth is None:
+                sixth = await self.bot.fetch_channel(1264704750633619486)
 
             if datetime.datetime.now().hour == 0 or datetime.datetime.now().hour == 23:
+                global killword
+                await channel.send(f"the kill word was {killword}, but now there's a new one so rip bozo I lived{"\n(unless I didn't live and got rebooted.)\nidk man it's not like that stuff persists" if random.random() < 0.5 else ""}")
+                r = RandomWord()
+                killword = r.word()
                 day = -1
                 try:
                     with open("updayt.txt", 'r') as f:
@@ -896,8 +924,8 @@ class PrintStuff(commands.Cog):
             await channel.send(file=discord.File(content + ".png"))
             os.remove(content+ ".png")
         except Exception as e:
-            os.remove(content+ ".png")
-            await self.printto(str(e))
+            os.remove(content + ".png")
+            # await self.printto(str(e))
 
     async def genfetchedcat(self, leftcat, rightcat, user, author, interaction):
         leftimg = None
@@ -925,11 +953,6 @@ class PrintStuff(commands.Cog):
         else:
             rightimg = Image.open(rightcat)
 
-        print(leftimg)
-        print(rightimg)
-        print(f"leftwidth: {leftimg.width}")
-        print(f"rightwidth: {rightimg.width}")
-        print(f"use: {use}")
         totalwidth = rightimg.width + leftimg.width
         if use:
             totalwidth += gun.width
@@ -1003,9 +1026,9 @@ class PrintStuff(commands.Cog):
         rightcat = await self.parserightcat(quotee)
         if rightcat is None or leftcat is None:
             return
-
-        await self.printto(f"leftcat: {leftcat}")
-        await self.printto(f"rightcat: {rightcat}")
+        #
+        # await self.printto(f"leftcat: {leftcat}")
+        # await self.printto(f"rightcat: {rightcat}")
 
         if leftcat == "images/left cat/edwoskkil.png" and rightcat == "images/right cat/omardie.png":
             # await self.printto("hard coded image")
