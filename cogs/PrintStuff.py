@@ -227,9 +227,38 @@ class PrintStuff(commands.Cog):
                 return link
 
             result = result.replace(link, "1234uniquelinkidendontworryaboutitnobodywouldevertypethise271")
+        emojis = []
+        if ":" in result:
+            # print("doing literally anything")
+            try:
+                i = 0
+                emojis = [""]
+                opened = False
+                for c in enumerate(result):
+                    c = c[1]
+                    if c == ":" and opened:
+                        opened = False
+                        emojis[i] = str(emojis[i])
+                        emojis[i] = str(emojis[i]) + c
+                        emojis.append("")
+                        i = i + 1
+                        continue
+                    if c == ":" and not opened:
+                        # print("opening")
+                        opened = True
+                    if opened:
+                        # print(f"appending {c}")
+                        emojis[i] = str(emojis[i])
+                        emojis[i] = str(emojis[i]) + str(c)
+
+                for j in range(0, len(emojis) - 1):
+                    print
+                    result = result.replace(emojis[j], f"handlingforemojinumber{j}specifically")
+            except Exception as e:
+                print(e)
+
+
         result = result.replace("rovuh", "rov")
-        result = result.replace(":itssorover:", "epicemojihandlingforthatonecatboy")
-        result = result.replace(":anth:", "epicemojihandlingforthatoneorbcatboy")
 
         try:
             if "ington" in mess:
@@ -258,8 +287,13 @@ class PrintStuff(commands.Cog):
                 result = re.sub("anth", "Anth <:anth:1363704263402061985>", result, flags=re.IGNORECASE)
 
             result = result.replace("1234uniquelinkidendontworryaboutitnobodywouldevertypethise271", link)
-            result = result.replace("epicemojihandlingforthatonecatboy", ":itssorover:")
-            result = result.replace("epicemojihandlingforthatoneorbcatboy", ":anth:")
+
+            for j in range(0, len(emojis) - 1):
+                # print(emojis)
+                # print(result)
+                # print(f"switching {j} back to {emojis[j]}")
+                result = result.replace(f"handlingforemojinumber{j}specifically", emojis[j])
+
             return result
 
         except Exception as e:
