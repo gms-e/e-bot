@@ -227,7 +227,7 @@ class PrintStuff(commands.Cog):
                 return link
 
             result = result.replace(link, "1234uniquelinkidendontworryaboutitnobodywouldevertypethise271")
-        result = result.replace("rovuh", "rover")
+        result = result.replace("rovuh", "rov")
         result = result.replace(":itssorover:", "epicemojihandlingforthatonecatboy")
         result = result.replace(":anth:", "epicemojihandlingforthatoneorbcatboy")
 
