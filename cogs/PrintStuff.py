@@ -234,8 +234,13 @@ class PrintStuff(commands.Cog):
                 i = 0
                 emojis = [""]
                 opened = False
+                prev = False
                 for c in enumerate(result):
                     c = c[1]
+
+                    if c == "<" and not prev:
+                        prev = True
+                        continue
                     if c == ":" and opened:
                         opened = False
                         emojis[i] = str(emojis[i])
@@ -243,13 +248,15 @@ class PrintStuff(commands.Cog):
                         emojis.append("")
                         i = i + 1
                         continue
-                    if c == ":" and not opened:
+                    if c == ":" and not opened and prev:
+                        prev = False
                         # print("opening")
                         opened = True
                     if opened:
                         # print(f"appending {c}")
                         emojis[i] = str(emojis[i])
                         emojis[i] = str(emojis[i]) + str(c)
+                    prev = False
 
                 for j in range(0, len(emojis) - 1):
                     print
