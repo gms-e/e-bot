@@ -227,6 +227,9 @@ class PrintStuff(commands.Cog):
                 return link
 
             result = result.replace(link, "1234uniquelinkidendontworryaboutitnobodywouldevertypethise271")
+        result = result.replace("rovuh", "rover")
+        result = result.replace(":itssorover:", "epicemojihandlingforthatonecatboy")
+        result = result.replace(":anth:", "epicemojihandlingforthatoneorbcatboy")
 
         try:
             if "ington" in mess:
@@ -253,7 +256,10 @@ class PrintStuff(commands.Cog):
                 result = re.sub("rov", "Rover <:Maxwell_I_Guess:1400716442697072651>", result, flags=re.IGNORECASE)
             if "anth" in mess:
                 result = re.sub("anth", "Anth <:anth:1363704263402061985>", result, flags=re.IGNORECASE)
+
             result = result.replace("1234uniquelinkidendontworryaboutitnobodywouldevertypethise271", link)
+            result = result.replace("epicemojihandlingforthatonecatboy", ":itssorover:")
+            result = result.replace("epicemojihandlingforthatoneorbcatboy", ":anth:")
             return result
 
         except Exception as e:
