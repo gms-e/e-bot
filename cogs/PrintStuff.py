@@ -101,16 +101,19 @@ class PrintStuff(commands.Cog):
 
         usettings = self.bot.get_cog("SetStuff")
 
-        # Ignore messages from the bot itself to prevent infinite loops (and sends anons to dmlink)
+        #---------------------------------------chat -> dms---botignore-------------------------------------------#
         if message.author == self.bot.user:
             if message.channel.id == 841490511390048277:
                 people = await usettings.get_people()
                 for person in people:
                     person = await self.bot.fetch_user(int(person))
                     await person.send(message.content)
+                    if message.attachments:
+                        files = [await attachment.to_file() for attachment in message.attachments]
+                        await person.send(files=files)
             return
 
-        #send dms to anon chat
+        #-----------------------------------------dms -> anon chat------------------------------------------------#
         if isinstance(message.channel, discord.DMChannel) and message.author.id != self.bot.user.id:
             if await usettings.get_falsey_value(message, message.author, "dmtochat"):
                 anon = await self.bot.fetch_channel(841490511390048277)
@@ -228,6 +231,31 @@ class PrintStuff(commands.Cog):
 
             result = result.replace(link, "1234uniquelinkidendontworryaboutitnobodywouldevertypethise271")
         emojis = []
+        if "zzz" in result:
+            # print("found zzz")
+            customs = [match.start() for match in re.finditer(re.escape("zzz"), result)]
+            # print(customs)
+            replacements = []
+            olds = []
+            for thing in customs:
+                split = result[thing + 3::]
+                # print(split)
+                try:
+                    if " " in split:
+                        split = split.split(" ")[0].strip()
+                    # print(split)
+                    # print("pre replacement")
+                    replacement = discord.utils.get(self.bot.get_guild(773015467753209888).emojis, name = split)
+                    if replacement:
+                        replacements.append(replacement)
+                        olds.append(split)
+                    # print(result)
+
+                except Exception as e:
+                    print(f"rip, {e}")
+            for m in range(0, len(olds)):
+                result = result.replace(f"zzz{olds[m]}", str(replacements[m]))
+
         if ":" in result:
             # print("doing literally anything")
             try:
@@ -536,6 +564,12 @@ class PrintStuff(commands.Cog):
 
                 while "-" in killword or "_" in killword:
                     killword = r.word()
+                cheekypeeker = self.bot.get_user(702906770003198003)
+                if cheekypeeker is None:
+                    cheekypeeker = await self.bot.fetch_user(702906770003198003)
+
+                await cheekypeeker.send(f"The word is {killword}, I'm sure that's not a common one, right?")
+
                 day = -1
                 try:
                     with open("updayt.txt", 'r') as f:
