@@ -227,52 +227,52 @@ class VoiceStuff(commands.Cog):
 
     #-----------------------------------------------Soundboard person in vc--------------------------------------------#
 
-    @commands.hybrid_command()
-    @app_commands.allowed_installs(guilds=True, users=False)
-    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def soundboard(self, ctx, guy: discord.Member = discord.ext.commands.parameter(displayed_name="guy",
-                                                                                   description="Dude you wanna soundboard (must be in vc)")):
-        await self.sendSound(ctx, guy, False)
-
-    async def sendSound(self, ctx, guy, redo):
-        await self.printto(f"soundboarding {guy.name}")
-        voice_channel = guy.voice.channel
-        await self.printto(voice_channel)
-
-        if voice_channel is not None:
-            channel = voice_channel.name
-            await self.printto(channel)
-            sound = self.bot.soundboard_sounds[random.randint(0, len(self.bot.soundboard_sounds) - 1)]
-            # await self.printto(self.bot.soundboard_sounds)
-
-            await self.printto(f"picked {sound.name}")
-
-            try:
-                if not redo:
-                    vc = await voice_channel.connect()
-                await voice_channel.send_sound(sound)
-                await ctx.send(sound.name + "ing " + guy.display_name, ephemeral=True)
-                await asyncio.sleep(0.3)
-                await vc.disconnect()
-
-            except Exception as error:
-                await self.printto(f"An error occurred: {type(error).__name__}")
-                if "Already connected" in str(error) and not redo:
-                    await self.printto("already connected")
-                    await ctx.send("DON'T YOU FRICKIN INTERRUPT ME")
-                    return
-                elif redo:
-                    self.bot.voice_clients[0].stop()
-                    await self.bot.voice_clients.pop().disconnect()
-                else:
-                    await ctx.send("An error occurred: " + str(error) + "\n I can't frickin use that sound",
-                                   ephemeral=True)
-                    await self.sendSound(ctx, guy, True)
-                    await self.printto("I can't frickin use that sound")
-                    self.bot.voice_clients[0].stop()
-                    await self.printto("Stopped")
-                    await self.bot.voice_clients.pop().disconnect()
-                    await self.printto("disconnected")
+    # @commands.hybrid_command()
+    # @app_commands.allowed_installs(guilds=True, users=False)
+    # @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    # async def soundboard(self, ctx, guy: discord.Member = discord.ext.commands.parameter(displayed_name="guy",
+    #                                                                                description="Dude you wanna soundboard (must be in vc)")):
+    #     await self.sendSound(ctx, guy, False)
+    #
+    # async def sendSound(self, ctx, guy, redo):
+    #     await self.printto(f"soundboarding {guy.name}")
+    #     voice_channel = guy.voice.channel
+    #     await self.printto(voice_channel)
+    #
+    #     if voice_channel is not None:
+    #         channel = voice_channel.name
+    #         await self.printto(channel)
+    #         sound = self.bot.soundboard_sounds[random.randint(0, len(self.bot.soundboard_sounds) - 1)]
+    #         # await self.printto(self.bot.soundboard_sounds)
+    #
+    #         await self.printto(f"picked {sound.name}")
+    #
+    #         try:
+    #             if not redo:
+    #                 vc = await voice_channel.connect()
+    #             await voice_channel.send_sound(sound)
+    #             await ctx.send(sound.name + "ing " + guy.display_name, ephemeral=True)
+    #             await asyncio.sleep(0.3)
+    #             await vc.disconnect()
+    #
+    #         except Exception as error:
+    #             await self.printto(f"An error occurred: {type(error).__name__}")
+    #             if "Already connected" in str(error) and not redo:
+    #                 await self.printto("already connected")
+    #                 await ctx.send("DON'T YOU FRICKIN INTERRUPT ME")
+    #                 return
+    #             elif redo:
+    #                 self.bot.voice_clients[0].stop()
+    #                 await self.bot.voice_clients.pop().disconnect()
+    #             else:
+    #                 await ctx.send("An error occurred: " + str(error) + "\n I can't frickin use that sound",
+    #                                ephemeral=True)
+    #                 await self.sendSound(ctx, guy, True)
+    #                 await self.printto("I can't frickin use that sound")
+    #                 self.bot.voice_clients[0].stop()
+    #                 await self.printto("Stopped")
+    #                 await self.bot.voice_clients.pop().disconnect()
+    #                 await self.printto("disconnected")
 
 async def setup(bot):
     await bot.add_cog(VoiceStuff(bot))

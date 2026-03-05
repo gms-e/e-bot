@@ -17,7 +17,7 @@ class SetStuff(commands.Cog):
 
     @commands.hybrid_group(name = "set")
 
-    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def hybrid_group(self, ctx):
         print("obsolete")
