@@ -814,16 +814,57 @@ class PrintStuff(commands.Cog):
                     await ctx.send("o7 found it", ephemeral=True)
                     return
 
-    # ----------------------------------emoji by name sender---------------------------------------------3
+    # ----------------------------------emoji by name sender---------------------------------------------#
     @commands.hybrid_command(name = "emoji")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def emote(self, ctx, emojiname):
         emoji = discord.utils.get(self.bot.get_guild(773015467753209888).emojis, name=emojiname)
+
         if emoji:
-            await ctx.reply(emoji)
+            await ctx.reply(f"{emoji.url}")
         else:
-            await ctx.reply("uh... wot\nThat ain't a name", ephemeral=True)
+            await ctx.reply("uh... wot\nThat ain't an emoji name\n(use emojilist)", ephemeral=True)
+
+    #-------------------------------------emoji list retriever------------------------------------------#
+    @commands.hybrid_command(name="emojilist")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def emotelist(self, ctx):
+        try:
+
+            emojis = self.bot.get_guild(773015467753209888).emojis
+            emojilist = ""
+            for emoji in emojis:
+                emojilist = emojilist + f" {emoji.name}     "
+            await ctx.reply(f"{emojilist}"[:2000], ephemeral=True)
+        except Exception as e:
+            print(e)
+
+
+    #-------------------------------------gambleping------------------------------------------------------#
+    @commands.hybrid_command(name="gamble")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def gambleping(self, ctx):
+            nerds =[405197452833062912, #mariofan
+            702906770003198003, #me (uness someone else is reading this, which I DOUBT)
+            617347174120030208, #rovuh
+            916883861634441286, #edwosk
+            456858402832908301, #CB
+            721389007426158633, #Josh
+            450811106504605706, #Anth
+            925472450962141195, #mafewerawr
+            770464351336923157] #Astro
+
+            roulettes = []#array of image names in same order as nerds
+
+            dingus = random.randint(0, len(nerds) - 1)
+            await ctx.reply(roulettes[dingus])
+            await asyncio.sleep(3)
+            for n in range(2, random.randint(2, 7)):
+                ctx.reply(f"<@{nerds[dingus]}>")
+
     # ----------------------------------Quote series--------------------------------------------#
     @commands.hybrid_group(brief = "from | random")
     @app_commands.allowed_installs(guilds=True, users=False)
