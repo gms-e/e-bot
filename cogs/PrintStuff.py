@@ -814,12 +814,16 @@ class PrintStuff(commands.Cog):
                     await ctx.send("o7 found it", ephemeral=True)
                     return
 
-    # ----------------------------------:__: sender---------------------------------------------3
-    @commands.hybrid_command(name = "o__o")
+    # ----------------------------------emoji by name sender---------------------------------------------3
+    @commands.hybrid_command(name = "emoji")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def dread(self, ctx):
-        await ctx.reply("<:o__o:1429555147238805684>")
+    async def emote(self, ctx, emojiname):
+        emoji = discord.utils.get(self.bot.get_guild(773015467753209888).emojis, name=emojiname)
+        if emoji:
+            await ctx.reply(emoji)
+        else:
+            await ctx.reply("uh... wot\nThat ain't a name", ephemeral=True)
     # ----------------------------------Quote series--------------------------------------------#
     @commands.hybrid_group(brief = "from | random")
     @app_commands.allowed_installs(guilds=True, users=False)
