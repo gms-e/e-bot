@@ -846,24 +846,41 @@ class PrintStuff(commands.Cog):
     @commands.hybrid_command(name="gamble")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def gambleping(self, ctx):
+    async def gambleping(self, ctx, mp4 = False):
+        try:
             nerds =[405197452833062912, #mariofan
-            702906770003198003, #me (uness someone else is reading this, which I DOUBT)
-            617347174120030208, #rovuh
-            916883861634441286, #edwosk
             456858402832908301, #CB
-            721389007426158633, #Josh
+            770464351336923157, #Astro
             450811106504605706, #Anth
-            925472450962141195, #mafewerawr
-            770464351336923157] #Astro
+            916883861634441286, #edwosk
+            721389007426158633, #Josh
+            925472450962141195, #mafewerawr that comment's been there forever (this is stolen from cat)
+            702906770003198003, #me (uness someone else is reading this, which I DOUBT)
+            617347174120030208] #rovuh
 
-            roulettes = []#array of image names in same order as nerds
 
+            roulgettes = ["images/casino/gif/bonusmario.gif", "images/casino/gif/bonuscb.gif", "images/casino/gif/bonusastro.gif", "images/casino/gif/bonusanth.gif",
+            "images/casino/gif/bonused.gif", "images/casino/gif/bonusjosh.gif", "images/casino/gif/bonusmowser.gif", "images/casino/gif/bonusomar.gif", "images/casino/gif/bonusrover.gif"]
+
+            roulmettes = ["images/casino/mp4/bonusmario.mp4", "images/casino/mp4/bonuscb.mp4", "images/casino/mp4/bonusastro.mp4", "images/casino/mp4/bonusanth.mp4",
+            "images/casino/mp4/bonused.mp4", "images/casino/mp4/bonusjosh.mp4", "images/casino/mp4/bonusmowesr.mp4", "images/casino/mp4/bonusomar.mp4", "images/casino/mp4/bonusrover.mp4"]
             dingus = random.randint(0, len(nerds) - 1)
-            await ctx.reply(roulettes[dingus])
-            await asyncio.sleep(3)
-            for n in range(2, random.randint(2, 7)):
-                ctx.reply(f"<@{nerds[dingus]}>")
+            print(f" d = {dingus}")
+            print(f"that's {roulmettes[dingus]} or {roulgettes[dingus]}")
+            if mp4:
+                await ctx.reply(file=discord.File(roulmettes[dingus]))
+                await asyncio.sleep(4)
+                for n in range(0, random.randint(2, 5)):
+                    print(n)
+                    await ctx.reply(f"<@{nerds[dingus]}>")
+            else:
+                await ctx.reply(file=discord.File(roulgettes[dingus]))
+                await asyncio.sleep(3)
+                for n in range(0, random.randint(2, 5)):
+                    print(n)
+                    await ctx.reply(f"<@{nerds[dingus]}>")
+        except Exception as e:
+            print(e)
 
     # ----------------------------------Quote series--------------------------------------------#
     @commands.hybrid_group(brief = "from | random")
