@@ -870,29 +870,20 @@ class PrintStuff(commands.Cog):
             if include:
                 try:
                     cname = "who"
-                    print(include)
-                    print(include[0])
-                    print(type(include[0]))
                     if type(include[0]) is not discord.Member:
                         await ctx.send("You have to ping people with @ for it to work", ephemeral=True)
                         return
                     nerdiot = include[random.randint(0, len(include)-1)]
-                    print("nerdiot = ", nerdiot)
                     if nerdiot.id in nerds:
                         cname = roulgettes[nerds.index(nerdiot.id)]
-                        print(cname)
                         cname = cname[:cname.index(".")]
-                        print(cname)
                         cname = cname[cname.index("bonus")+5:]
-                        print(cname)
-
 
                     if mp4:
                         await ctx.send(file=discord.File(f"images/casino/mp4/bonus{cname}.mp4"))
                         await asyncio.sleep(5)
 
                         for n in range(0, setpings):
-                            print(n)
                             await ctx.reply(f"<@{nerdiot.id}>")
                     else:
 
@@ -900,7 +891,6 @@ class PrintStuff(commands.Cog):
                         await asyncio.sleep(4)
 
                         for n in range(0, setpings):
-                            print(n)
                             await ctx.reply(f"<@{nerdiot.id}>")
 
                 except Exception as e:
@@ -917,13 +907,11 @@ class PrintStuff(commands.Cog):
                 await ctx.reply(file=discord.File(roulmettes[dingus]))
                 await asyncio.sleep(5)
                 for n in range(0, setpings):
-                    print(n)
                     await ctx.reply(f"<@{nerds[dingus]}>")
             else:
                 await ctx.reply(file=discord.File(roulgettes[dingus]))
                 await asyncio.sleep(4)
                 for n in range(0, setpings):
-                    print(n)
                     await ctx.reply(f"<@{nerds[dingus]}>")
         except Exception as e:
             print(e)
