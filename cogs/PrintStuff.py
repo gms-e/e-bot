@@ -846,8 +846,10 @@ class PrintStuff(commands.Cog):
     @commands.hybrid_command(name="gamble")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def gambleping(self, ctx,mp4 = False,  include: commands.Greedy[discord.Member] = None,
+    async def gambleping(self, ctx,mp4 = False,  include: commands.Greedy[discord.User] = None,
         setpings: app_commands.Range[int, 0, 5] = -1):
+        await ctx.typing()
+
         try:
             nerds =[405197452833062912, #mariofan
             456858402832908301, #CB
@@ -866,20 +868,19 @@ class PrintStuff(commands.Cog):
 
             if setpings < 0:
                 setpings = random.randint(2, 5)
-
             if include:
                 try:
                     cname = "who"
-                    if type(include[0]) is not discord.Member:
+                    if type(include[0]) is not discord.Member and type(include[0]) is not discord.User:
                         await ctx.send("You have to ping people with @ for it to work", ephemeral=True)
                         return
                     peeps = ""
                     for inc in include:
-                        print(type(inc.display_name))
-                        if inc.display_name:
-                            peeps = peeps + "-# " + inc.display_name + "\n"
-                        else:
+                        try:
+                            peeps = peeps + "-# " + inc.name + "\n"
+                        except Exception as e:
                             peeps = peeps + "-# " + inc.global_name + "\n"
+                            print(e)
 
 
                     nerdiot = include[random.randint(0, len(include)-1)]
