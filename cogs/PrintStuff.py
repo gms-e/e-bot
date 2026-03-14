@@ -846,7 +846,8 @@ class PrintStuff(commands.Cog):
     @commands.hybrid_command(name="gamble")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def gambleping(self, ctx, mp4 = False):
+    async def gambleping(self, ctx,mp4 = False,  include: commands.Greedy[discord.Member] = None,
+        setpings: app_commands.Range[int, 0, 5] = -1):
         try:
             nerds =[405197452833062912, #mariofan
             456858402832908301, #CB
@@ -862,21 +863,66 @@ class PrintStuff(commands.Cog):
             roulgettes = ["images/casino/gif/bonusmario.gif", "images/casino/gif/bonuscb.gif", "images/casino/gif/bonusastro.gif", "images/casino/gif/bonusanth.gif",
             "images/casino/gif/bonused.gif", "images/casino/gif/bonusjosh.gif", "images/casino/gif/bonusmowser.gif", "images/casino/gif/bonusomar.gif", "images/casino/gif/bonusrover.gif"]
 
+
+            if setpings < 0:
+                setpings = random.randint(2, 5)
+
+            if include:
+                try:
+                    cname = "who"
+                    print(include)
+                    print(include[0])
+                    print(type(include[0]))
+                    if type(include[0]) is not discord.Member:
+                        await ctx.send("You have to ping people with @ for it to work", ephemeral=True)
+                        return
+                    nerdiot = include[random.randint(0, len(include)-1)]
+                    print("nerdiot = ", nerdiot)
+                    if nerdiot.id in nerds:
+                        cname = roulgettes[nerds.index(nerdiot.id)]
+                        print(cname)
+                        cname = cname[:cname.index(".")]
+                        print(cname)
+                        cname = cname[cname.index("bonus")+5:]
+                        print(cname)
+
+
+                    if mp4:
+                        await ctx.send(file=discord.File(f"images/casino/mp4/bonus{cname}.mp4"))
+                        await asyncio.sleep(5)
+
+                        for n in range(0, setpings):
+                            print(n)
+                            await ctx.reply(f"<@{nerdiot.id}>")
+                    else:
+
+                        await ctx.send(file=discord.File(f"images/casino/gif/bonus{cname}.gif"))
+                        await asyncio.sleep(4)
+
+                        for n in range(0, setpings):
+                            print(n)
+                            await ctx.reply(f"<@{nerdiot.id}>")
+
+                except Exception as e:
+                    print(e)
+                return
+
             roulmettes = ["images/casino/mp4/bonusmario.mp4", "images/casino/mp4/bonuscb.mp4", "images/casino/mp4/bonusastro.mp4", "images/casino/mp4/bonusanth.mp4",
             "images/casino/mp4/bonused.mp4", "images/casino/mp4/bonusjosh.mp4", "images/casino/mp4/bonusmowesr.mp4", "images/casino/mp4/bonusomar.mp4", "images/casino/mp4/bonusrover.mp4"]
             dingus = random.randint(0, len(nerds) - 1)
             print(f" d = {dingus}")
             print(f"that's {roulmettes[dingus]} or {roulgettes[dingus]}")
+
             if mp4:
                 await ctx.reply(file=discord.File(roulmettes[dingus]))
-                await asyncio.sleep(4)
-                for n in range(0, random.randint(2, 5)):
+                await asyncio.sleep(5)
+                for n in range(0, setpings):
                     print(n)
                     await ctx.reply(f"<@{nerds[dingus]}>")
             else:
                 await ctx.reply(file=discord.File(roulgettes[dingus]))
-                await asyncio.sleep(3)
-                for n in range(0, random.randint(2, 5)):
+                await asyncio.sleep(4)
+                for n in range(0, setpings):
                     print(n)
                     await ctx.reply(f"<@{nerds[dingus]}>")
         except Exception as e:
@@ -1024,6 +1070,7 @@ class PrintStuff(commands.Cog):
         return leftcat
 
     async def parserightcat(self, name: str):
+        skip = False
         rightcat = None
         print("name:")
         print(name)
@@ -1054,7 +1101,7 @@ class PrintStuff(commands.Cog):
         if "rov" in name:
             skip = True
             rightcat = "images/right cat/rovuhdie.png"
-        if "m" in name and "r" in name and not skip:
+        if ("meow" in name or"ma" in name) and "er" in name and not skip:
             rightcat = "images/right cat/meowzadie.png"
 
         # await self.printto(f"rightcat: {rightcat}")
