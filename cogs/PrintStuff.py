@@ -873,6 +873,15 @@ class PrintStuff(commands.Cog):
                     if type(include[0]) is not discord.Member:
                         await ctx.send("You have to ping people with @ for it to work", ephemeral=True)
                         return
+                    peeps = ""
+                    for inc in include:
+                        print(type(inc.display_name))
+                        if inc.display_name:
+                            peeps = peeps + "-# " + inc.display_name + "\n"
+                        else:
+                            peeps = peeps + "-# " + inc.global_name + "\n"
+
+
                     nerdiot = include[random.randint(0, len(include)-1)]
                     if nerdiot.id in nerds:
                         cname = roulgettes[nerds.index(nerdiot.id)]
@@ -880,14 +889,14 @@ class PrintStuff(commands.Cog):
                         cname = cname[cname.index("bonus")+5:]
 
                     if mp4:
-                        await ctx.send(file=discord.File(f"images/casino/mp4/bonus{cname}.mp4"))
+                        await ctx.send(peeps, file=discord.File(f"images/casino/mp4/bonus{cname}.mp4"))
                         await asyncio.sleep(5)
 
                         for n in range(0, setpings):
                             await ctx.reply(f"<@{nerdiot.id}>")
                     else:
 
-                        await ctx.send(file=discord.File(f"images/casino/gif/bonus{cname}.gif"))
+                        await ctx.send(peeps, file=discord.File(f"images/casino/gif/bonus{cname}.gif"))
                         await asyncio.sleep(4)
 
                         for n in range(0, setpings):
@@ -900,8 +909,6 @@ class PrintStuff(commands.Cog):
             roulmettes = ["images/casino/mp4/bonusmario.mp4", "images/casino/mp4/bonuscb.mp4", "images/casino/mp4/bonusastro.mp4", "images/casino/mp4/bonusanth.mp4",
             "images/casino/mp4/bonused.mp4", "images/casino/mp4/bonusjosh.mp4", "images/casino/mp4/bonusmowesr.mp4", "images/casino/mp4/bonusomar.mp4", "images/casino/mp4/bonusrover.mp4"]
             dingus = random.randint(0, len(nerds) - 1)
-            print(f" d = {dingus}")
-            print(f"that's {roulmettes[dingus]} or {roulgettes[dingus]}")
 
             if mp4:
                 await ctx.reply(file=discord.File(roulmettes[dingus]))
