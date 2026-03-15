@@ -413,8 +413,29 @@ async def killtarget(inter: discord.Interaction, mes: discord.Message):
         await printto(str(error))
 
 
-
-
+@bot.tree.context_menu(name="trackiller")
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+async def killtracker(inter: discord.Interaction, message: discord.Message):
+    try:
+        if "https://" in message.content and "?si=" in message.content:
+            time = ""
+            if "&t=" in message.content:
+                time = message.content[message.content.index("&t="):]
+                if " " in time:
+                    time = time[:time.index(" ")]
+                if "\n" in time:
+                    time = time[:time.index(" ")]
+            bettermessage = message.content[:message.content.index("?si=")]
+            bettermessage = bettermessage[bettermessage.index("https://"):]
+            bettermessage = bettermessage + time
+            await inter.response.send_message(bettermessage, file = discord.File("images/trackiller.png"))
+        elif "https://" in message.content and "?si=" not in message.content:
+            await inter.response.send_message("there isn't a tracker as far as I can tell my guy.", ephemeral=True)
+        else:
+            await inter.response.send_message("Is there even a *link* in there?? not that I can tell\n._.", ephemeral=True)
+    except Exception as e:
+        print(e)
 
 
 #---------------------------------command to reboot pc, for omar's eyes only----------------------------#
