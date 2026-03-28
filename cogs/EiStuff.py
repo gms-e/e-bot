@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 import os
 
 key = os.getenv("API_KEY_1")
-model = "cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
+model = "nvidia/nemotron-3-super-120b-a12b:free"
 class EiStuff(commands.Cog):
     load_dotenv()  # This loads the .env file into the environment
     # Now you can access the variables
@@ -58,15 +58,17 @@ class EiStuff(commands.Cog):
     @ai_change.command(name = "model")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def ai_change_model(self, ctx, models: Literal["Schitzo", "Uncensored", "Normalish"]):
+    async def ai_change_model(self, ctx, models: Literal["nvidia", "stepfun", "trinity", "z"]):
         global model
         match models:
-            case "Schitzo":
-                model = "arliai/qwq-32b-arliai-rpr-v1:free"
-            case "Uncensored":
-                model = "cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
-            case "Normalish":
-                model = "mistralai/mistral-small-24b-instruct-2501:free"
+            case "nvidia":
+                model = "nvidia/nemotron-3-super-120b-a12b:free"
+            case "stepfun":
+                model = "stepfun/step-3.5-flash:free"
+            case "trinity":
+                model = "arcee-ai/trinity-large-preview:free"
+            case "z":
+                model = "z-ai/glm-4.5-air:free"
         await ctx.send(f"k we on the {models} one now")
     @ai_change.command(name = "account")
     @app_commands.allowed_installs(guilds=True, users=True)
@@ -79,10 +81,10 @@ class EiStuff(commands.Cog):
             case "Acc 2":
                 key = os.getenv("API_KEY_2")
         await ctx.send("o7 swapped accounts")
-    @commands.hybrid_command(name = "testpingei")
+    @commands.hybrid_command(name = "ei_as")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def ei(self, ctx, person: Literal["Astro", "CB", "Josh", "Rover"], inputted: str):
+    async def ei(self, ctx, person: Literal["Astro", "Josh", "Rover"], inputted: str):
         global key
 
         try:
@@ -146,7 +148,7 @@ class EiStuff(commands.Cog):
                 await ctx.send(file=discord.File("airesponsethatwasreallylongsoitsafilenow.txt"))
                 return
             try:
-                if "Rate limit" in str(response.json()["error"]["message"]):
+                if "rate limit" in str(response.json()["error"]["metadata"]["raw"]):
                     await ctx.send(f"it ran out of credits, swap to account {"2" if os.getenv("API_KEY_1") == key else "1"}")
 
                 elif "Provider returned error" in str(response.json()["error"]["message"]):
@@ -174,11 +176,11 @@ class EiStuff(commands.Cog):
                     async for m in message.channel.history(limit = 170):
                         if m.author == guy:
                             iconic = iconic + "\n" + m.content
-                case "CB":#cb
-                    iconic = "How are you doing, unpaid worker? Get back into the field where you belong\nim the first one to beat goku with taxes\nIf anyone asks.. Josh died in a drunk driving accident\nI need you to take a hit while I run away, don't worry if you start convulsing on the floor because you're paralyzed\nHe's gotta tighten some nuts if you know what I mean\nCan't believe I'm doing it with you\nmods... cut off his life support\nI am racist\nbut you are white, so\nThe gay rights, the gay middles, and the gay lefts will not stop me\nSometimes people just think you're a nazi\nI'm a woman driver so it makes sense\nGay\nGot it, slave labour!\nBaby Luigi likes jumping!\ndon't call me racist but why is it black now?\nGoogle, show me this man's address\nI'm about to tear up the entire ecosystem that's next to me because it's blocking my view\nYou ever seen a more depressed giraffe?\nWe are NOT turning this into a foot fetish\nYou know what? Screw it, forbidden milk time.\nlet's go guys we can crash through this block\nIt's not short for anything, he's not black\ndis is my GUN.\nI'm trying to find the one. I just have to look through all the taxes to get to it.\nThat's just rover stuff waiting to happen"
-                    async for m in message.channel.history(limit=370):
-                        if m.author == guy and len(iconic) < 1000:
-                            iconic = iconic + "\n" + m.content
+                # case "CB":#cb
+                #     iconic = "How are you doing, unpaid worker? Get back into the field where you belong\nim the first one to beat goku with taxes\nIf anyone asks.. Josh died in a drunk driving accident\nI need you to take a hit while I run away, don't worry if you start convulsing on the floor because you're paralyzed\nHe's gotta tighten some nuts if you know what I mean\nCan't believe I'm doing it with you\nmods... cut off his life support\nI am racist\nbut you are white, so\nThe gay rights, the gay middles, and the gay lefts will not stop me\nSometimes people just think you're a nazi\nI'm a woman driver so it makes sense\nGay\nGot it, slave labour!\nBaby Luigi likes jumping!\ndon't call me racist but why is it black now?\nGoogle, show me this man's address\nI'm about to tear up the entire ecosystem that's next to me because it's blocking my view\nYou ever seen a more depressed giraffe?\nWe are NOT turning this into a foot fetish\nYou know what? Screw it, forbidden milk time.\nlet's go guys we can crash through this block\nIt's not short for anything, he's not black\ndis is my GUN.\nI'm trying to find the one. I just have to look through all the taxes to get to it.\nThat's just rover stuff waiting to happen"
+                #     async for m in message.channel.history(limit=370):
+                #         if m.author == guy and len(iconic) < 1000:
+                #             iconic = iconic + "\n" + m.content
                             # await self.printto(iconic)
 
                 case 916883861634441286:#edwosk

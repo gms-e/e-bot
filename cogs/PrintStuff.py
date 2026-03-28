@@ -596,15 +596,12 @@ class PrintStuff(commands.Cog):
                     case x if x > 5:
                         await self.printto("eh")
                     case -1:
-                        await channel.send("ok well CLEARLY nothing is happening, so I'm just gonna reset the time.\nSomeone add a favor and do the other thing\nwait the other thing is WHA-")
-                        contx = await channel.send("myself, animation time reset")
-                        command = self.bot.get_command('animation time reset')
+                        await channel.send("ok well CLEARLY nothing is happening, so I'm just gonna reset the time.\nSomeone add a favor and do the other thing\n(it's reset now I fixed that you can check if you don't believe me)")
                         try:
-                            await command(await self.bot.get_context(contx))
-
-                        except Exception as error:
-                            print(error)
-                            await channel.send("ok well I *tried* to reset it and something broke, someone else do it ;-;")
+                            with open("updayt.txt", "w") as f:
+                                f.write(f"4")
+                        except Exception as e:
+                            await self.printto(e)
                     case _:
                         await channel.send(f"days are at {day} , this is the error handling message. \nEither I messed up the code REAAALLLY bad,\nor it's day 3 :D")
 
