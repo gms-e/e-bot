@@ -816,7 +816,13 @@ class PrintStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def emote(self, ctx, emojiname):
-        emoji = discord.utils.get(self.bot.get_guild(773015467753209888).emojis, name=emojiname)
+        guilds = self.bot.guilds
+
+        emoji = None
+        for guild in guilds:
+            fetched = discord.utils.get(guild.emojis, name=emojiname)
+            if fetched:
+                emoji = fetched
 
         if emoji:
             await ctx.reply(f"{emoji.url}")
@@ -824,19 +830,81 @@ class PrintStuff(commands.Cog):
             await ctx.reply("uh... wot\nThat ain't an emoji name\n(use emojilist)", ephemeral=True)
 
     #-------------------------------------emoji list retriever------------------------------------------#
-    @commands.hybrid_command(name="emojilist")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def emotelist(self, ctx):
-        try:
-
-            emojis = self.bot.get_guild(773015467753209888).emojis
-            emojilist = ""
-            for emoji in emojis:
-                emojilist = emojilist + f" {emoji.name}     "
-            await ctx.reply(f"{emojilist}"[:2000], ephemeral=True)
-        except Exception as e:
-            print(e)
+    # @commands.hybrid_command(name="emojilist")
+    # @app_commands.allowed_installs(guilds=True, users=True)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def emotelist(self, ctx):
+    #     try:
+    #
+    #         page = 0
+    #
+    #         bview = View(timeout=50)
+    #         left = Button(label="<-", style=discord.ButtonStyle.blurple)
+    #         right = Button(label="->", style=discord.ButtonStyle.blurple)
+    #
+    #
+    #         async def fetchMessage(p):
+    #             emojis = self.bot.guilds[p].emojis
+    #
+    #             emojilist = ""
+    #             for emoji in emojis:
+    #                 emojilist = emojilist + f"{emoji}"[:2000]
+    #             return emojilist
+    #
+    #         display = await ctx.reply(content = f"{await fetchMessage(0)}", ephemeral=True, view = bview)
+    #
+    #         async def incleft(ctx):
+    #             nonlocal page
+    #             if page > 0:
+    #                 page -= 1
+    #                 bview.clear_items()
+    #                 bview.add_item(left)
+    #                 pnm = Button(label=str(page) + f" {self.bot.guilds[page].name}")
+    #                 bview.add_item(pnm)
+    #                 bview.add_item(right)
+    #
+    #
+    #                 await ctx.response.edit_message(content = await fetchMessage(page), view = bview)
+    #             else:
+    #                 await ctx.response.edit_message(content = "there's nothing before 0")
+    #
+    #         async def incright(ctx):
+    #             try:
+    #                 nonlocal page
+    #                 if page < len(self.bot.guilds) - 1:
+    #                     page += 1
+    #
+    #                     bview.clear_items()
+    #                     bview.add_item(left)
+    #                     pnm = Button(label=str(page) + f" {self.bot.guilds[page].name}")
+    #                     bview.add_item(pnm)
+    #                     bview.add_item(right)
+    #
+    #                     nm = await fetchMessage(page)
+    #                     await ctx.response.edit_message(content = nm, view = bview)
+    #                 else:
+    #                     await ctx.response.edit_message(content = "That was the last page :/")
+    #
+    #             except Exception as e:
+    #                 print(e)
+    #
+    #
+    #         left.callback = incleft
+    #
+    #         right.callback = incright
+    #
+    #         pnum = Button(label=str(page) + f" {self.bot.guilds[page].name}")
+    #
+    #         bview.add_item(left)
+    #         bview.add_item(pnum)
+    #         bview.add_item(right)
+    #
+    #         await display.edit(view = bview)
+    #
+    #
+    #
+    #     except Exception as e:
+    #         print(e)
 
 
     #-------------------------------------gambleping------------------------------------------------------#
