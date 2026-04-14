@@ -200,6 +200,50 @@ class PrintStuff(commands.Cog):
         if bluff and "e, " in message.content and "bluff" not in message.content:
             await message.reply("o7 on it", mention_author=False)
             bluff = False
+        # ---------------------------------------detect & count e-------------------------------------------#
+        if "e" in message.content.lower():
+            ecounts = {}
+            count = 0
+            count += message.content.lower().count(" e ")
+            count += message.content.lower().count(" e.")
+            if len(message.content) > 2 and message.content.lower()[-2:] == " e":
+                print("found final e")
+                count += 1
+            if len(message.content) > 2 and message.content.lower()[:2] == "e ":
+                print("found initial e")
+                count += 1
+            count -= message.content.lower().count("e bot")
+            if count > 0:
+                try:
+                    with open("elist.json", 'r') as f:
+                        ecounts = eval(f.readline())
+                    ecounts[message.author.id] = ecounts.get(message.author.id, 0) + count
+                    print(f"updating to {ecounts}")
+                    with open('elist.json', 'w') as f:
+                        f.write(str(ecounts))
+                except FileNotFoundError:
+                    ecounts[message.author.id] = 1
+                    with open("elist.json", "x") as f:
+                        f.write(str(ecounts))
+                except Exception as e:
+                    print(e)
+
+        if message.content.lower() == "e":
+            print("found lone e")
+            ecounts = {}
+            try:
+                with open("elist.json", 'r') as f:
+                    ecounts = eval(f.readline())
+                ecounts[message.author.id] = ecounts.get(message.author.id, 0) + 1
+                with open('elist.json', 'w') as f:
+                    f.write(str(ecounts))
+            except FileNotFoundError:
+                ecounts[message.author.id] = 1
+                with open("elist.json", "x") as f:
+                    f.write(str(ecounts))
+            except Exception as e:
+                print(e)
+
         #---------------------------------------door stuff print stuff collab-----------------------------------#
         if message.channel.id == 1461631744955514932:
             channelrole = message.author.guild.get_role(1462230075503149299)
@@ -347,6 +391,29 @@ class PrintStuff(commands.Cog):
         bluff = True
         await ctx.send(content = "o7", ephemeral = True)
         await ctx.bot.process_commands(ctx)
+    #--------------------------------------------print e count----------------------------------------------#
+    @commands.hybrid_command(name="printee", brief="who's the biggest e fan?")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def prius(self, ctx):
+        ecounts = {}
+        try:
+            with open("elist.json", 'r') as f:
+                ecounts = eval(f.readline())
+        except FileNotFoundError:
+            await ctx.send("0 from anyone. I don't think anyone will ever see this since I intend to type e "
+                          + "instantly, but good programming practice to handle possible errors and whatnot")
+            return
+        resultmessage = ""
+        for key, value  in ecounts.items():
+            try:
+                peep = ctx.guild.get_member(int(key))
+                if peep:
+                    resultmessage = resultmessage + peep.display_name
+                    resultmessage = resultmessage + f" : {value}\n"
+            except Exception as e:
+                print(e)
+        await ctx.send(resultmessage)
     # ----------------------------------Date since made--------------------------------------------#
     @commands.hybrid_group(brief="created")
     @app_commands.allowed_installs(guilds=True, users=True)
