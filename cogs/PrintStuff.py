@@ -20,6 +20,7 @@ import subprocess
 import io
 from wonderwords import RandomWord
 
+schrodinger = {}
 
 stopp = False
 bluff = False
@@ -74,7 +75,7 @@ class PrintStuff(commands.Cog):
     #-----------------------------------------
     @commands.Cog.listener()
     async def on_message(self, message):
-
+        global schrodinger
 
         #---------------------------------------notices your non anon------------------------------------------#
         if message.channel.id == 841490511390048277 and message.author.id != self.bot.user.id:
@@ -100,6 +101,13 @@ class PrintStuff(commands.Cog):
             await self.catimg(message)
 
         usettings = self.bot.get_cog("SetStuff")
+        #-----------------------------------------no proof-------------------------------------#
+
+        if schrodinger and message.attachments and message.author.id in schrodinger:
+            for attached in message.attachments:
+                if attached.filename in schrodinger[message.author.id]:
+                    await message.delete()
+                    return
 
         #---------------------------------------chat -> dms---botignore-------------------------------------------#
         if message.author == self.bot.user:
@@ -561,6 +569,37 @@ class PrintStuff(commands.Cog):
     #     await ctx.send("o7 it's gone")
     #
 
+
+    #----------------------------------------no proof----------------------------------------------------#
+    @commands.hybrid_group(name="no", breif="proof")
+
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def nada(self, ctx):
+        await self.printto("obsolete")
+
+    @nada.command(name="proof", brief="can't prove it")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def provado(self, ctx, person: discord.Member):
+        global schrodinger
+        found = False
+        async for message in ctx.channel.history(limit=12):
+            if message.attachments and message.author == person:
+                for attached in message.attachments:
+                    tmp = schrodinger.get(person.id, [])
+                    tmp.append(attached.filename)
+                    schrodinger[person.id] = tmp
+                await message.delete()
+                await ctx.send("o7 no proof")
+                found = True
+                break
+
+        if found:
+            await asyncio.sleep(69 * 2)
+            schrodinger = {}
+        else:
+            await ctx.send(content = "there, uh... there ain't an image there chief", ephemeral = True)
 
     #----------------------------------------Hit singer Kasane Teto----------------------------------------------------#
 
