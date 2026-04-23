@@ -273,7 +273,7 @@ async def on_message(message):
     #     voices = bot.get_cog("VoiceStuff")
     #     await voices.playSong(message, "music/World is Mine - Kasane Teto (Synthesizer V Cover) [0eaeiSjh7pU].mp3")
     #-----------------------------------Stop music command------------------------------------------------#
-    if (("good" in lower and "music" in lower) or "e, shut up" in lower) and await usettings.get_value(message, message.author, "leavevc"):
+    if "e, shut up" in lower and await usettings.get_value(message, message.author, "leavevc"): #removed "good" "music" req bc deadline
         await printto("saw stop command")
         voices = bot.get_cog("VoiceStuff")
         await voices.setStop(True)
