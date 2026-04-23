@@ -473,62 +473,62 @@ class PrintStuff(commands.Cog):
         except Exception as e:
             print(e)
 
-    #-------------------------------Reports mc server status & players when requested--------------------------------#
-    @commands.hybrid_group(name = "server", brief = "up\n role add | remove")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def server(self, ctx):
-        await self.printto("obsolete")
-    @server.command(name = "up")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def up(self, ctx):
-        usettings = self.bot.get_cog("SetStuff")
-        sessage = await ctx.send("uh")
-        try:
-            server = mcstatus.JavaServer.lookup("true-cigarette.gl.joinmc.link")
-            st = server.status()
-            await self.printto(st.players.online)
-            count = st.players.online
-            if random.random() < 1/90 and await usettings.get_value(ctx, ctx.author, "serverlie"):
-                sessage = await sessage.channel.fetch_message(sessage.id)
-                await sessage.edit(content="Nope...")
-                return
-            else:
-                sessage = await sessage.channel.fetch_message(sessage.id)
-                await sessage.edit(content = f"yea, {f"{count} guys on." if count > 1 else "1 guy on." if count == 1 else "but nobody's on ._."}")
-            try:
-                dudes = st.players.sample
-                dudelist = ""
-                if len(dudes) > 1:
-                    for dude in dudes:
-                        dudelist = dudelist + dude.name + ", "
-                elif len(dudes) == 1:
-                    dudelist = dudes[0].name
-                if len(dudes) >=1:
-                    await ctx.send(f"{dudelist}.")
-
-            except Exception as error:
-                await self.printto(str(error))
-                await self.printto("error handling for error that made empty server = offline server bc error handling is funny")
-        except BrokenPipeError as e:
-            sessage = await sessage.channel.fetch_message(sessage.id)
-            await sessage.edit(content = "idk it failed in a weird way do it again")
-        except Exception as e:
-            await self.printto("error: " + str(e))
-            if random.random() < 1/90 and await usettings.get_value(ctx, ctx.author, "serverlie"):
-                sessage = await sessage.channel.fetch_message(sessage.id)
-                await sessage.edit(content="Yeah One guy one there")
-                await sessage.channel.send("Mariofan527")
-
-            else:
-                sessage = await sessage.channel.fetch_message(sessage.id)
-                await sessage.edit(content = f"nah")
-
-    @up.error
-    async def mcstatus_error(self, ctx, error):
-        await self.printto(f"trying, but {error}")
-        await ctx.channel.send("idk something broke")
+    # #-------------------------------Reports mc server status & players when requested--------------------------------#
+    # @commands.hybrid_group(name = "server", brief = "up\n role add | remove")
+    # @app_commands.allowed_installs(guilds=True, users=True)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def server(self, ctx):
+    #     await self.printto("obsolete")
+    # @server.command(name = "up")
+    # @app_commands.allowed_installs(guilds=True, users=True)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def up(self, ctx):
+    #     usettings = self.bot.get_cog("SetStuff")
+    #     sessage = await ctx.send("uh")
+    #     try:
+    #         server = mcstatus.JavaServer.lookup("true-cigarette.gl.joinmc.link")
+    #         st = server.status()
+    #         await self.printto(st.players.online)
+    #         count = st.players.online
+    #         if random.random() < 1/90 and await usettings.get_value(ctx, ctx.author, "serverlie"):
+    #             sessage = await sessage.channel.fetch_message(sessage.id)
+    #             await sessage.edit(content="Nope...")
+    #             return
+    #         else:
+    #             sessage = await sessage.channel.fetch_message(sessage.id)
+    #             await sessage.edit(content = f"yea, {f"{count} guys on." if count > 1 else "1 guy on." if count == 1 else "but nobody's on ._."}")
+    #         try:
+    #             dudes = st.players.sample
+    #             dudelist = ""
+    #             if len(dudes) > 1:
+    #                 for dude in dudes:
+    #                     dudelist = dudelist + dude.name + ", "
+    #             elif len(dudes) == 1:
+    #                 dudelist = dudes[0].name
+    #             if len(dudes) >=1:
+    #                 await ctx.send(f"{dudelist}.")
+    #
+    #         except Exception as error:
+    #             await self.printto(str(error))
+    #             await self.printto("error handling for error that made empty server = offline server bc error handling is funny")
+    #     except BrokenPipeError as e:
+    #         sessage = await sessage.channel.fetch_message(sessage.id)
+    #         await sessage.edit(content = "idk it failed in a weird way do it again")
+    #     except Exception as e:
+    #         await self.printto("error: " + str(e))
+    #         if random.random() < 1/90 and await usettings.get_value(ctx, ctx.author, "serverlie"):
+    #             sessage = await sessage.channel.fetch_message(sessage.id)
+    #             await sessage.edit(content="Yeah One guy one there")
+    #             await sessage.channel.send("Mariofan527")
+    #
+    #         else:
+    #             sessage = await sessage.channel.fetch_message(sessage.id)
+    #             await sessage.edit(content = f"nah")
+    #
+    # @up.error
+    # async def mcstatus_error(self, ctx, error):
+    #     await self.printto(f"trying, but {error}")
+    #     await ctx.channel.send("idk something broke")
 
     #helper command for checking if server is up in main, exists to avoid importing mcstatus *again* in main
     # async def sup(self):
