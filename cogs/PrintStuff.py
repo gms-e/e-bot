@@ -663,10 +663,12 @@ class PrintStuff(commands.Cog):
                     case x if x > 5:
                         await self.printto("eh")
                     case -1:
-                        await channel.send("ok well CLEARLY nothing is happening, so I'm just gonna reset the time.\nSomeone add a favor and do the other thing\n(it's reset now I fixed that you can check if you don't believe me)")
+                        await channel.send("I'm resetting the time.\nadd a favor and do the other thing")
                         try:
-                            with open("updayt.txt", "w") as f:
-                                f.write(f"4")
+                            with open("updayt.txt", 'r+') as f:
+                                f.seek(0)
+                                f.truncate()
+                                f.write(str(4))
                         except Exception as e:
                             await self.printto(e)
                     case _:
