@@ -845,56 +845,111 @@ class PrintStuff(commands.Cog):
         await ctx.reply("Deltarune tomorrow", mention_author=False)
         await self.bot.process_commands(ctx)
 
-    #---------------------------------KILL IT WITH FIRE--------------------------------------------------#
-    @commands.hybrid_group()
-    @app_commands.allowed_installs(guilds=True, users=False)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def killit(self, ctx):
-        await self.printto("obsolete")
-    @killit.group(name = "with")
-    @app_commands.allowed_installs(guilds=True, users=False)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def using(self, ctx):
-        await self.printto("obsolete")
-    @using.command(name = "fire")
-    @app_commands.allowed_installs(guilds=True, users=False)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def fire(self, ctx):
-        if ctx.message.reference:
-            replied_message_id = ctx.message.reference.message_id
-            try:
-                replied_message = await ctx.channel.fetch_message(replied_message_id)
-                if replied_message.author == self.bot.user:
-                    await ctx.send("It's gone, we're safe now.\n YOU ALL SAW NOTHING", ephemeral=True)
-                    await replied_message.delete()
-                else:
-                    await ctx.send("uh... that's not one of mine, that's your problem.\n Ask them really, REALLY, **REALLY** nicely to delete it, I'm sure that'll go well.")
-            except discord.NotFound:
-                await ctx.send("That, uh... doesn't exist anymore?")
-        else:
-            async for m in ctx.channel.history(limit=30):
-                if m.author == self.bot.user:
-                    await m.delete()
-                    await ctx.send("o7 found it", ephemeral=True)
-                    return
+    # #---------------------------------KILL IT WITH FIRE--------------------------------------------------#
+    # @commands.hybrid_group()
+    # @app_commands.allowed_installs(guilds=True, users=False)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def killit(self, ctx):
+    #     await self.printto("obsolete")
+    # @killit.group(name = "with")
+    # @app_commands.allowed_installs(guilds=True, users=False)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def using(self, ctx):
+    #     await self.printto("obsolete")
+    # @using.command(name = "fire")
+    # @app_commands.allowed_installs(guilds=True, users=False)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def fire(self, ctx):
+    #     if ctx.message.reference:
+    #         replied_message_id = ctx.message.reference.message_id
+    #         try:
+    #             replied_message = await ctx.channel.fetch_message(replied_message_id)
+    #             if replied_message.author == self.bot.user:
+    #                 await ctx.send("It's gone, we're safe now.\n YOU ALL SAW NOTHING", ephemeral=True)
+    #                 await replied_message.delete()
+    #             else:
+    #                 await ctx.send("uh... that's not one of mine, that's your problem.\n Ask them really, REALLY, **REALLY** nicely to delete it, I'm sure that'll go well.")
+    #         except discord.NotFound:
+    #             await ctx.send("That, uh... doesn't exist anymore?")
+    #     else:
+    #         async for m in ctx.channel.history(limit=30):
+    #             if m.author == self.bot.user:
+    #                 await m.delete()
+    #                 await ctx.send("o7 found it", ephemeral=True)
+    #                 return
 
     # ----------------------------------emoji by name sender---------------------------------------------#
-    @commands.hybrid_command(name = "emoji")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def emote(self, ctx, emojiname):
-        guilds = self.bot.guilds
-
-        emoji = None
-        for guild in guilds:
-            fetched = discord.utils.get(guild.emojis, name=emojiname)
-            if fetched:
-                emoji = fetched
-
-        if emoji:
-            await ctx.reply(f"{emoji.url}")
-        else:
-            await ctx.reply("uh... wot\nThat ain't an emoji name\n(use emojilist)", ephemeral=True)
+    # @commands.hybrid_command(name = "emoji")
+    # @app_commands.allowed_installs(guilds=True, users=True)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def emote(self, ctx, emojiname):
+    #     guilds = self.bot.guilds
+    #
+    #     ebot = await self.bot.fetch_application_emojis()
+    #
+    #     emoji = None
+    #     overflow = []
+    #
+    #     if ebot and discord.utils.get(ebot, name=emojiname):
+    #         emoji = discord.utils.get(ebot, name=emojiname)
+    #     else:
+    #         for guild in guilds:
+    #             fetched = discord.utils.get(guild.emojis, name=emojiname)
+    #             if fetched:
+    #                 if emoji and not overflow:
+    #                     print(emoji)
+    #                     overflow = [emoji, fetched]
+    #                 elif emoji and overflow:
+    #                     overflow.append(fetched)
+    #                 else:
+    #                     emoji = fetched
+    #     print(overflow)
+    #     if overflow:
+    #         bview = View(timeout=50)
+    #
+    #         async def getcallb(yourl):
+    #             print("making callb")
+    #
+    #             async def callb(interaction: discord.Interaction):
+    #                 print("running")
+    #                 try:
+    #                     await interaction.channel.send(f"{yourl}")
+    #                 except Exception as e:
+    #                     print(e)
+    #
+    #             print("made callb")
+    #             return callb
+    #
+    #         for emj in overflow:
+    #
+    #             print("past func def")
+    #             btn = Button(emoji=str(emj), style=discord.ButtonStyle.blurple)
+    #             try:
+    #                 if emj.url:
+    #                     tmp = await getcallb(emj.url)
+    #                     btn.callback = tmp
+    #                 else:
+    #                     tmp = await getcallb(str(emj))
+    #                     btn.callback = tmp
+    #             except Exception as e:
+    #                 print(e)
+    #
+    #             print("past callback")
+    #             print(btn)
+    #             bview.add_item(btn)
+    #         print(bview)
+    #         try:
+    #             await ctx.reply(f"Turns out there's {len(overflow)} emojis with that name...\nluckily I can code, pick which one you wanted:", ephemeral=True, view = bview)
+    #         except Exception as e:
+    #             print(e)
+    #         finally:
+    #             return
+    #
+    #
+    #     if emoji:
+    #         await ctx.reply(f"{emoji.url}")
+    #     else:
+    #         await ctx.reply("uh... wot\nThat ain't an emoji name\n(rip emojilist)", ephemeral=True)
 
     #-------------------------------------emoji list retriever------------------------------------------#
     # @commands.hybrid_command(name="emojilist")
