@@ -60,13 +60,23 @@ class PrintStuff(commands.Cog):
         await self.printto("Print Stuff online")
         global killword
         try:
-            cheekypeeker = await self.bot.fetch_user(702906770003198003)
+            cheekypeeker = self.bot.get_user(702906770003198003)
+            usedafavor = self.bot.get_user(405197452833062912)
+
+            if cheekypeeker is None:
+                cheekypeeker = await self.bot.fetch_user(702906770003198003)
+            if usedafavor is None:
+                usedafavor = await self.bot.fetch_user(405197452833062912)
+
+
             r = RandomWord()
             killword = r.word()
             while "-" in killword or "_" in killword:
                 killword = r.word()
 
             await cheekypeeker.send(f"The word is {killword}, I'm sure that's not a common one, right?")
+            await usedafavor.send(f"The word is {killword}, I'm sure that's not a common one, right?")
+
         except Exception as error:
             print(error)
             print(str(error))
