@@ -501,19 +501,25 @@ class PrintStuff(commands.Cog):
     @commands.hybrid_command(name="e")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def e(self, ctx, undersores: int = 0, tildes: int = 0, asterisks: int = 0):
-        extras = ""
-        while undersores > 0:
-            extras = extras + "_"
-            undersores = undersores - 1
-        while tildes > 0:
-            extras = extras + "~"
-            tildes = tildes - 1
-        while asterisks > 0:
-            extras = extras + "*"
-            astrisks = astrisks - 1
+    async def e(self, ctx, underscores: int = 0, tildes: int = 0, asterisks: int = 0):
+        try:
+            extras = ""
+            if underscores:
+                while underscores > 0:
+                    extras = extras + "_"
+                    underscores = underscores - 1
+            if tildes:
+                while tildes > 0:
+                    extras = extras + "~"
+                    tildes = tildes - 1
+            if asterisks:
+                while asterisks > 0:
+                    extras = extras + "*"
+                    asterisks = asterisks - 1
 
-        await ctx.send(extras + "e" + reversed(extras))
+            await ctx.send(f"{extras}e{extras[::-1]}")
+        except Exception as e:
+            print(e)
     # #-------------------------------Reports mc server status & players when requested--------------------------------#
     # @commands.hybrid_group(name = "server", brief = "up\n role add | remove")
     # @app_commands.allowed_installs(guilds=True, users=True)
