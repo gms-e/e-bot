@@ -204,16 +204,16 @@ class VoiceStuff(commands.Cog):
         await self.bot.process_commands(ctx)
 
 #--------------------------------------------super censored song----------------------------------------#
-    @commands.hybrid_command(name="russiasong")
-    @app_commands.allowed_installs(guilds=True, users=False)
-    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def russiasong(self, ctx):
-        try:
-            await ctx.send("||o7||")
-            await self.playSong(ctx, 'music/__ and _.mp3', True)
-        except Exception as error:
-            await self.printto(f"An error occurred: {type(error).__name__}")
-            await self.printto(str(error))
+    # @commands.hybrid_command(name="russiasong")
+    # @app_commands.allowed_installs(guilds=True, users=False)
+    # @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    # async def russiasong(self, ctx):
+    #     try:
+    #         await ctx.send("||o7||")
+    #         await self.playSong(ctx, 'music/__ and _.mp3', True)
+    #     except Exception as error:
+    #         await self.printto(f"An error occurred: {type(error).__name__}")
+    #         await self.printto(str(error))
     # ----------------------------------Bring user to vc--------------------------------------------#
     @commands.hybrid_command(name="kidnap", brief="Kidnaps person to vc")
     @app_commands.allowed_installs(guilds=True, users=False)

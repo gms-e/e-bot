@@ -224,6 +224,12 @@ class PrintStuff(commands.Cog):
             count = 0
             count += message.content.lower().count(" e ")
             count += message.content.lower().count(" e.")
+            count += message.content.lower().count("*e*")
+            count += message.content.lower().count("_e_")
+            count += message.content.lower().count("~e~")
+            count += message.content.lower().count(" e!")
+
+
             if len(message.content) > 2 and message.content.lower()[-2:] == " e":
                 print("found final e")
                 count += 1
@@ -491,6 +497,23 @@ class PrintStuff(commands.Cog):
         except Exception as e:
             print(e)
 
+        # --------------------------------------e-----------------------------------------#
+        @commands.hybrid_command(name="e")
+        @app_commands.allowed_installs(guilds=True, users=True)
+        @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+        async def roll(self, ctx, undersores: int = 0, tildes: int = 0, asterisks: int = 0):
+            extras = ""
+            while undersores > 0:
+                extras = extras + "_"
+                undersores = undersores - 1
+            while tildes > 0:
+                extras = extras + "~"
+                tildes = tildes - 1
+            while asterisks > 0:
+                extras = extras + "*"
+                astrisks = astrisks - 1
+
+            await ctx.send(extras + "e" + reversed(extras))
     # #-------------------------------Reports mc server status & players when requested--------------------------------#
     # @commands.hybrid_group(name = "server", brief = "up\n role add | remove")
     # @app_commands.allowed_installs(guilds=True, users=True)
