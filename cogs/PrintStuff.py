@@ -118,6 +118,54 @@ class PrintStuff(commands.Cog):
                 if attached.filename in schrodinger[message.author.id]:
                     await message.delete()
                     return
+        # ---------------------------------------detect & count e-------------------------------------------#
+        if "e" in message.content.lower():
+            ecounts = {}
+            count = 0
+            count += message.content.lower().count(" e ")
+            count += message.content.lower().count(" e.")
+            count += message.content.lower().count("*e*")
+            count += message.content.lower().count("_e_")
+            count += message.content.lower().count("~e~")
+            count += message.content.lower().count(" e!")
+
+            if len(message.content) > 2 and message.content.lower()[-2:] == " e":
+                print("found final e")
+                count += 1
+            if len(message.content) > 2 and message.content.lower()[:2] == "e ":
+                print("found initial e")
+                count += 1
+            count -= message.content.lower().count("e bot")
+            if count > 0:
+                try:
+                    with open("elist.json", 'r') as f:
+                        ecounts = eval(f.readline())
+                    ecounts[message.author.id] = ecounts.get(message.author.id, 0) + count
+                    print(f"updating to {ecounts}")
+                    with open('elist.json', 'w') as f:
+                        f.write(str(ecounts))
+                except FileNotFoundError:
+                    ecounts[message.author.id] = 1
+                    with open("elist.json", "x") as f:
+                        f.write(str(ecounts))
+                except Exception as e:
+                    print(e)
+
+        if message.content.lower() == "e":
+            print("found lone e")
+            ecounts = {}
+            try:
+                with open("elist.json", 'r') as f:
+                    ecounts = eval(f.readline())
+                ecounts[message.author.id] = ecounts.get(message.author.id, 0) + 1
+                with open('elist.json', 'w') as f:
+                    f.write(str(ecounts))
+            except FileNotFoundError:
+                ecounts[message.author.id] = 1
+                with open("elist.json", "x") as f:
+                    f.write(str(ecounts))
+            except Exception as e:
+                print(e)
 
         #---------------------------------------chat -> dms---botignore-------------------------------------------#
         if message.author == self.bot.user:
@@ -218,55 +266,6 @@ class PrintStuff(commands.Cog):
         if bluff and "e, " in message.content and "bluff" not in message.content:
             await message.reply("o7 on it", mention_author=False)
             bluff = False
-        # ---------------------------------------detect & count e-------------------------------------------#
-        if "e" in message.content.lower():
-            ecounts = {}
-            count = 0
-            count += message.content.lower().count(" e ")
-            count += message.content.lower().count(" e.")
-            count += message.content.lower().count("*e*")
-            count += message.content.lower().count("_e_")
-            count += message.content.lower().count("~e~")
-            count += message.content.lower().count(" e!")
-
-
-            if len(message.content) > 2 and message.content.lower()[-2:] == " e":
-                print("found final e")
-                count += 1
-            if len(message.content) > 2 and message.content.lower()[:2] == "e ":
-                print("found initial e")
-                count += 1
-            count -= message.content.lower().count("e bot")
-            if count > 0:
-                try:
-                    with open("elist.json", 'r') as f:
-                        ecounts = eval(f.readline())
-                    ecounts[message.author.id] = ecounts.get(message.author.id, 0) + count
-                    print(f"updating to {ecounts}")
-                    with open('elist.json', 'w') as f:
-                        f.write(str(ecounts))
-                except FileNotFoundError:
-                    ecounts[message.author.id] = 1
-                    with open("elist.json", "x") as f:
-                        f.write(str(ecounts))
-                except Exception as e:
-                    print(e)
-
-        if message.content.lower() == "e":
-            print("found lone e")
-            ecounts = {}
-            try:
-                with open("elist.json", 'r') as f:
-                    ecounts = eval(f.readline())
-                ecounts[message.author.id] = ecounts.get(message.author.id, 0) + 1
-                with open('elist.json', 'w') as f:
-                    f.write(str(ecounts))
-            except FileNotFoundError:
-                ecounts[message.author.id] = 1
-                with open("elist.json", "x") as f:
-                    f.write(str(ecounts))
-            except Exception as e:
-                print(e)
 
         #---------------------------------------door stuff print stuff collab-----------------------------------#
         if message.channel.id == 1461631744955514932:
