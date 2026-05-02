@@ -671,10 +671,15 @@ class PrintStuff(commands.Cog):
                 while "-" in killword or "_" in killword:
                     killword = r.word()
                 cheekypeeker = self.bot.get_user(702906770003198003)
+                usedafavor = self.bot.get_user(405197452833062912)
                 if cheekypeeker is None:
                     cheekypeeker = await self.bot.fetch_user(702906770003198003)
+                if usedafavor is None:
+                    usedafavor = await self.bot.fetch_user(405197452833062912)
+
 
                 await cheekypeeker.send(f"The word is {killword}, I'm sure that's not a common one, right?")
+                await usedafavor.send(f"The word is {killword}, I'm sure that's not a common one, right?")
 
                 day = -1
                 try:
