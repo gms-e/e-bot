@@ -200,52 +200,52 @@ class SetStuff(commands.Cog):
 #     async def tetoday(self, ctx, value: bool):
 #         await self.setValue(ctx, "tetoday", value)
 #
-#     async def get_value(self, ctx, member: discord.Member, setting):
-#         outer = {}
-#         try:
-#             with open("settings.json", 'r') as f:
-#                 outer = json.load(f)
-#                 inner = outer.get(str(member.id), {})
-#                 return inner.get(setting, True)
-#         except FileNotFoundError:
-#             with open("settings.json", "x") as f:
-#                 outer = {str(member.id): {setting: True}}
-#                 json.dump(outer, f, indent=2)
-#                 print("made a settings file since it wasn't there")
-#                 return True
-#         except Exception as e:
-#             print(e)
-#             print(type(e))
-#             await ctx.send("something broke, ", str(e))
-#
-#     async def get_falsey_value(self, ctx, member: discord.Member, setting):
-#         outer = {}
-#         try:
-#             with open("settings.json", 'r') as f:
-#                 outer = json.load(f)
-#                 inner = outer.get(str(member.id), {})
-#                 return inner.get(setting, False)
-#         except FileNotFoundError:
-#             with open("settings.json", "x") as f:
-#                 outer = {str(member.id): {setting: False}}
-#                 json.dump(outer, f, indent=2)
-#                 print("made a settings file since it wasn't there")
-#                 return False
-#         except Exception as e:
-#             print(e)
-#             print(type(e))
-#             await ctx.send("something broke, ", str(e))
-#     async def get_people(self):
-#         try:
-#             with open("settings.json", 'r') as f:
-#                 outer = json.load(f)
-#                 return outer.get("dms", [])
-#         except FileNotFoundError:
-#                 return []
-#         except Exception as e:
-#             print(e)
-#             print(type(e))
-#             return []
+    async def get_value(self, ctx, member: discord.Member, setting):
+        outer = {}
+        try:
+            with open("settings.json", 'r') as f:
+                outer = json.load(f)
+                inner = outer.get(str(member.id), {})
+                return inner.get(setting, True)
+        except FileNotFoundError:
+            with open("settings.json", "x") as f:
+                outer = {str(member.id): {setting: True}}
+                json.dump(outer, f, indent=2)
+                print("made a settings file since it wasn't there")
+                return True
+        except Exception as e:
+            print(e)
+            print(type(e))
+            await ctx.send("something broke, ", str(e))
+
+    async def get_falsey_value(self, ctx, member: discord.Member, setting):
+        outer = {}
+        try:
+            with open("settings.json", 'r') as f:
+                outer = json.load(f)
+                inner = outer.get(str(member.id), {})
+                return inner.get(setting, False)
+        except FileNotFoundError:
+            with open("settings.json", "x") as f:
+                outer = {str(member.id): {setting: False}}
+                json.dump(outer, f, indent=2)
+                print("made a settings file since it wasn't there")
+                return False
+        except Exception as e:
+            print(e)
+            print(type(e))
+            await ctx.send("something broke, ", str(e))
+    async def get_people(self):
+        try:
+            with open("settings.json", 'r') as f:
+                outer = json.load(f)
+                return outer.get("dms", [])
+        except FileNotFoundError:
+                return []
+        except Exception as e:
+            print(e)
+            print(type(e))
+            return []
 
 async def setup(bot):
     await bot.add_cog(SetStuff(bot))
