@@ -448,7 +448,11 @@ class PrintStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def created(self, ctx):
-        await ctx.send(f"<t:{1748565600}:R>")
+        madedate = datetime.date(2025, 5, 29)
+        currdate = datetime.date.today()
+        dayssince = currdate - madedate
+        dayssince = dayssince.days
+        await ctx.send(f"Made 5/29/25\n-# {dayssince} days ago.")
         await self.bot.process_commands(ctx)
 
     @commands.hybrid_command()
