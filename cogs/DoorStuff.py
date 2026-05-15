@@ -489,8 +489,25 @@ class DoorStuff(commands.Cog):
 
     @tasks.loop(minutes=60)  # Runs every hour
     async def timepass(self):
-        await self.printto("updating door hours...")
+        delay = 60 - datetime.datetime.now().minute
+        if delay > 0:
+            print(f"passing time in {delay} minutes")
+            await asyncio.sleep(minutes = delay)
+        await self.printto("updating door/server hours...")
         times = {}
+
+        pstuf = self.bot.get_cog("PrintStuff")
+
+        airlist = await pstuf.getWaitList()
+        if len(airlist) > 0:
+            for id in airlist:
+                if airlist.get(id, 0) > 1:
+                    airlist[id] = airlist[id] - 1
+                if airlist.get(id, 0) < 1:
+                    airlist.pop(id)
+            await self.printto(airlist)
+            await pstuf.setWaitList(airlist)
+
         try:
             mcb = await self.bot.fetch_guild(773015467753209888)
             channelrole = mcb.get_role(1462230075503149299)

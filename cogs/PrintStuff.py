@@ -21,6 +21,7 @@ import io
 from wonderwords import RandomWord
 
 schrodinger = {}
+airlist = {}
 
 stopp = False
 bluff = False
@@ -31,29 +32,30 @@ class PrintStuff(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.task.start()
+        self.aintnoway.start()
 
     async def printto(self, m: str):
         print(m)
-        channel = await self.bot.fetch_channel(1434085176320852018)
-        if channel is None:
-            channel = await self.bot.get_channel(1434085176320852018)
-
-        try:
-            if len(str(m)) > 2000:
-                n = []
-                i = 0
-                for i in range(0, len(m), 1900):
-                    await channel.send(m[i:i + 1900])
-            else:
-                await channel.send(m)
-        except Exception as error:
-            print(str(error))
-            print(error)
-            try:
-                await channel.send(str(error))
-                await channel.send(error)
-            except Exception as error:
-                print("ok that's enough try catch")
+        # channel = await self.bot.fetch_channel(1434085176320852018)
+        # if channel is None:
+        #     channel = await self.bot.get_channel(1434085176320852018)
+        #
+        # try:
+        #     if len(str(m)) > 2000:
+        #         n = []
+        #         i = 0
+        #         for i in range(0, len(m), 1900):
+        #             await channel.send(m[i:i + 1900])
+        #     else:
+        #         await channel.send(m)
+        # except Exception as error:
+        #     print(str(error))
+        #     print(error)
+        #     try:
+        #         await channel.send(str(error))
+        #         await channel.send(error)
+        #     except Exception as error:
+        #         print("ok that's enough try catch")
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -465,6 +467,55 @@ class PrintStuff(commands.Cog):
         nerd = await ctx.send("e", ephemeral = True)
         await nerd.delete()
 
+    @commands.hybrid_command(name="server")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def serv(self, ctx, hours: int = 3):
+        if hours > 12:
+            await ctx.send("I don't believe you'd wait more than 12 hours")
+            return
+        if hours <= 0:
+            await ctx.send("that's... not how time works.")
+            return
+
+
+        global airlist
+        if ctx.author.id in airlist:
+            await ctx.send("o7 refreshed your hours in the waitlist, ask someone else to help open it ig", ephemeral = True)
+            airlist[ctx.author.id] = hours
+            return
+        airlist[ctx.author.id] = hours
+        if len(airlist) > 2:
+            try:
+                people = ""
+                for key in airlist:
+                    person = await self.bot.fetch_user(key)
+                    if person:
+                        if person.display_name:
+                            people = people + person.display_name + " and "
+                        else:
+                            people = people + person.global_name + " and "
+                    else:
+                        people = people + " someone and "
+                people = people[:len(people) - 4]
+
+                await ctx.send(f"<@721389007426158633> we got {people} waiting for server do the thing")
+                airlist.clear()
+                return
+            except Exception as e:
+                await ctx.send(e)
+                return
+        print("e")
+        await ctx.send("Cool, you're in the waitlist now. If a few others are also waiting then he'll open the server", ephemeral = True)
+
+    async def getWaitList(self):
+        global airlist
+        return airlist
+
+    async def setWaitList(self, glist):
+        global airlist
+        airlist = glist
+
     #--------------------------------------Ping omar-----------------------------------------------#
     @commands.hybrid_command(name = "omarhelpweneedyougeton")
     @app_commands.allowed_installs(guilds=True, users=False)
@@ -677,18 +728,21 @@ class PrintStuff(commands.Cog):
     async def aintnoway(self):
         lotto = random.random()
 
-        if lotto < 0.00000000001:
+        if lotto < 0.000000000000001:
+            chat = await self.bot.get_channel(773015468201345027)
+            await chat.send(
+                "@everyone BUY A FRICKIN LOTTERY TICKET RIGHT NOW,\n and also don't forget the heart patch <:fennyalove:1466317750732455978>")
+        elif lotto < 0.00000000001:
             await self.printto(f"AIN'T NO WAAAAAYYYYYYYYY we hit the billion chance with {lotto}") #Console server
             thatonemf = await self.bot.fetch_user(405197452833062912)
             await thatonemf.send("Don't forget the heart patch")
-            chat = await self.bot.get_channel(773015468201345027)
-            await chat.send("@everyone BUY A FRICKIN LOTTERY TICKET RIGHT NOW,\n and also don't forget the heart patch <:fennyalove:1466317750732455978>")
         elif lotto < 0.00001:
             await self.printto(f"{lotto} isn't quite 1 in a billion, but still kinda neat .-.")
 
     #-----------------------------------Anim progress tracker-----------------------------------------#
     @tasks.loop(minutes=120)
     async def task(self):
+        await asyncio.sleep(minutes = 60 - datetime.datetime.now().minute)
         try:
             channel = self.bot.get_channel(1282010600322629652)
             sixth = self.bot.get_channel(1264704750633619486)
@@ -880,44 +934,44 @@ class PrintStuff(commands.Cog):
         await ctx.send(f"{favors} favors owed\n ._.")
 
     # --------------------------------------------reserve tracking---------------------------------------------
-    @animation.group(name="reserves")
-    @app_commands.allowed_installs(guilds=True, users=False)
-    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def reserve(self, ctx):
-        await self.printto("obsolete")
-
-    @reserve.command(name="add")
-    @app_commands.allowed_installs(guilds=True, users=False)
-    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def resadd(self, ctx, number: int):
-        if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912):
-            await ctx.send("Imma don't think you're allowed to do dat")
-            await ctx.send(
-                "https://tenor.com/view/luigi-coo-coo-crazy-luigis-mansion-dark-moon-gif-1213275346224547321")
-            return
-        curr = 0
-        try:
-            with open("reserve.txt", 'r') as f:
-                curr = int(f.readline().strip())
-        except FileNotFoundError:
-            with open("reserve.txt", "x") as f:
-                f.write("0")
-        with open("reserve.txt", "w") as f:
-            f.write(f"{curr + number}")
-        await ctx.send(f"o7 added {number}")
-
-    @reserve.command(name="stored")
-    @app_commands.allowed_installs(guilds=True, users=False)
-    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def resget(self, ctx):
-        reserve = 0
-        try:
-            with open("reserve.txt", 'r') as f:
-                reserve = int(f.readline().strip())
-        except FileNotFoundError:
-            with open("reserve.txt", "x") as f:
-                f.write("0")
-        await ctx.send(f"{reserve} days reserved\n \\_._")
+    # @animation.group(name="reserves")
+    # @app_commands.allowed_installs(guilds=True, users=False)
+    # @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    # async def reserve(self, ctx):
+    #     await self.printto("obsolete")
+    #
+    # @reserve.command(name="add")
+    # @app_commands.allowed_installs(guilds=True, users=False)
+    # @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    # async def resadd(self, ctx, number: int):
+    #     if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912):
+    #         await ctx.send("Imma don't think you're allowed to do dat")
+    #         await ctx.send(
+    #             "https://tenor.com/view/luigi-coo-coo-crazy-luigis-mansion-dark-moon-gif-1213275346224547321")
+    #         return
+    #     curr = 0
+    #     try:
+    #         with open("reserve.txt", 'r') as f:
+    #             curr = int(f.readline().strip())
+    #     except FileNotFoundError:
+    #         with open("reserve.txt", "x") as f:
+    #             f.write("0")
+    #     with open("reserve.txt", "w") as f:
+    #         f.write(f"{curr + number}")
+    #     await ctx.send(f"o7 added {number}")
+    #
+    # @reserve.command(name="stored")
+    # @app_commands.allowed_installs(guilds=True, users=False)
+    # @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    # async def resget(self, ctx):
+    #     reserve = 0
+    #     try:
+    #         with open("reserve.txt", 'r') as f:
+    #             reserve = int(f.readline().strip())
+    #     except FileNotFoundError:
+    #         with open("reserve.txt", "x") as f:
+    #             f.write("0")
+    #     await ctx.send(f"{reserve} days reserved\n \\_._")
 
     # ----------------------------------Deltarune tomorrow--------------------------------------------#
     @commands.hybrid_group(name="deltarune", brief="tomorrow")
