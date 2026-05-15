@@ -467,10 +467,16 @@ class PrintStuff(commands.Cog):
         nerd = await ctx.send("e", ephemeral = True)
         await nerd.delete()
 
-    @commands.hybrid_command(name="server")
+    @commands.hybrid_group(name="server")
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def serv(self, ctx, hours: int = 3):
+    async def server(self, ctx):
+        print("obsolete")
+
+    @server.command(name="enqueue")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def q(self, ctx, hours: int = 3):
         if hours > 12:
             await ctx.send("I don't believe you'd wait more than 12 hours")
             return
@@ -485,6 +491,7 @@ class PrintStuff(commands.Cog):
             airlist[ctx.author.id] = hours
             return
         airlist[ctx.author.id] = hours
+
         if len(airlist) > 2:
             try:
                 people = ""
@@ -507,6 +514,49 @@ class PrintStuff(commands.Cog):
                 return
         print("e")
         await ctx.send("Cool, you're in the waitlist now. If a few others are also waiting then he'll open the server", ephemeral = True)
+        try:
+            await ctx.typing()
+            server = mcstatus.JavaServer.lookup("includes-trickery.gl.joinmc.link")
+            if server.status():
+                print(server.status())
+                await ctx.send("I think the server's already up btw, may wanna check that")
+        except Exception as e:
+            print(e)
+
+
+
+    @server.command(name="dequeue")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def dq(self, ctx):
+        global airlist
+        if ctx.author.id in airlist:
+            airlist.pop(ctx.author.id)
+            await ctx.send("o7 you're no longer in the queue", ephemeral = True)
+            return
+        await ctx.send("you're not even IN the queue (anymore at least)")
+
+    @server.command(name="getqueue")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def gq(self, ctx):
+        global airlist
+        people = ""
+        if len(airlist) > 0:
+            for id in airlist:
+                person = await self.bot.fetch_user(id)
+                if person:
+                    if person.display_name:
+                        people = people + person.display_name + " and "
+                    else:
+                        people = people + person.global_name + " and "
+                else:
+                    people = people + " person-bot-can't-find-name-of "
+            people = people[:len(people) - 4]
+        else:
+            people = "nobody.\nYou may wanna server enqueue .-."
+
+        await ctx.send(people)
 
     async def getWaitList(self):
         global airlist
