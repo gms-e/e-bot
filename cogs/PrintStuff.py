@@ -792,7 +792,10 @@ class PrintStuff(commands.Cog):
     #-----------------------------------Anim progress tracker-----------------------------------------#
     @tasks.loop(minutes=120)
     async def task(self):
-        await asyncio.sleep(minutes = 60 - datetime.datetime.now().minute)
+        delay = 60 - datetime.datetime.now().minute
+        if delay > 0:
+            print(f"passing time in {delay} minutes")
+            await asyncio.sleep(delay * 60)
         try:
             channel = self.bot.get_channel(1282010600322629652)
             sixth = self.bot.get_channel(1264704750633619486)

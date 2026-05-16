@@ -492,7 +492,7 @@ class DoorStuff(commands.Cog):
         delay = 60 - datetime.datetime.now().minute
         if delay > 0:
             print(f"passing time in {delay} minutes")
-            await asyncio.sleep(minutes = delay)
+            await asyncio.sleep(delay * 60)
         await self.printto("updating door/server hours...")
         times = {}
 
@@ -503,8 +503,16 @@ class DoorStuff(commands.Cog):
             for id in airlist:
                 if airlist.get(id, 0) > 1:
                     airlist[id] = airlist[id] - 1
+
                 if airlist.get(id, 0) < 1:
-                    airlist.pop(id)
+                    pid = airlist.pop(id)
+
+                    person = self.bot.get_user(pid)
+                    if person is None:
+                        person = await self.bot.fetch_user(pid)
+                    await person.send("you timed out of the queue .-.\nI guess yoyu gotta ask someone to join you in it")
+
+
             await self.printto(airlist)
             await pstuf.setWaitList(airlist)
 
