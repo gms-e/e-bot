@@ -499,10 +499,8 @@ class DoorStuff(commands.Cog):
         pstuf = self.bot.get_cog("PrintStuff")
 
         airlist = await pstuf.getWaitList()
-        if len(airlist) > 0:
+        if len(airlist) >= 0:
             for id in airlist:
-                if airlist.get(id, 0) > 1:
-                    airlist[id] = airlist[id] - 1
 
                 if airlist.get(id, 0) < 1:
                     pid = airlist.pop(id)
@@ -511,6 +509,9 @@ class DoorStuff(commands.Cog):
                     if person is None:
                         person = await self.bot.fetch_user(pid)
                     await person.send("you timed out of the queue .-.\nI guess yoyu gotta ask someone to join you in it")
+
+                if airlist.get(id, 0) >= 1:
+                    airlist[id] = airlist[id] - 1
 
 
             await self.printto(airlist)

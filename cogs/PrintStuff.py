@@ -536,6 +536,15 @@ class PrintStuff(commands.Cog):
             return
         await ctx.send("you're not even IN the queue (anymore at least)")
 
+        try:
+            await ctx.typing()
+            server = mcstatus.JavaServer.lookup("includes-trickery.gl.joinmc.link")
+            if server.status():
+                print(server.status())
+                await ctx.send("I think the server's up anyways, may wanna check that")
+        except Exception as e:
+            print(e)
+
     @server.command(name="getqueue")
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
@@ -557,6 +566,14 @@ class PrintStuff(commands.Cog):
             people = "nobody.\nYou may wanna server enqueue .-."
 
         await ctx.send(people)
+        try:
+            await ctx.typing()
+            server = mcstatus.JavaServer.lookup("includes-trickery.gl.joinmc.link")
+            if server.status():
+                print(server.status())
+                await ctx.send("Doesn't matter because I'm pretty sure the server's already up, might wanna check that")
+        except Exception as e:
+            print(e)
 
     async def getWaitList(self):
         global airlist
