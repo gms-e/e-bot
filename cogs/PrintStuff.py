@@ -22,6 +22,7 @@ from wonderwords import RandomWord
 
 schrodinger = {}
 airlist = {}
+partylist = {}
 
 stopp = False
 bluff = False
@@ -575,13 +576,113 @@ class PrintStuff(commands.Cog):
         except Exception as e:
             print(e)
 
-    async def getWaitList(self):
+    async def getAirList(self):
         global airlist
         return airlist
 
-    async def setWaitList(self, glist):
+    async def setAirList(self, glist):
         global airlist
         airlist = glist
+
+
+
+
+    @commands.hybrid_group(name="party")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def party(self, ctx):
+        print("obsolete")
+
+    @party.command(name="enqueue")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def pq(self, ctx, hours: int = 3):
+        if hours > 12:
+            await ctx.send("I don't believe you'd wait more than 12 hours")
+            return
+        if hours <= 0:
+            await ctx.send("that's... not how time works.")
+            return
+
+
+        global partylist
+        if ctx.author.id in partylist:
+            await ctx.send("o7 refreshed your hours in the waitlist, ask someone else to help open it ig", ephemeral = True)
+            partylist[ctx.author.id] = hours
+            return
+        partylist[ctx.author.id] = hours
+
+        if len(partylist) > 2:
+            try:
+                people = ""
+                for key in partylist:
+                    person = await self.bot.fetch_user(key)
+                    if person:
+                        if person.display_name:
+                            people = people + person.display_name + " and "
+                        else:
+                            people = people + person.global_name + " and "
+                    else:
+                        people = people + " someone and "
+                people = people[:len(people) - 4]
+
+                await ctx.send(f"<@721389007426158633> we got {people} waiting for server do the thing")
+                partylist.clear()
+                return
+            except Exception as e:
+                await ctx.send(e)
+                return
+        print("e")
+        await ctx.send("Cool, you're in the waitlist now. If a few others are also waiting then he'll open the server", ephemeral = True)
+
+
+
+
+    @party.command(name="dequeue")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def pdq(self, ctx):
+        global partylist
+        if ctx.author.id in partylist:
+            partylist.pop(ctx.author.id)
+            await ctx.send("o7 you're no longer in the queue", ephemeral = True)
+            return
+        await ctx.send("you're not even IN the queue (anymore at least)")
+
+
+
+    @party.command(name="getqueue")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def pgq(self, ctx):
+        global partylist
+        people = ""
+        if len(partylist) > 0:
+            for id in partylist:
+                person = await self.bot.fetch_user(id)
+                if person:
+                    if person.display_name:
+                        people = people + person.display_name + " and "
+                    else:
+                        people = people + person.global_name + " and "
+                else:
+                    people = people + " person-bot-can't-find-name-of "
+            people = people[:len(people) - 4]
+        else:
+            people = "nobody.\nYou may wanna server enqueue .-."
+
+        await ctx.send(people)
+
+
+
+    async def getPartyList(self):
+        global partylist
+        return partylist
+
+    async def setPartyList(self, glist):
+        global partylist
+        partylist = glist
+
 
     #--------------------------------------Ping omar-----------------------------------------------#
     @commands.hybrid_command(name = "omarhelpweneedyougeton")

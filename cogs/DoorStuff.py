@@ -487,6 +487,12 @@ class DoorStuff(commands.Cog):
             await self.printto("An error occurred:", type(error).__name__)
             await self.printto(str(error))
 
+
+
+
+
+
+
     @tasks.loop(minutes=60)  # Runs every hour
     async def timepass(self):
         delay = 60 - datetime.datetime.now().minute
@@ -498,24 +504,48 @@ class DoorStuff(commands.Cog):
 
         pstuf = self.bot.get_cog("PrintStuff")
 
-        airlist = await pstuf.getWaitList()
+        #decrement queue time for aeronautics server
+        airlist = await pstuf.getAirList()
         if len(airlist) >= 0:
             for id in airlist:
 
-                if airlist.get(id, 0) < 1:
+                if airlist.get(id, 0) <= 0:
                     pid = airlist.pop(id)
 
                     person = self.bot.get_user(pid)
                     if person is None:
                         person = await self.bot.fetch_user(pid)
-                    await person.send("you timed out of the queue .-.\nI guess yoyu gotta ask someone to join you in it")
+                    await person.send("you timed out of the queue .-.\nI guess you gotta ask someone to join you in it\n-# (and rejoin it yourself)")
 
                 if airlist.get(id, 0) >= 1:
                     airlist[id] = airlist[id] - 1
 
 
+
             await self.printto(airlist)
-            await pstuf.setWaitList(airlist)
+            await pstuf.setAirList(airlist)
+
+
+        #decrement time for minecraft party (if it ever happens)
+        plist = await pstuf.getPartyList()
+        if len(plist) >= 0:
+            for id in plist:
+
+                if plist.get(id, 0) <= 0:
+                    pid = plist.pop(id)
+
+                    person = self.bot.get_user(pid)
+                    if person is None:
+                        person = await self.bot.fetch_user(pid)
+                    await person.send(
+                        "you timed out of the queue .-.\nI guess you gotta ask someone to join you in it\n-# (and rejoin it yourself)")
+
+                if plist.get(id, 0) >= 1:
+                    plist[id] = plist[id] - 1
+
+            await self.printto(plist)
+            await pstuf.setPartyList(airlist)
+
 
         try:
             mcb = await self.bot.fetch_guild(773015467753209888)
