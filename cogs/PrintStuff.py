@@ -626,14 +626,14 @@ class PrintStuff(commands.Cog):
                         people = people + " someone and "
                 people = people[:len(people) - 4]
 
-                await ctx.send(f"<@721389007426158633> we got {people} waiting for server do the thing")
+                await ctx.send(f"<@40519745283062912> MAAAAAAAAAARIOOOOOOOOOOOOO\nwe got {people} waiting for mc party do the thing")
                 partylist.clear()
                 return
             except Exception as e:
                 await ctx.send(e)
                 return
         print("e")
-        await ctx.send("Cool, you're in the waitlist now. If a few others are also waiting then he'll open the server", ephemeral = True)
+        await ctx.send("Cool, you're in the waitlist now. If a few others are also waiting then maybe mc party will be played for the first time since the 1400's", ephemeral = True)
 
 
 
@@ -645,7 +645,7 @@ class PrintStuff(commands.Cog):
         global partylist
         if ctx.author.id in partylist:
             partylist.pop(ctx.author.id)
-            await ctx.send("o7 you're no longer in the queue", ephemeral = True)
+            await ctx.send("o7 you hate mariofan and minecraft party", ephemeral = True)
             return
         await ctx.send("you're not even IN the queue (anymore at least)")
 
@@ -669,7 +669,7 @@ class PrintStuff(commands.Cog):
                     people = people + " person-bot-can't-find-name-of "
             people = people[:len(people) - 4]
         else:
-            people = "nobody.\nYou may wanna server enqueue .-."
+            people = "nobody.\nYou may wanna party enqueue .-.\nit's been so looooonnnnnnnnnnnngggggggg\n# since we've last been on the woooooooorrrrllllllllllllllllddd\nthat's slowly been forgoooooooteeeeeeeeeeeennnnnn"
 
         await ctx.send(people)
 

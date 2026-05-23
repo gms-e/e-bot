@@ -544,7 +544,7 @@ class DoorStuff(commands.Cog):
                     plist[id] = plist[id] - 1
 
             await self.printto(plist)
-            await pstuf.setPartyList(airlist)
+            await pstuf.setPartyList(plist)
 
 
         try:
