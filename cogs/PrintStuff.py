@@ -121,6 +121,38 @@ class PrintStuff(commands.Cog):
                 if attached.filename in schrodinger[message.author.id]:
                     await message.delete()
                     return
+        if message.author.id == 916883861634441286 and "t" in message.content.lower():
+            await message.author.send(message.content + "\n:tea:")
+
+            await message.delete()
+        #-----------------------------------------kill tiss I guess--------------------------------------#
+        if "tiss" in message.content.lower():
+            count = 0
+            count += message.content.lower().count(" tiss ")
+            count += message.content.lower().count(" tiss.")
+            count += message.content.lower().count("*tiss")
+            count += message.content.lower().count("_tiss")
+            count += message.content.lower().count("_tiss")
+            count += message.content.lower().count("~tiss")
+            count += message.content.lower().count(" tiss!")
+            count += message.content.lower().count(" tiss,")
+
+
+            if len(message.content) > 2 and message.content.lower()[-2:] == " tiss":
+                count += 1
+            if len(message.content) > 2 and message.content.lower()[:2] == "tiss ":
+                count += 1
+            if message.content.lower() == "tiss":
+                count += 1
+            print(count)
+            if count > 0 or message.author.id == 916883861634441286:
+                try:
+                    await message.author.send("Mariofan sends his regards")
+                    await message.delete()
+                    return
+                except Exception as e:
+                    print(e)
+
         # ---------------------------------------detect & count e-------------------------------------------#
         if "e" in message.content.lower():
             ecounts = {}
@@ -1506,7 +1538,7 @@ class PrintStuff(commands.Cog):
     @quote.command(name="from")
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def fromQ(self, ctx, guy: Literal["Anth", "Astro", "CB", "Edwosk", "Josh", "Mariofan", "Meowsor", "Omar", "Otter", "Rover", "Other"], ephem=False):
+    async def fromQ(self, ctx, guy: Literal["Anth", "Astro", "CB", "Edwosk", "Josh", "Mariofan", "Meowsor", "Omar", "Other"], ephem = False): # "Otter", "Rover"], ephem=False):
         try:
             pulled = 8
             match guy:

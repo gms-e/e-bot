@@ -84,8 +84,10 @@ class EiStuff(commands.Cog):
     @commands.hybrid_command(name = "ei_as")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def ei(self, ctx, person: Literal["Astro", "Josh", "Rover"], inputted: str):
+    async def ei(self, ctx, person: Literal[""], inputted: str):
         global key
+        await ctx.send("that's not a valid input")
+        return
 
         try:
 
