@@ -28,6 +28,9 @@ stopp = False
 bluff = False
 
 killword = ""
+letterword = ""
+letterSucker = None
+suckyLetter = ""
 
 class PrintStuff(commands.Cog):
     def __init__(self, bot):
@@ -62,6 +65,9 @@ class PrintStuff(commands.Cog):
     async def on_ready(self):
         await self.printto("Print Stuff online")
         global killword
+        global letterword
+        global letterSucker
+        global suckyLetter
         try:
             cheekypeeker = self.bot.get_user(702906770003198003)
             usedafavor = self.bot.get_user(405197452833062912)
@@ -77,6 +83,27 @@ class PrintStuff(commands.Cog):
             while "-" in killword or "_" in killword:
                 killword = r.word()
 
+
+            suckyLetter = random.choice(string.ascii_lowercase)
+
+            letterword = r.word()
+            while "-" in letterword or "_" in letterword or suckyLetter in letterword:
+                letterword = r.word()
+
+
+            suckerlist = [405197452833062912, 341797788918480897, 617347174120030208, 916883861634441286,
+            770464351336923157, 721389007426158633, 450811106504605706, 702906770003198003, 916883861634441286]
+            letterSucker = self.bot.get_user(suckerlist[random.randint(0, len(suckerlist) - 1)])
+            if letterSucker is None:
+                letterSucker = await self.bot.fetch_user(405197452833062912)
+
+
+            sixth = self.bot.get_channel(1264704750633619486)
+            if sixth is None:
+                sixth = await self.bot.fetch_channel(1264704750633619486)
+            await sixth.send(f"{letterSucker.global_name} is banned from {suckyLetter} today\nUnless they solve my word- never mind that doesn't exist yet\n-# it woulda been {letterword} tho")
+
+
             await cheekypeeker.send(f"The word is {killword}, I'm sure that's not a common one, right?")
             await usedafavor.send(f"The word is {killword}, I'm sure that's not a common one, right?")
 
@@ -84,10 +111,46 @@ class PrintStuff(commands.Cog):
             print(error)
             print(str(error))
 
+    @commands.Cog.listener()
+    async def on_message_edit(self, before, after):
+        global suckyLetter
 
+        global letterSucker
+        if after.author.global_name == letterSucker.global_name:
+            if suckyLetter in after.content.lower():
+                await after.send(f"nah you ain't getting away with {suckyLetter} through an edit\n-# I'll add a wordle to fight for freedom later tho :P")
+        if "tiss" in after.content.lower():
+            count = 0
+            count += after.content.lower().count(" tiss ")
+            count += after.content.lower().count(" tiss.")
+            count += after.content.lower().count("*tiss")
+            count += after.content.lower().count("_tiss")
+            count += after.content.lower().count("_tiss")
+            count += after.content.lower().count("~tiss")
+            count += after.content.lower().count(" tiss!")
+            count += after.content.lower().count(" tiss,")
+
+            if len(after.content) > 2 and after.content.lower()[-2:] == " tiss":
+                count += 1
+            if len(after.content) > 2 and after.content.lower()[:2] == "tiss ":
+                count += 1
+            if after.content.lower() == "tiss":
+                count += 1
+            print(count)
+            if count > 0 or after.author.id == 916883861634441286:
+                try:
+                    await after.author.send("Mariofan sends his regards")
+                    await after.delete()
+                    return
+                except Exception as e:
+                    print(e)
+        if before.author.bot:
+            return
     #-----------------------------------------
     @commands.Cog.listener()
     async def on_message(self, message):
+        global letterSucker
+        global suckyLetter
         global schrodinger
 
         #---------------------------------------notices your non anon------------------------------------------#
@@ -121,10 +184,9 @@ class PrintStuff(commands.Cog):
                 if attached.filename in schrodinger[message.author.id]:
                     await message.delete()
                     return
-        if message.author.id == 916883861634441286 and "t" in message.content.lower():
-            await message.author.send(message.content + "\n:tea:")
-
-            await message.delete()
+        if message.author.global_name == letterSucker.global_name:
+            if suckyLetter in message.content.lower():
+                await message.send(f"nah you're not allowed to use {suckyLetter}\n-# I'll add a wordle to fight for freedom later")
         #-----------------------------------------kill tiss I guess--------------------------------------#
         if "tiss" in message.content.lower():
             count = 0
