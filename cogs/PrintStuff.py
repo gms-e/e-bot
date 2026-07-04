@@ -118,7 +118,8 @@ class PrintStuff(commands.Cog):
         global letterSucker
         if after.author.global_name == letterSucker.global_name:
             if suckyLetter in after.content.lower():
-                await after.send(f"nah you ain't getting away with {suckyLetter} through an edit\n-# I'll add a wordle to fight for freedom later tho :P")
+                await after.reply(f"nah you ain't getting away with {suckyLetter} through an edit\n-# I'll add a wordle to fight for freedom later tho :P")
+                await after.delete()
         if "tiss" in after.content.lower():
             count = 0
             count += after.content.lower().count(" tiss ")
@@ -186,7 +187,9 @@ class PrintStuff(commands.Cog):
                     return
         if message.author.global_name == letterSucker.global_name:
             if suckyLetter in message.content.lower():
-                await message.send(f"nah you're not allowed to use {suckyLetter}\n-# I'll add a wordle to fight for freedom later")
+                await message.reply(f"nah you're not allowed to use {suckyLetter}\n-# I'll add a wordle to fight for freedom later")
+                await message.delete()
+                return
         #-----------------------------------------kill tiss I guess--------------------------------------#
         if "tiss" in message.content.lower():
             count = 0
