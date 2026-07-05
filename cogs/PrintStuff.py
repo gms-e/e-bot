@@ -31,6 +31,8 @@ killword = ""
 letterword = ""
 letterSucker = None
 suckyLetter = ""
+wordleOpen = False
+wordleSolved = False
 
 class PrintStuff(commands.Cog):
     def __init__(self, bot):
@@ -68,6 +70,9 @@ class PrintStuff(commands.Cog):
         global letterword
         global letterSucker
         global suckyLetter
+        global wordleOpen
+        global wordleSolved
+
         try:
             cheekypeeker = self.bot.get_user(702906770003198003)
             usedafavor = self.bot.get_user(405197452833062912)
@@ -91,17 +96,21 @@ class PrintStuff(commands.Cog):
                 letterword = r.word()
 
 
-            suckerlist = [405197452833062912, 341797788918480897, 617347174120030208, 916883861634441286,
-            770464351336923157, 721389007426158633, 450811106504605706, 702906770003198003, 916883861634441286]
-            letterSucker = self.bot.get_user(suckerlist[random.randint(0, len(suckerlist) - 1)])
-            if letterSucker is None:
-                letterSucker = await self.bot.fetch_user(405197452833062912)
-
+            suckerlist = [405197452833062912, 617347174120030208, 916883861634441286, 770464351336923157, 721389007426158633, 450811106504605706, 702906770003198003, 916883861634441286]
+            letterSucker = suckerlist[random.randint(0, len(suckerlist) - 1)]
 
             sixth = self.bot.get_channel(1264704750633619486)
             if sixth is None:
                 sixth = await self.bot.fetch_channel(1264704750633619486)
-            await sixth.send(f"{letterSucker.global_name} is banned from {suckyLetter} today\nUnless they solve my word- never mind that doesn't exist yet\n-# it woulda been {letterword} tho")
+
+            person = sixth.guild.get_member(letterSucker)
+            if person is None:
+                person = await sixth.guild.fetch_member(letterSucker)
+            print(letterSucker)
+
+            wordleOpen = False
+            wordleSolved = False
+            await sixth.send(f"{person.name} is banned from {suckyLetter} today\nUnless they solve my wordle that's real now :D")
 
 
             await cheekypeeker.send(f"The word is {killword}, I'm sure that's not a common one, right?")
@@ -116,9 +125,9 @@ class PrintStuff(commands.Cog):
         global suckyLetter
 
         global letterSucker
-        if after.author.global_name == letterSucker.global_name:
-            if suckyLetter in after.content.lower():
-                await after.reply(f"nah you ain't getting away with {suckyLetter} through an edit\n-# I'll add a wordle to fight for freedom later tho :P")
+        if after.author.id == letterSucker:
+            if suckyLetter in after.content.lower() and not wordleSolved:
+                await after.reply(f"nah you ain't getting away with {suckyLetter} through an edit\n-# use /wordlee to fight for your freedom :P")
                 await after.delete()
         if "tiss" in after.content.lower():
             count = 0
@@ -185,9 +194,9 @@ class PrintStuff(commands.Cog):
                 if attached.filename in schrodinger[message.author.id]:
                     await message.delete()
                     return
-        if message.author.global_name == letterSucker.global_name:
-            if suckyLetter in message.content.lower():
-                await message.reply(f"nah you're not allowed to use {suckyLetter}\n-# I'll add a wordle to fight for freedom later")
+        if message.author.id == letterSucker:
+            if suckyLetter in message.content.lower() and not wordleSolved:
+                await message.reply(f"nah you're not allowed to use {suckyLetter}\n-# use /wordlee to fight for your freedom :P")
                 await message.delete()
                 return
         #-----------------------------------------kill tiss I guess--------------------------------------#
@@ -959,6 +968,107 @@ class PrintStuff(commands.Cog):
         else:
             await ctx.send(content = "there, uh... there ain't an image there chief", ephemeral = True)
 
+    #---------------------------------------------Freedom wordle-----------------------------------------------#
+
+
+    @commands.hybrid_command(name="wordlee", brief="find word to unlock letter :D")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+
+    async def spoken(self, ctx, guess: str = "no guess so just show len"):
+        global letterSucker
+        global wordleOpen
+        global letterword
+        global wordleSolved
+
+        returnstring = ""
+
+        sixth = self.bot.get_channel(1264704750633619486)
+        if sixth is None:
+            sixth = await self.bot.fetch_channel(1264704750633619486)
+
+        person = sixth.guild.get_member(letterSucker)
+        if person is None:
+            person = await sixth.guild.fetch_member(letterSucker)
+
+        if ctx.author.id != letterSucker:
+            for char in letterword:
+                print(char)
+                returnstring += ":black_large_square: "
+            if wordleOpen:
+                await ctx.send(f"It was already open, but only the person supressed can do it\n-# aka{person.name}\n{returnstring}")
+            else:
+                wordleOpen = True
+                await ctx.send(f"o7 the person who's supressed can do the wordle now\n{returnstring} ({len(letterword)})")
+            return
+        else:
+            if not wordleOpen:
+                await ctx.send("Soooooorrrryyyyyyyyyyyyyyy, you gotta have someone else run the command to open the wordle...\nyeeeeaaaaaaaahhhhhhhhhhhhh blame josh for that")
+                return
+        if guess == letterword:
+            wordleSolved = True
+            toregional = ""
+            for char in guess:
+                returnstring += ":green_square: "
+                toregional += f":regional_indicator_{char}: "
+            await ctx.send(f"{toregional}\n{returnstring}\ncongrats, you're FREEEEEEEEEEEEEEEEEEEEEEE\nyou can now use {suckyLetter}")
+            return
+
+
+        try:
+            if guess == None:
+                for char in letterword:
+                    returnstring += ":black_large_square: "
+                await ctx.send(returnstring + "\n" + len(letterword))
+                return
+            if " " in guess:
+                for char in letterword:
+                    returnstring += ":black_large_square: "
+                await ctx.send(f"The word is {len(letterword)} letters long\n{returnstring}")
+                return
+            if len(guess) < len(letterword):
+                for char in letterword:
+                    returnstring += ":black_large_square: "
+                await ctx.send(f"too short, the word is only {len(letterword)} letters long\n" + returnstring)
+                return
+
+            if len(guess) > len(letterword):
+                for char in letterword:
+                    returnstring += ":black_large_square: "
+                await ctx.send(f"too long, the word is only {len(letterword)} letters long\n" + returnstring)
+                return
+
+            greens = []
+            yellows = []
+            usedJs = []
+            for i in range(len(letterword)):
+                if letterword[i] == guess[i]:
+                    greens.append(i)
+
+            for i in range(len(letterword)):
+                if i in greens:
+                    continue
+                for j in range(len(letterword)):
+                    if letterword[i] == guess[j] and j not in usedJs and i not in greens and j not in greens:
+                        yellows.append(j)
+                        usedJs.append(j)
+                        break
+
+            for i in range(len(letterword)):
+                if i in greens:
+                    returnstring += ":green_square: "
+                elif i in yellows:
+                    returnstring += ":yellow_square: "
+                else:
+                    returnstring += ":black_large_square: "
+            toregional = ""
+            for char in guess:
+                toregional += f":regional_indicator_{char}: "
+            await ctx.send(toregional + "\n" + returnstring)
+        except Exception as e:
+            print(e)
+            print(type(e))
+
     #----------------------------------------Hit singer Kasane Teto----------------------------------------------------#
 
     @commands.hybrid_group(name = "daily", breif = "teto")
@@ -1007,6 +1117,13 @@ class PrintStuff(commands.Cog):
     #-----------------------------------Anim progress tracker-----------------------------------------#
     @tasks.loop(minutes=120)
     async def task(self):
+        global letterSucker
+        global suckyLetter
+        global letterword
+        global wordleOpen
+        global wordleSolved
+
+
         delay = 60 - datetime.datetime.now().minute
         if delay > 0:
             print(f"passing time in {delay} minutes")
@@ -1034,6 +1151,35 @@ class PrintStuff(commands.Cog):
 
                 while "-" in killword or "_" in killword:
                     killword = r.word()
+
+                suckyLetter = random.choice(string.ascii_lowercase)
+
+                letterword = r.word()
+                while "-" in letterword or "_" in letterword or suckyLetter in letterword:
+                    letterword = r.word()
+
+                suckerlist = [405197452833062912, 617347174120030208, 916883861634441286,
+                              770464351336923157, 721389007426158633, 450811106504605706, 702906770003198003,
+                              916883861634441286]
+                letterSucker = suckerlist[random.randint(0, len(suckerlist) - 1)]
+
+                sixth = self.bot.get_channel(1264704750633619486)
+                if sixth is None:
+                    sixth = await self.bot.fetch_channel(1264704750633619486)
+
+
+                person = sixth.guild.get_member(letterSucker)
+                if person is None:
+                    person = await sixth.guild.fetch_member(letterSucker)
+
+                print(letterSucker)
+
+                wordleOpen = False
+                wordleSolved = False
+
+                await sixth.send(
+                    f"{person.name} is banned from {suckyLetter} today\nUnless they solve my wordlee that's REAL now")
+
                 cheekypeeker = self.bot.get_user(702906770003198003)
                 usedafavor = self.bot.get_user(405197452833062912)
                 if cheekypeeker is None:
