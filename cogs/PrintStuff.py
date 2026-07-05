@@ -31,8 +31,9 @@ killword = ""
 letterword = ""
 letterSucker = None
 suckyLetter = ""
-wordleOpen = False
+wordleOpeners = {}
 wordleSolved = False
+wordleGuesses = 4
 
 class PrintStuff(commands.Cog):
     def __init__(self, bot):
@@ -70,8 +71,8 @@ class PrintStuff(commands.Cog):
         global letterword
         global letterSucker
         global suckyLetter
-        global wordleOpen
         global wordleSolved
+        global wordleGuesses
 
         try:
             cheekypeeker = self.bot.get_user(702906770003198003)
@@ -106,10 +107,9 @@ class PrintStuff(commands.Cog):
             person = sixth.guild.get_member(letterSucker)
             if person is None:
                 person = await sixth.guild.fetch_member(letterSucker)
-            print(letterSucker)
 
-            wordleOpen = False
             wordleSolved = False
+            wordleGuesses = 4
             await sixth.send(f"{person.name} is banned from {suckyLetter} today\nUnless they solve my wordle that's real now :D")
 
 
@@ -977,10 +977,21 @@ class PrintStuff(commands.Cog):
 
     async def spoken(self, ctx, guess: str = "no guess so just show len"):
         global letterSucker
-        global wordleOpen
+        global wordleOpeners
         global letterword
         global wordleSolved
+        global wordleGuesses
 
+        parentmessage = None
+
+        if wordleSolved:
+            await ctx.send(f"The wordle's already been solved, it was {letterword}")
+            return
+
+        async for message in ctx.channel.history(limit=12):
+            if "wordlee _ _ _ _ _ _\n" in message.content and message.author == self.bot.user:
+                parentmessage = message
+                break
         returnstring = ""
 
         sixth = self.bot.get_channel(1264704750633619486)
@@ -993,30 +1004,35 @@ class PrintStuff(commands.Cog):
 
         if ctx.author.id != letterSucker:
             for char in letterword:
-                print(char)
                 returnstring += ":black_large_square: "
-            if wordleOpen:
-                await ctx.send(f"It was already open, but only the person supressed can do it\n-# aka{person.name}\n{returnstring}")
+            if ctx.author.id in wordleOpeners:
+                await ctx.send(f"You've already opened it, you gotta wait {wordleOpeners[ctx.author.id]} minutes to give more guesses")
             else:
-                wordleOpen = True
-                await ctx.send(f"o7 the person who's supressed can do the wordle now\n{returnstring} ({len(letterword)})")
+                wordleGuesses = 6
+                wordleOpeners[ctx.author.id] = 60
+                await ctx.send(f"o7 the person who's supressed now has 6 guesses\n{returnstring} ({len(letterword)})")
+                while wordleOpeners[ctx.author.id] > 0:
+                    wordleOpeners[ctx.author.id] = wordleOpeners[ctx.author.id] - 1
+                    await asyncio.sleep(60)
+                wordleOpeners.pop(ctx.author.id)
             return
         else:
-            if not wordleOpen:
-                await ctx.send("Soooooorrrryyyyyyyyyyyyyyy, you gotta have someone else run the command to open the wordle...\nyeeeeaaaaaaaahhhhhhhhhhhhh blame josh for that")
+
+            if wordleGuesses < 1:
+                await ctx.send("You're out of guesses, ask someone for more or accept fate")
                 return
-        if guess == letterword:
-            wordleSolved = True
-            toregional = ""
-            for char in guess:
-                returnstring += ":green_square: "
-                toregional += f":regional_indicator_{char}: "
-            await ctx.send(f"{toregional}\n{returnstring}\ncongrats, you're FREEEEEEEEEEEEEEEEEEEEEEE\nyou can now use {suckyLetter}")
-            return
+            if guess == letterword:
+                wordleSolved = True
+                toregional = ""
+                for char in guess:
+                    returnstring += ":green_square: "
+                    toregional += f":regional_indicator_{char}: "
+                await ctx.send(f"{toregional}\n{returnstring}\ncongrats, you're FREEEEEEEEEEEEEEEEEEEEEEE\nyou can now use {suckyLetter}")
+                return
 
 
         try:
-            if guess == None:
+            if guess is None:
                 for char in letterword:
                     returnstring += ":black_large_square: "
                 await ctx.send(returnstring + "\n" + len(letterword))
@@ -1024,18 +1040,19 @@ class PrintStuff(commands.Cog):
             if " " in guess:
                 for char in letterword:
                     returnstring += ":black_large_square: "
-                await ctx.send(f"The word is {len(letterword)} letters long\n{returnstring}")
+
+                await ctx.send(f"The word is {len(letterword)} letters long\n{returnstring} (guesses left: {wordleGuesses}/6)")
                 return
             if len(guess) < len(letterword):
                 for char in letterword:
                     returnstring += ":black_large_square: "
-                await ctx.send(f"too short, the word is only {len(letterword)} letters long\n" + returnstring)
+                await ctx.send(f"too short, the word is only {len(letterword)} letters long\n" + returnstring + " _ _")
                 return
 
             if len(guess) > len(letterword):
                 for char in letterword:
                     returnstring += ":black_large_square: "
-                await ctx.send(f"too long, the word is only {len(letterword)} letters long\n" + returnstring)
+                await ctx.send(f"too long, the word is only {len(letterword)} letters long\n" + returnstring + " _ _")
                 return
 
             greens = []
@@ -1064,7 +1081,12 @@ class PrintStuff(commands.Cog):
             toregional = ""
             for char in guess:
                 toregional += f":regional_indicator_{char}: "
-            await ctx.send(toregional + "\n" + returnstring)
+
+            wordleGuesses = wordleGuesses - 1
+            if parentmessage:
+                await parentmessage.edit(content = parentmessage.content + "\n" + toregional + "\n" + returnstring +  f"({len(letterword)}) + guesses left: {wordleGuesses}/6")
+            else:
+                await ctx.send("wordlee _ _ _ _ _ _\n" + toregional + "\n" + returnstring +  f"({len(letterword)}) guesses left: {wordleGuesses}/6")
         except Exception as e:
             print(e)
             print(type(e))
@@ -1120,8 +1142,8 @@ class PrintStuff(commands.Cog):
         global letterSucker
         global suckyLetter
         global letterword
-        global wordleOpen
         global wordleSolved
+        global wordleGuesses
 
 
         delay = 60 - datetime.datetime.now().minute
@@ -1174,7 +1196,7 @@ class PrintStuff(commands.Cog):
 
                 print(letterSucker)
 
-                wordleOpen = False
+                wordleGuesses = 4
                 wordleSolved = False
 
                 await sixth.send(
@@ -1873,6 +1895,7 @@ class PrintStuff(commands.Cog):
         use = False
         print("left & right cats:")
         print(leftcat, rightcat)
+
 
         if leftcat is None:
             avatar_bytes = await user.avatar.read()
