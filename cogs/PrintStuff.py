@@ -84,13 +84,13 @@ class PrintStuff(commands.Cog):
                 usedafavor = await self.bot.fetch_user(405197452833062912)
 
 
+            suckyLetter = random.choice(string.ascii_lowercase)
             r = RandomWord()
             killword = r.word()
-            while "-" in killword or "_" in killword:
+            while "-" in killword or "_" in killword or suckyLetter not in killword:
                 killword = r.word()
 
 
-            suckyLetter = random.choice(string.ascii_lowercase)
 
             letterword = r.word()
             while "-" in letterword or "_" in letterword or suckyLetter in letterword:
@@ -174,14 +174,14 @@ class PrintStuff(commands.Cog):
             cnt = await self.oddyspeak(cnt)
             await ch.send(cnt)
 
-        if "testingsomething" in message.content:
-            print("test on")
-            command = self.bot.get_command('daily teto')
-            print(command)
-            try:
-                await command(await self.bot.get_context(message))
-            except Exception as error:
-                print(error)
+        # if "testingsomething" in message.content:
+        #     print("test on")
+        #     command = self.bot.get_command('daily teto')
+        #     print(command)
+        #     try:
+        #         await command(await self.bot.get_context(message))
+        #     except Exception as error:
+        #         print(error)
         #----------------------------------------killing x image sender----------------------------------------#
         if "killing" in message.content.lower():
             await self.catimg(message)
