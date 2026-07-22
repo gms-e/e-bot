@@ -20,6 +20,8 @@ import subprocess
 import io
 from wonderwords import RandomWord
 
+import unicodedata
+
 schrodinger = {}
 airlist = {}
 partylist = {}
@@ -93,7 +95,7 @@ class PrintStuff(commands.Cog):
 
 
             letterword = r.word()
-            while "-" in letterword or "_" in letterword or suckyLetter in letterword:
+            while "-" in letterword or "_" in letterword or suckyLetter in unicodedata.normalize('NFKD', letterword):
                 letterword = r.word()
 
 
@@ -126,7 +128,7 @@ class PrintStuff(commands.Cog):
 
         global letterSucker
         if after.author.id == letterSucker:
-            if suckyLetter in after.content.lower() and not wordleSolved:
+            if suckyLetter in unicodedata.normalize('NFKD', after.content.lower()) and not wordleSolved:
                 await after.reply(f"nah you ain't getting away with {suckyLetter} through an edit\n-# use /wordlee to fight for your freedom :P")
                 await after.delete()
         if "tiss" in after.content.lower():
@@ -195,7 +197,7 @@ class PrintStuff(commands.Cog):
                     await message.delete()
                     return
         if message.author.id == letterSucker:
-            if suckyLetter in message.content.lower() and not wordleSolved:
+            if suckyLetter in unicodedata.normalize('NFKD', message.content.lower()) and not wordleSolved:
                 await message.reply(f"nah you're not allowed to use {suckyLetter}\n-# use /wordlee to fight for your freedom :P")
                 await message.delete()
                 return
@@ -825,6 +827,32 @@ class PrintStuff(commands.Cog):
         except Exception as e:
             print(e)
 
+    @commands.hybrid_command(name="setletterstuff")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def setletterstuff(self, ctx, target:discord.Member = None, letter:str = None):
+        if letter and len(letter) > 1:
+            letter = letter[0]
+        try:
+            global letterSucker
+            global suckyLetter
+            returnstr = ""
+            if ctx.author.id != 702906770003198003:
+                await ctx.send(f"You're not that guy pal, you're not that guy.\nbro was gonna set {"NOTHING" if not target and not letter else ""}{"target = " + target.name if target else ""} {"letter = " + letter if letter else ""}")
+                return
+            if target:
+                letterSucker = target.id
+                returnstr = f"{target.name} is now banned from the letter\n"
+            if letter:
+                suckyLetter = letter
+                returnstr = returnstr + f"the letter is now {suckyLetter}"
+            if not letter and not target:
+                returnstr = "You, ah... Didn't set any values"
+            await ctx.send(returnstr)
+        except Exception as e:
+            print(e)
+
+
         # --------------------------------------e-----------------------------------------#
     @commands.hybrid_command(name="e")
     @app_commands.allowed_installs(guilds=True, users=True)
@@ -1177,7 +1205,7 @@ class PrintStuff(commands.Cog):
                 suckyLetter = random.choice(string.ascii_lowercase)
 
                 letterword = r.word()
-                while "-" in letterword or "_" in letterword or suckyLetter in letterword:
+                while "-" in letterword or "_" in letterword or suckyLetter in unicodedata.normalize('NFKD', letterword):
                     letterword = r.word()
 
                 suckerlist = [405197452833062912, 617347174120030208, 916883861634441286,

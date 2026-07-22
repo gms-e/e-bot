@@ -57,13 +57,17 @@ async def on_ready():
 
 
     await printto(f'{bot.user} has connected to Discord! Version {discord.__version__}')
-    synced = await bot.tree.sync()
+    try:
+        synced = await bot.tree.sync()
 #     try:
 #         await timechecks.start()
 #     except Exception as error:
 #         await printto(error)
 #         await printto(str(error))
-    await printto(f"bot ready")
+        await printto(f"bot ready")
+    except Exception as e:
+        print(e)
+        print(type(e))
 #
 # # @tasks.loop(minutes=30) # Runs every 60 seconds (adjust as needed)
 # async def timechecks():
@@ -298,8 +302,8 @@ async def on_message(message):
 
 
     #----------------------------------respond to pings--------------------------------------------#
-    if  await usettings.get_value(message, message.author, "replyeyes") and bot.user.mentioned_in(message):
-        await message.add_reaction("👀")
+    # if  await usettings.get_value(message, message.author, "replyeyes") and bot.user.mentioned_in(message):
+    #     await message.add_reaction("👀")
         #------------------Calls mock when mock count over 0 and not escaped------------------------------#
     elif messageCount > 0 and message.author != bot.user and not "_ _" in message.content:
         if "https" in message.content:
@@ -334,14 +338,16 @@ marle = ["<:CircleFairy:1400643761528111105>", "<:Parlor:1400314790232199248>", 
          "<:CB:1400313849298550896>","<:Bubble:1400313836623495188>", "<:Wiki:1400313825735086081>",
          "<:Spacey:1400313811705270322>","<:Technician:1400313794944827513>"]
 
-@bot.tree.context_menu(name = "Random Marle Message")
-@app_commands.allowed_installs(guilds=True, users=False)
-@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-async def reactMarle(interaction: discord.Interaction, message: discord.Message):
-    cmarle = marle[random.randint(0, len(marle) - 1)]
-    await printto(cmarle, interaction.user.name)
-    await message.add_reaction(cmarle)
-    await interaction.response.send_message(f"{cmarle}'d it.", ephemeral=True)
+# @bot.tree.context_menu(name = "Random Marle Message")
+# @app_commands.allowed_installs(guilds=True, users=False)
+# @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+# async def reactMarle(interaction: discord.Interaction, message: discord.Message):
+#     cmarle = marle[random.randint(0, len(marle) - 1)]
+#     await printto(cmarle, interaction.user.name)
+#     await message.add_reaction(cmarle)
+#     await interaction.response.send_message(f"{cmarle}'d it.", ephemeral=True)
+
+
 
 @bot.tree.context_menu(name = "Marle Message With")
 @app_commands.allowed_installs(guilds=True, users=False)
@@ -436,6 +442,19 @@ async def killtracker(inter: discord.Interaction, message: discord.Message):
             await inter.response.send_message("Is there even a *link* in there?? not that I can tell\n._.", ephemeral=True)
     except Exception as e:
         print(e)
+
+
+
+@bot.tree.context_menu(name = "Collect Anth")
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+async def canpthure(interaction: discord.Interaction, message: discord.Message):
+    chanthnel = await bot.fetch_channel(1529322436741566526)
+    await chanthnel.send(f"-# {interaction.user.name} got an anth:")
+    await chanthnel.send(str(message.author.avatar.url))
+    await interaction.response.send_message("Anth Collected!", ephemeral=True)
+
+
 
 
 #---------------------------------command to reboot pc, for omar's eyes only----------------------------#
