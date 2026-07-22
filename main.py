@@ -449,10 +449,13 @@ async def killtracker(inter: discord.Interaction, message: discord.Message):
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 async def canpthure(interaction: discord.Interaction, message: discord.Message):
-    chanthnel = await bot.fetch_channel(1529322436741566526)
-    await chanthnel.send(f"-# {interaction.user.name} got an anth:")
-    await chanthnel.send(str(message.author.avatar.url))
-    await interaction.response.send_message("Anth Collected!", ephemeral=True)
+    try:
+        chanthnel = await bot.fetch_channel(1529322436741566526)
+        await chanthnel.send(f"-# {interaction.user.name} got an anth:")
+        await chanthnel.send(str(message.author.avatar.url))
+        await interaction.response.send_message("Anth Collected!", ephemeral=True)
+    except Exception as e:
+        print(e)
 
 
 
