@@ -52,6 +52,11 @@ async def printto(m: str):
         except Exception as error:
             print("ok that's enough try catch")
 
+
+async def setup_hook(self):
+    self.add_view(AnthView())
+
+
 @bot.event
 async def on_ready():
 
@@ -444,6 +449,24 @@ async def killtracker(inter: discord.Interaction, message: discord.Message):
         print(e)
 
 
+class AnthView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)  # Set timeout to None so it never expires
+
+    @discord.ui.button(label="That ain't anth", style=discord.ButtonStyle.red, custom_id="notanth")
+    async def notanthbutton(self, interaction: discord.Interaction, button: discord.ui.Button):
+        try:
+            async for msg in interaction.channel.history(before=interaction.message, limit=1):
+                if msg.author.id == interaction.client.user.id and "got an anth" in msg.content:
+                    await msg.delete()
+            await interaction.message.delete()
+        except Exception as error:
+            print(error)
+
+
+    @discord.ui.button(label="Yeah that's anth", style=discord.ButtonStyle.green, custom_id="isanth")
+    async def isanthbutton(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.message.edit(view=None)
 
 @bot.tree.context_menu(name = "Collect Anth")
 @app_commands.allowed_installs(guilds=True, users=True)
@@ -452,8 +475,7 @@ async def canpthure(interaction: discord.Interaction, message: discord.Message):
     try:
         chanthnel = await bot.fetch_channel(1529322436741566526)
         await chanthnel.send(f"-# {interaction.user.name} got an anth:")
-        await chanthnel.send(str(message.author.avatar.url))
-        await interaction.response.send_message("Anth Collected!", ephemeral=True)
+        await chanthnel.send(str(message.author.avatar.url), view = AnthView())
     except Exception as e:
         print(e)
 
