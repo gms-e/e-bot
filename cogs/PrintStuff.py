@@ -175,7 +175,11 @@ class PrintStuff(commands.Cog):
             await message.delete()
             cnt = await self.oddyspeak(cnt)
             await ch.send(cnt)
-
+        #-----------------------------------notices your non anth---------------------------------#
+        if message.channel.id == 1529322436741566526 and message.author.id != self.bot.uer.id:
+            await asyncio.sleep(60 * 4)
+            await message.delete()
+            return
         # if "testingsomething" in message.content:
         #     print("test on")
         #     command = self.bot.get_command('daily teto')
@@ -1198,8 +1202,9 @@ class PrintStuff(commands.Cog):
                     killword = r.word()
                     await sixth.send(f"the kill word was {oldword}, but now there's a new one so rip bozo I lived{"\n(unless I didn't live and got rebooted.)\nidk man it's not like that stuff persists" if random.random() < 0.5 else ""}")
 
+                suckyLetter = random.choice(string.ascii_lowercase)
 
-                while "-" in killword or "_" in killword:
+                while "-" in killword or "_" in killword or suckyLetter in unicodedata.normalize('NFKD', letterword):
                     killword = r.word()
 
                 suckyLetter = random.choice(string.ascii_lowercase)
