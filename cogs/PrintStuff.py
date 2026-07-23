@@ -837,7 +837,7 @@ class PrintStuff(commands.Cog):
             global letterSucker
             global suckyLetter
             returnstr = ""
-            if ctx.author.id != 702906770003198003:
+            if ctx.author.id != 702906770003198003 and ctx.author.id != 405197452833062912:
                 await ctx.send(f"You're not that guy pal, you're not that guy.\nbro was gonna set {"NOTHING" if not target and not letter else ""}{"target = " + target.name if target else ""} {"letter = " + letter if letter else ""}")
                 return
             if target:
