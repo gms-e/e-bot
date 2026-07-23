@@ -112,8 +112,12 @@ class PrintStuff(commands.Cog):
 
             wordleSolved = False
             wordleGuesses = 4
-            await sixth.send(f"{person.name} is banned from {suckyLetter} today\nUnless they solve my wordle that's real now :D")
+            squares = ""
 
+            for c in letterword:
+                squares = squares + ":black_medium_square:"
+            await sixth.send(
+                f"{person.name} is banned from {suckyLetter} today\n-# Unless they solve {squares}({len(letterword)}).")
 
             await cheekypeeker.send(f"The word is {killword}, I'm sure that's not a common one, right?")
             await usedafavor.send(f"The word is {killword}, I'm sure that's not a common one, right?")
@@ -1231,9 +1235,12 @@ class PrintStuff(commands.Cog):
 
                 wordleGuesses = 4
                 wordleSolved = False
+                squares = ""
 
+                for c in letterword:
+                    squares = squares + ":black_medium_square:"
                 await sixth.send(
-                    f"{person.name} is banned from {suckyLetter} today\nUnless they solve my wordlee that's REAL now")
+                    f"{person.name} is banned from {suckyLetter} today\n-# Unless they solve {squares}({len(letterword)}).")
 
                 cheekypeeker = self.bot.get_user(702906770003198003)
                 usedafavor = self.bot.get_user(405197452833062912)
