@@ -195,6 +195,8 @@ class PrintStuff(commands.Cog):
         #----------------------------------------killing x image sender----------------------------------------#
         if "killing" in message.content.lower():
             await self.catimg(message)
+        if len(message.content) > 2 and message.content.lower()[:3] == "die":
+            await self.catimg(message)
 
         usettings = self.bot.get_cog("SetStuff")
         #-----------------------------------------no proof-------------------------------------#
@@ -1989,6 +1991,12 @@ class PrintStuff(commands.Cog):
         content = message.content
         author = message.author
         channel = message.channel
+
+        try:
+            if content.lower()[:3] == "die":
+                content = "killing you"
+        except Exception as e:
+            print(e)
 
         quotee = content[content.lower().index("killing ") + 8:]
 
