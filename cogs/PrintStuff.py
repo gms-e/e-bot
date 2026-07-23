@@ -180,8 +180,8 @@ class PrintStuff(commands.Cog):
             cnt = await self.oddyspeak(cnt)
             await ch.send(cnt)
         #-----------------------------------notices your non anth---------------------------------#
-        if message.channel.id == 1529322436741566526 and message.author.id != self.bot.uer.id:
-            await asyncio.sleep(60 * 4)
+        if message.channel.id == 1529322436741566526 and message.author.id != self.bot.user.id:
+            await asyncio.sleep(240)
             await message.delete()
             return
         # if "testingsomething" in message.content:
