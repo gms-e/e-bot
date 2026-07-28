@@ -383,10 +383,10 @@ class PrintStuff(commands.Cog):
                     await guy.send("got the wordle on the last try, not even close")
 
         # -------------------------------------responds to bluff------------------------------------------#
-        global bluff
-        if bluff and "e, " in message.content and "bluff" not in message.content:
-            await message.reply("o7 on it", mention_author=False)
-            bluff = False
+        # global bluff
+        # if bluff and "e, " in message.content and "bluff" not in message.content:
+        #     await message.reply("o7 on it", mention_author=False)
+        #     bluff = False
 
         #---------------------------------------door stuff print stuff collab-----------------------------------#
         if message.channel.id == 1461631744955514932:
@@ -526,15 +526,15 @@ class PrintStuff(commands.Cog):
 
 
 
-    # ------------------------------------------Bluff----------------------------------------------------------#
-    @commands.hybrid_command(name="bluff", brief = "Tell e bot to do something, even if it can't.")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def fakeit(self, ctx):
-        global bluff
-        bluff = True
-        await ctx.send(content = "o7", ephemeral = True)
-        await ctx.bot.process_commands(ctx)
+    # # ------------------------------------------Bluff----------------------------------------------------------#
+    # @commands.hybrid_command(name="bluff", brief = "Tell e bot to do something, even if it can't.")
+    # @app_commands.allowed_installs(guilds=True, users=True)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def fakeit(self, ctx):
+    #     global bluff
+    #     bluff = True
+    #     await ctx.send(content = "o7", ephemeral = True)
+    #     await ctx.bot.process_commands(ctx)
     #--------------------------------------------print e count----------------------------------------------#
     @commands.hybrid_command(name="printee", brief="who's the biggest e fan?")
     @app_commands.allowed_installs(guilds=True, users=True)
