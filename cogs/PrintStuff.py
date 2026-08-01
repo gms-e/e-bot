@@ -27,7 +27,7 @@ airlist = {}
 partylist = {}
 
 stopp = False
-bluff = False
+# bluff = False
 
 killword = ""
 letterword = ""
@@ -535,6 +535,33 @@ class PrintStuff(commands.Cog):
     #     bluff = True
     #     await ctx.send(content = "o7", ephemeral = True)
     #     await ctx.bot.process_commands(ctx)
+    # ------------------------------------------Bright----------------------------------------------------------#
+    @commands.hybrid_command(name="bright", brief = "8")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def wha(self, ctx):
+        positive = ["It is certain","It is decidedly so",
+            "Without a doubt","Yes, definitely","You may rely on it",
+            "As I see it, yes","Most likely","Outlook good",
+            "Yes","Signs point to yes","Let it ride"]
+        noncommittal = [
+            "Reply hazy, try again","Ask again later",
+            "Better not tell you now","Cannot predict now",
+            "Concentrate and ask again",
+            "Signs point to...maybe...depends on...hold on let me get my glasses",
+            "Idk man, I just work here"]
+        negative = [
+        "Don't count on it","My reply is no","My sources say no",
+        "Outlook not so good","Very doubtful", "I wouldn’t"]
+
+        response = random.randint(1,3)
+        if response==1:
+            await ctx.send(random.choice(positive))
+        if response==2:
+            await ctx.send(random.choice(noncommittal))
+        if response==3:
+            await ctx.send(random.choice(negative))
+        await ctx.bot.process_commands(ctx)
     #--------------------------------------------print e count----------------------------------------------#
     @commands.hybrid_command(name="printee", brief="who's the biggest e fan?")
     @app_commands.allowed_installs(guilds=True, users=True)
