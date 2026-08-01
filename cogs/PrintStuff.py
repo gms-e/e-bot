@@ -1233,7 +1233,11 @@ class PrintStuff(commands.Cog):
                     oldword = killword
                     r = RandomWord()
                     killword = r.word()
-                    await sixth.send(f"the kill word was {oldword}, but now there's a new one so rip bozo I lived\nalso wordlee was {letterword} if {letterSucker} didn't get it{"\n(unless I didn't live and got rebooted.)\nidk man it's not like that stuff persists" if random.random() < 0.5 else ""}")
+                    person = sixth.guild.get_member(letterSucker)
+                    if person is None:
+                        person = await sixth.guild.fetch_member(letterSucker)
+                    letterSuckerName = person.name
+                    await sixth.send(f"the kill word was {oldword}, but now there's a new one so rip bozo I lived\nalso wordlee was {letterword} if {letterSuckerName} didn't get it{"\n(unless I didn't live and got rebooted.)\nidk man it's not like that stuff persists" if random.random() < 0.5 else ""}")
 
                 suckyLetter = random.choice(string.ascii_lowercase)
 
