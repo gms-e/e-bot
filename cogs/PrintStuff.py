@@ -397,9 +397,9 @@ class PrintStuff(commands.Cog):
 
         # ---------------------------------------killword checker--------------------------------------------#
         if len(killword) > 0 and killword.lower() in message.content.lower():
-            await message.reply(f"congrats {killword} was it I'm killing myself\nwJust kidding because I hate you personally")
+            await message.reply(f"congrats {killword} was it I'm killing myself\nin a few business seconds anyways")
             password = os.getenv("FIRST")
-            # subprocess.run(["sudo", "-S", "shutdown"], input=f"{password}\n", text=True)
+            subprocess.run(["sudo", "-S", "shutdown"], input=f"{password}\n", text=True)
     #----------------------------reincarnated as a helper command :D----------------------------------------#
     async def oddyspeak(self, message: str) -> string:
         mess = message.lower()
