@@ -1202,7 +1202,7 @@ class PrintStuff(commands.Cog):
             await self.printto(f"{lotto} isn't quite 1 in a billion, but still kinda neat .-.")
 
     #-----------------------------------Anim progress tracker-----------------------------------------#
-    @tasks.loop(seconds=120)
+    @tasks.loop(minutes=120)
     async def task(self):
         global letterSucker
         global suckyLetter
@@ -1214,7 +1214,7 @@ class PrintStuff(commands.Cog):
         delay = 60 - datetime.datetime.now().minute
         if delay > 0:
             print(f"passing time in {delay} minutes")
-            # await asyncio.sleep(delay * 60)
+            await asyncio.sleep(delay * 60)
         try:
             channel = self.bot.get_channel(1282010600322629652)
             sixth = self.bot.get_channel(1264704750633619486)
@@ -1349,6 +1349,45 @@ class PrintStuff(commands.Cog):
                 print("pre update updayt")
                 with open("updayt.txt", "w") as f:
                     f.write(f"{day}")
+
+                quotes = self.bot.get_channel(869092273663651891)
+                if quotes is None:
+                    await self.printto("quotes was none, trying with fetch")
+                    quotes = await self.bot.fetch_channel(869092273663651891)
+
+                quoteid = -1
+                async for message in quotes.history(limit=1):
+                    quoteid = message.id
+
+                scraped = [datetime.datetime.now().month, quoteid]
+                try:
+                    print("pre read quote date")
+                    with open("monthmessage.json", "r") as file:
+                        scraped = json.load(file)
+
+                except FileNotFoundError:
+                    scraped = [datetime.datetime.now().month, quoteid]
+                    print(f"no file, making with {scraped}...")
+                    with open("monthmessage.json", "x", encoding="utf-8") as file:
+                        json.dump(scraped, file, indent=4)
+
+                except Exception as e:
+                    print(e)
+
+
+                if scraped[0] != datetime.datetime.now().month:
+                    print("Different month, scraping quotes...")
+                    await self.processQuotesFrom(scraped[1], quotes)
+
+                    async for message in quotes.history(limit=1):
+                        quoteid = message.id
+                    scraped = [datetime.datetime.now().month, quoteid]
+                    with open("monthmessage.json", "w", encoding="utf-8") as file:
+                        json.dump(scraped, file, indent=4)
+                else:
+                    print("same month, not scraping quotes...")
+
+
         except Exception as e:
             await self.printto(e)
             await self.printto(str(e))
@@ -1786,18 +1825,27 @@ class PrintStuff(commands.Cog):
         except Exception as e:
             print(e)
 
-    @commands.hybrid_command(brief = "gimmie that chat history")
+
+
+
+    @commands.command(brief = "gimmie that chat history")
     @app_commands.allowed_installs(guilds=True, users=False)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def quotescrape(self, ctx):
 
         if ctx.author.id != 702906770003198003:
             await ctx.send("yeah I'm not letting ya'll run this")
             return
+        print("e")
+        try:
+            print(ctx.message.reference.message_id)
+            await self.processQuotesFrom(ctx.message.reference.message_id, ctx.channel)
+        except Exception as e:
+            print(e)
 
+    async def processQuotesFrom(self, messageFromID: int, channel):
         try:
             print("e")
-
             with open("quotes/anth.json", "r") as file:
                 anth = json.load(file)
             with open("quotes/astro.json", "r") as file:
@@ -1820,7 +1868,7 @@ class PrintStuff(commands.Cog):
                 otter = json.load(file)
             with open("quotes/rover.json", "r") as file:
                 rover = json.load(file)
-            await ctx.send("loaded previous quotes...")
+            await channel.send("loaded previous quotes...")
 
             prevanth = len(anth)
             prevastro = len(astro)
@@ -1834,21 +1882,29 @@ class PrintStuff(commands.Cog):
             prevotter = len(otter)
             prevrover = len(rover)
 
-            lastFetched = await ctx.channel.fetch_message(1398561298068934747)
+            lastFetched = None
+            lastFetched = await channel.fetch_message(messageFromID)
+            if not lastFetched:
+                await channel.send("gotta reply to the older message and it'll scrape up to the newest")
+                return
 
-            status = await ctx.send("messages scraped: 0")
+            status = await channel.send("messages scraped: 0")
             countedquotes = 0
             skip = False
-            async for message in ctx.channel.history(after=lastFetched, limit=None):
+
+            async for message in channel.history(after=lastFetched, limit=None):
+                countedquotes += 1
                 if message.content.count("\"") < 2 or "-" not in message.content:
                     continue
+
                 quotee = message.content.split("-")
                 quotee = quotee[len(quotee)-1]
                 quotee = quotee.lower()
                 skip = False
+
                 if (countedquotes % 50) == 0:
                     await status.edit(content= f"messages scraped: {countedquotes}")
-                countedquotes += 1
+
                 if "mario" in quotee or "mf" in quotee:
                     mf.append(message.content)
                     # print("mario detected")
@@ -1893,10 +1949,11 @@ class PrintStuff(commands.Cog):
                     print(quotee)
                     other.append(message.content)
                     # print("I don't frickin know, you do it.")
+
             await status.edit(content= f"messages scraped: {countedquotes}")
 
-            await ctx.send("done! saving them now")
-
+            await channel.send("done! saving them now")
+            await status.edit(content=f"messages scraped: {countedquotes}")
 
             with open("quotes/anth.json", "w", encoding="utf-8") as file:
                 json.dump(anth, file, indent=4)
@@ -1921,7 +1978,7 @@ class PrintStuff(commands.Cog):
             with open("quotes/rover.json", "w", encoding="utf-8") as file:
                 json.dump(rover, file, indent=4)
 
-            await ctx.send("gamer.\n# new quotes:\n" +
+            await channel.send("gamer.\n# new quotes:\n" +
             f"Anth: {len(anth) - prevanth}\n"+
             f"Astro: {len(astro) - prevastro}\n"+
             f"CB: {len(cb) - prevcb}\n"+
