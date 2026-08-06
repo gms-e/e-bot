@@ -117,7 +117,7 @@ class PrintStuff(commands.Cog):
             for c in letterword:
                 squares = squares + ":black_medium_square:"
             await sixth.send(
-                f"{person.name} is banned from {suckyLetter} today\n-# Unless they solve {squares}({len(letterword)}).")
+                f"{person.name} is banned from {"ice cream" if suckyLetter == "a" else suckyLetter} today\n-# Unless they solve {squares}({len(letterword)}).")
 
             await cheekypeeker.send(f"The word is {killword}, I'm sure that's not a common one, right?")
             await usedafavor.send(f"The word is {killword}, I'm sure that's not a common one, right?")
@@ -1202,7 +1202,7 @@ class PrintStuff(commands.Cog):
             await self.printto(f"{lotto} isn't quite 1 in a billion, but still kinda neat .-.")
 
     #-----------------------------------Anim progress tracker-----------------------------------------#
-    @tasks.loop(minutes=120)
+    @tasks.loop(seconds=120)
     async def task(self):
         global letterSucker
         global suckyLetter
@@ -1214,7 +1214,7 @@ class PrintStuff(commands.Cog):
         delay = 60 - datetime.datetime.now().minute
         if delay > 0:
             print(f"passing time in {delay} minutes")
-            await asyncio.sleep(delay * 60)
+            # await asyncio.sleep(delay * 60)
         try:
             channel = self.bot.get_channel(1282010600322629652)
             sixth = self.bot.get_channel(1264704750633619486)
@@ -1228,38 +1228,69 @@ class PrintStuff(commands.Cog):
                 sixth = await self.bot.fetch_channel(1264704750633619486)
 
             if datetime.datetime.now().hour == 0 or datetime.datetime.now().hour == 23:
+                print("made it to main if statement")
                 global killword
+                global suckyLetter
+
+
+                day = -1
+                try:
+                    print("pre read updayt")
+                    with open("updayt.txt", 'r') as f:
+                        line = f.readline()
+                        day = int(line.strip())  # Strip whitespace and convert to int
+                except FileNotFoundError:
+                    with open("updayt.txt", "x") as f:
+                        f.write("2")
+                        day = 2
+                        await self.printto("made a file since it wasn't there, running as if was offline")
+                except Exception as e:
+                    print(e)
+
                 if len(killword) > 0:
                     oldword = killword
                     r = RandomWord()
                     killword = r.word()
                     person = sixth.guild.get_member(letterSucker)
+                    print("made it to person")
                     if person is None:
                         person = await sixth.guild.fetch_member(letterSucker)
+                    print("pre name")
                     letterSuckerName = person.name
-                    await sixth.send(f"the kill word was {oldword}, but now there's a new one so rip bozo I lived\nalso wordlee was {letterword} if {letterSuckerName} didn't get it{"\n(unless I didn't live and got rebooted.)\nidk man it's not like that stuff persists" if random.random() < 0.5 else ""}")
+                    print("post name")
+                    await sixth.send(f"the kill word was {oldword}, but now there's a new one so rip bozo I lived\n-# also wordlee was {letterword} if {letterSuckerName} didn't get it{"\n(unless I didn't live and got rebooted.)\nidk man it's not like that stuff persists" if random.random() < 0.5 else ""}")
 
                 suckyLetter = random.choice(string.ascii_lowercase)
 
-                while "-" in killword or "_" in killword or suckyLetter in unicodedata.normalize('NFKD', letterword):
+                try:
+                    r = RandomWord()
+                    print("pre killword gen")
                     killword = r.word()
+                    while "-" in killword or "_" in killword or suckyLetter in unicodedata.normalize('NFKD', killword):
+                        print(suckyLetter)
+                        print(killword)
+                        killword = r.word()
 
-                suckyLetter = random.choice(string.ascii_lowercase)
+                    suckyLetter = random.choice(string.ascii_lowercase)
 
-                letterword = r.word()
-                while "-" in letterword or "_" in letterword or suckyLetter in unicodedata.normalize('NFKD', letterword):
+                    print("pre letterword gen")
                     letterword = r.word()
+                    while "-" in letterword or "_" in letterword or suckyLetter in unicodedata.normalize('NFKD', letterword):
+                        letterword = r.word()
+                except Exception as e:
+                    print(e)
 
                 suckerlist = [405197452833062912, 617347174120030208, 916883861634441286,
                               770464351336923157, 721389007426158633, 450811106504605706, 702906770003198003,
                               916883861634441286]
+                print("pre lettersucker assignment")
                 letterSucker = suckerlist[random.randint(0, len(suckerlist) - 1)]
 
                 sixth = self.bot.get_channel(1264704750633619486)
                 if sixth is None:
                     sixth = await self.bot.fetch_channel(1264704750633619486)
 
-
+                print("pre get member from lettersucker ID")
                 person = sixth.guild.get_member(letterSucker)
                 if person is None:
                     person = await sixth.guild.fetch_member(letterSucker)
@@ -1269,11 +1300,11 @@ class PrintStuff(commands.Cog):
                 wordleGuesses = 4
                 wordleSolved = False
                 squares = ""
-
+                print("pre sixth letter announcement")
                 for c in letterword:
                     squares = squares + ":black_medium_square:"
                 await sixth.send(
-                    f"{person.name} is banned from {suckyLetter} today\n-# Unless they solve {squares}({len(letterword)}).")
+                    f"{person.name} is banned from {"ice cream" if suckyLetter == "a" else suckyLetter} today\n-# Unless they solve {squares}({len(letterword)}).")
 
                 cheekypeeker = self.bot.get_user(702906770003198003)
                 usedafavor = self.bot.get_user(405197452833062912)
@@ -1282,22 +1313,15 @@ class PrintStuff(commands.Cog):
                 if usedafavor is None:
                     usedafavor = await self.bot.fetch_user(405197452833062912)
 
-
+                print("pre killword announcement")
                 await cheekypeeker.send(f"The word is {killword}, I'm sure that's not a common one, right?")
                 await usedafavor.send(f"The word is {killword}, I'm sure that's not a common one, right?")
 
-                day = -1
-                try:
-                    with open("updayt.txt", 'r') as f:
-                        line = f.readline()
-                        day = int(line.strip())  # Strip whitespace and convert to int
-                except FileNotFoundError:
-                    with open("updayt.txt", "x") as f:
-                        f.write("2")
-                        day= 2
-                        await self.printto("made a file since it wasn't there, running as if was offline")
 
+
+                print("pre match day")
                 day -= 1
+                print(day)
                 match day:
                     # case 3:
                     #     await channel.send("3 days left :D")
@@ -1322,7 +1346,7 @@ class PrintStuff(commands.Cog):
                             await self.printto(e)
                     case _:
                         await channel.send(f"days are at {day} , this is the error handling message. \nEither I messed up the code REAAALLLY bad,\nor it's day 3 :D")
-
+                print("pre update updayt")
                 with open("updayt.txt", "w") as f:
                     f.write(f"{day}")
         except Exception as e:
@@ -1759,6 +1783,157 @@ class PrintStuff(commands.Cog):
                 await asyncio.sleep(4)
                 for n in range(0, setpings):
                     await ctx.reply(f"<@{nerds[dingus]}>")
+        except Exception as e:
+            print(e)
+
+    @commands.hybrid_command(brief = "gimmie that chat history")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def quotescrape(self, ctx):
+
+        if ctx.author.id != 702906770003198003:
+            await ctx.send("yeah I'm not letting ya'll run this")
+            return
+
+        try:
+            print("e")
+
+            with open("quotes/anth.json", "r") as file:
+                anth = json.load(file)
+            with open("quotes/astro.json", "r") as file:
+                astro = json.load(file)
+            with open("quotes/cb.json", "r") as file:
+                cb = json.load(file)
+            with open("quotes/edwosk.json", "r") as file:
+                edwosk = json.load(file)
+            with open("quotes/josh.json", "r") as file:
+                josh = json.load(file)
+            with open("quotes/mariofan.json", "r") as file:
+                mf = json.load(file)
+            with open("quotes/meowsor.json", "r") as file:
+                mr = json.load(file)
+            with open("quotes/omar.json", "r") as file:
+                omar = json.load(file)
+            with open("quotes/other.json", "r") as file:
+                other = json.load(file)
+            with open("quotes/otter.json", "r") as file:
+                otter = json.load(file)
+            with open("quotes/rover.json", "r") as file:
+                rover = json.load(file)
+            await ctx.send("loaded previous quotes...")
+
+            prevanth = len(anth)
+            prevastro = len(astro)
+            prevcb = len(cb)
+            prevedwosk = len(edwosk)
+            prevjosh = len(josh)
+            prevmariofan = len(mf)
+            prevmr = len(mr)
+            prevomar = len(omar)
+            prevother = len(other)
+            prevotter = len(otter)
+            prevrover = len(rover)
+
+            lastFetched = await ctx.channel.fetch_message(1398561298068934747)
+
+            status = await ctx.send("messages scraped: 0")
+            countedquotes = 0
+            skip = False
+            async for message in ctx.channel.history(after=lastFetched, limit=None):
+                if message.content.count("\"") < 2 or "-" not in message.content:
+                    continue
+                quotee = message.content.split("-")
+                quotee = quotee[len(quotee)-1]
+                quotee = quotee.lower()
+                skip = False
+                if (countedquotes % 50) == 0:
+                    await status.edit(content= f"messages scraped: {countedquotes}")
+                countedquotes += 1
+                if "mario" in quotee or "mf" in quotee:
+                    mf.append(message.content)
+                    # print("mario detected")
+                    skip = True
+                if "astro" in quotee:
+                    astro.append(message.content)
+                    # print("astro detected")
+                    skip = True
+                if "cb" in quotee:
+                    cb.append(message.content)
+                    # print("cb detected")
+                    skip = True
+                if "josh" in quotee:
+                    josh.append(message.content)
+                    # print("josh detected")
+                    skip = True
+                if "anth" in quotee:
+                    anth.append(message.content)
+                    # print("anth detected")
+                    skip = True
+                if "ed" in quotee:
+                    edwosk.append(message.content)
+                    # print("edwosk detected")
+                    skip = True
+                if "om" in quotee:
+                    omar.append(message.content)
+                    # print("omar detected")
+                    skip = True
+                if "rov" in quotee:
+                    rover.append(message.content)
+                    # print("rover detected")
+                    skip = True
+                if "otter" in quotee:
+                    otter.append(message.content)
+                    # print("otter detected")
+                    skip = True
+                if "m" in quotee and "r" in quotee and not skip:
+                    mr.append(message.content)
+                    # print("mkeyspamr detected")
+                    skip = True
+                if not skip:
+                    print(quotee)
+                    other.append(message.content)
+                    # print("I don't frickin know, you do it.")
+            await status.edit(content= f"messages scraped: {countedquotes}")
+
+            await ctx.send("done! saving them now")
+
+
+            with open("quotes/anth.json", "w", encoding="utf-8") as file:
+                json.dump(anth, file, indent=4)
+            with open("quotes/astro.json", "w", encoding="utf-8") as file:
+                json.dump(astro, file, indent=4)
+            with open("quotes/cb.json", "w", encoding="utf-8") as file:
+                json.dump(cb, file, indent=4)
+            with open("quotes/edwosk.json", "w", encoding="utf-8") as file:
+                json.dump(edwosk, file, indent=4)
+            with open("quotes/josh.json", "w", encoding="utf-8") as file:
+                json.dump(josh, file, indent=4)
+            with open("quotes/mariofan.json", "w", encoding="utf-8") as file:
+                json.dump(mf, file, indent=4)
+            with open("quotes/meowsor.json", "w", encoding="utf-8") as file:
+                json.dump(mr, file, indent=4)
+            with open("quotes/omar.json", "w", encoding="utf-8") as file:
+                json.dump(omar, file, indent=4)
+            with open("quotes/other.json", "w", encoding="utf-8") as file:
+                json.dump(other, file, indent=4)
+            with open("quotes/otter.json", "w", encoding="utf-8") as file:
+                json.dump(otter, file, indent=4)
+            with open("quotes/rover.json", "w", encoding="utf-8") as file:
+                json.dump(rover, file, indent=4)
+
+            await ctx.send("gamer.\n# new quotes:\n" +
+            f"Anth: {len(anth) - prevanth}\n"+
+            f"Astro: {len(astro) - prevastro}\n"+
+            f"CB: {len(cb) - prevcb}\n"+
+            f"Edwosk: {len(edwosk) - prevedwosk}\n"+
+            f"Josh: {len(josh) - prevjosh}\n"+
+            f"Mariofan: {len(mf) - prevmariofan}\n"+
+            f"Mdfaerawer: {len(mr) - prevmr}\n"+
+            f"Omar: {len(omar) - prevomar}\n"+
+            f"Other/Unknown: {len(other) - prevother}\n"+
+            f"Otter: {len(otter) - prevotter}\n"+
+            f"Rover: {len(rover) - prevrover}")
+
         except Exception as e:
             print(e)
 
