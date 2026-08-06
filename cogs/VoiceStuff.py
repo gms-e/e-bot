@@ -203,6 +203,19 @@ class VoiceStuff(commands.Cog):
         await self.printto("worked")
         await self.bot.process_commands(ctx)
 
+#----------------------------------------------ghost song-----------------------------------------------#
+    @commands.hybrid_command(name="ghost")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def spoopy(self, ctx):
+        await self.printto("trying ghost")
+        try:
+            await self.playSong(ctx,"music/Super Ghostbusters Full Album.mp3", True)
+        except Exception as error:
+            await self.printto(f"An error occurred: {type(error).__name__}")
+            await self.printto(str(error))
+        await self.printto("worked")
+        await self.bot.process_commands(ctx)
 #--------------------------------------------super censored song----------------------------------------#
     # @commands.hybrid_command(name="russiasong")
     # @app_commands.allowed_installs(guilds=True, users=False)
