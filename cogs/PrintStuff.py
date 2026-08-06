@@ -1350,42 +1350,42 @@ class PrintStuff(commands.Cog):
                 with open("updayt.txt", "w") as f:
                     f.write(f"{day}")
 
-                quotes = self.bot.get_channel(869092273663651891)
-                if quotes is None:
-                    await self.printto("quotes was none, trying with fetch")
-                    quotes = await self.bot.fetch_channel(869092273663651891)
-
-                quoteid = -1
-                async for message in quotes.history(limit=1):
-                    quoteid = message.id
-
-                scraped = [datetime.datetime.now().month, quoteid]
-                try:
-                    print("pre read quote date")
-                    with open("monthmessage.json", "r") as file:
-                        scraped = json.load(file)
-
-                except FileNotFoundError:
-                    scraped = [datetime.datetime.now().month, quoteid]
-                    print(f"no file, making with {scraped}...")
-                    with open("monthmessage.json", "x", encoding="utf-8") as file:
-                        json.dump(scraped, file, indent=4)
-
-                except Exception as e:
-                    print(e)
-
-
-                if scraped[0] != datetime.datetime.now().month:
-                    print("Different month, scraping quotes...")
-                    await self.processQuotesFrom(scraped[1], quotes)
-
-                    async for message in quotes.history(limit=1):
-                        quoteid = message.id
-                    scraped = [datetime.datetime.now().month, quoteid]
-                    with open("monthmessage.json", "w", encoding="utf-8") as file:
-                        json.dump(scraped, file, indent=4)
-                else:
-                    print("same month, not scraping quotes...")
+                # quotes = self.bot.get_channel(869092273663651891)
+                # if quotes is None:
+                #     await self.printto("quotes was none, trying with fetch")
+                #     quotes = await self.bot.fetch_channel(869092273663651891)
+                #
+                # quoteid = -1
+                # async for message in quotes.history(limit=1):
+                #     quoteid = message.id
+                #
+                # scraped = [datetime.datetime.now().month, quoteid]
+                # try:
+                #     print("pre read quote date")
+                #     with open("monthmessage.json", "r") as file:
+                #         scraped = json.load(file)
+                #
+                # except FileNotFoundError:
+                #     scraped = [datetime.datetime.now().month, quoteid]
+                #     print(f"no file, making with {scraped}...")
+                #     with open("monthmessage.json", "x", encoding="utf-8") as file:
+                #         json.dump(scraped, file, indent=4)
+                #
+                # except Exception as e:
+                #     print(e)
+                #
+                #
+                # if scraped[0] != datetime.datetime.now().month:
+                #     print("Different month, scraping quotes...")
+                #     await self.processQuotesFrom(scraped[1], quotes)
+                #
+                #     async for message in quotes.history(limit=1):
+                #         quoteid = message.id
+                #     scraped = [datetime.datetime.now().month, quoteid]
+                #     with open("monthmessage.json", "w", encoding="utf-8") as file:
+                #         json.dump(scraped, file, indent=4)
+                # else:
+                #     print("same month, not scraping quotes...")
 
 
         except Exception as e:
