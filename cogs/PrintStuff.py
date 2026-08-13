@@ -119,8 +119,8 @@ class PrintStuff(commands.Cog):
             await sixth.send(
                 f"{person.name} is banned from {"ice cream" if suckyLetter == "a" else suckyLetter} today\n-# Unless they solve {squares}({len(letterword)}).")
 
-            await cheekypeeker.send(f"The word is {killword}, I'm sure that's not a common one, right?")
-            await usedafavor.send(f"The word is {killword}, I'm sure that's not a common one, right?")
+            await cheekypeeker.send(f"The word is {killword}, it does nothing now -. -")
+            await usedafavor.send(f"The word is {killword}, it does nothing now -. -")
 
         except Exception as error:
             print(error)
@@ -397,9 +397,9 @@ class PrintStuff(commands.Cog):
 
         # ---------------------------------------killword checker--------------------------------------------#
         if len(killword) > 0 and killword.lower() in message.content.lower():
-            await message.reply(f"congrats {killword} was it I'm killing myself\nin a few business seconds anyways")
-            password = os.getenv("FIRST")
-            subprocess.run(["sudo", "-S", "shutdown"], input=f"{password}\n", text=True)
+            await message.reply(f">:(")
+            # password = os.getenv("FIRST")
+            # subprocess.run(["sudo", "-S", "shutdown"], input=f"{password}\n", text=True)
     #----------------------------reincarnated as a helper command :D----------------------------------------#
     async def oddyspeak(self, message: str) -> string:
         mess = message.lower()
