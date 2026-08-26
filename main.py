@@ -347,14 +347,14 @@ marle = ["<:CircleFairy:1400643761528111105>", "<:Parlor:1400314790232199248>", 
          "<:CB:1400313849298550896>","<:Bubble:1400313836623495188>", "<:Wiki:1400313825735086081>",
          "<:Spacey:1400313811705270322>","<:Technician:1400313794944827513>"]
 
-@bot.tree.context_menu(name = "Random Marle Message")
-@app_commands.allowed_installs(guilds=True, users=False)
-@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-async def reactMarle(interaction: discord.Interaction, message: discord.Message):
-    cmarle = marle[random.randint(0, len(marle) - 1)]
-    await printto(cmarle, interaction.user.name)
-    await message.add_reaction(cmarle)
-    await interaction.response.send_message(f"{cmarle}'d it.", ephemeral=True)
+# @bot.tree.context_menu(name = "Random Marle Message")
+# @app_commands.allowed_installs(guilds=True, users=False)
+# @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+# async def reactMarle(interaction: discord.Interaction, message: discord.Message):
+#     cmarle = marle[random.randint(0, len(marle) - 1)]
+#     await printto(cmarle, interaction.user.name)
+#     await message.add_reaction(cmarle)
+#     await interaction.response.send_message(f"{cmarle}'d it.", ephemeral=True)
 
 
 
