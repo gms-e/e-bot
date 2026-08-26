@@ -27,7 +27,7 @@ airlist = {}
 partylist = {}
 
 stopp = False
-# bluff = False
+bluff = False
 
 killword = ""
 letterword = ""
@@ -45,26 +45,26 @@ class PrintStuff(commands.Cog):
 
     async def printto(self, m: str):
         print(m)
-        # channel = await self.bot.fetch_channel(1434085176320852018)
-        # if channel is None:
-        #     channel = await self.bot.get_channel(1434085176320852018)
-        #
-        # try:
-        #     if len(str(m)) > 2000:
-        #         n = []
-        #         i = 0
-        #         for i in range(0, len(m), 1900):
-        #             await channel.send(m[i:i + 1900])
-        #     else:
-        #         await channel.send(m)
-        # except Exception as error:
-        #     print(str(error))
-        #     print(error)
-        #     try:
-        #         await channel.send(str(error))
-        #         await channel.send(error)
-        #     except Exception as error:
-        #         print("ok that's enough try catch")
+        channel = await self.bot.fetch_channel(1434085176320852018)
+        if channel is None:
+            channel = await self.bot.get_channel(1434085176320852018)
+
+        try:
+            if len(str(m)) > 2000:
+                n = []
+                i = 0
+                for i in range(0, len(m), 1900):
+                    await channel.send(m[i:i + 1900])
+            else:
+                await channel.send(m)
+        except Exception as error:
+            print(str(error))
+            print(error)
+            try:
+                await channel.send(str(error))
+                await channel.send(error)
+            except Exception as error:
+                print("ok that's enough try catch")
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -184,14 +184,14 @@ class PrintStuff(commands.Cog):
             await asyncio.sleep(240)
             await message.delete()
             return
-        # if "testingsomething" in message.content:
-        #     print("test on")
-        #     command = self.bot.get_command('daily teto')
-        #     print(command)
-        #     try:
-        #         await command(await self.bot.get_context(message))
-        #     except Exception as error:
-        #         print(error)
+        if "testingsomething" in message.content:
+            print("test on")
+            command = self.bot.get_command('daily teto')
+            print(command)
+            try:
+                await command(await self.bot.get_context(message))
+            except Exception as error:
+                print(error)
         #----------------------------------------killing x image sender----------------------------------------#
         if "killing" in message.content.lower():
             await self.catimg(message)
@@ -383,10 +383,10 @@ class PrintStuff(commands.Cog):
                     await guy.send("got the wordle on the last try, not even close")
 
         # -------------------------------------responds to bluff------------------------------------------#
-        # global bluff
-        # if bluff and "e, " in message.content and "bluff" not in message.content:
-        #     await message.reply("o7 on it", mention_author=False)
-        #     bluff = False
+        global bluff
+        if bluff and "e, " in message.content and "bluff" not in message.content:
+            await message.reply("o7 on it", mention_author=False)
+            bluff = False
 
         #---------------------------------------door stuff print stuff collab-----------------------------------#
         if message.channel.id == 1461631744955514932:
@@ -397,9 +397,9 @@ class PrintStuff(commands.Cog):
 
         # ---------------------------------------killword checker--------------------------------------------#
         if len(killword) > 0 and killword.lower() in message.content.lower():
-            await message.reply(f">:(")
-            # password = os.getenv("FIRST")
-            # subprocess.run(["sudo", "-S", "shutdown"], input=f"{password}\n", text=True)
+            await message.reply(f"congrats {killword} was the killword I die now\nwell, in a bit :(")
+            password = os.getenv("FIRST")
+            subprocess.run(["sudo", "-S", "shutdown"], input=f"{password}\n", text=True)
     #----------------------------reincarnated as a helper command :D----------------------------------------#
     async def oddyspeak(self, message: str) -> string:
         mess = message.lower()
@@ -527,14 +527,14 @@ class PrintStuff(commands.Cog):
 
 
     # # ------------------------------------------Bluff----------------------------------------------------------#
-    # @commands.hybrid_command(name="bluff", brief = "Tell e bot to do something, even if it can't.")
-    # @app_commands.allowed_installs(guilds=True, users=True)
-    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    # async def fakeit(self, ctx):
-    #     global bluff
-    #     bluff = True
-    #     await ctx.send(content = "o7", ephemeral = True)
-    #     await ctx.bot.process_commands(ctx)
+    @commands.hybrid_command(name="bluff", brief = "Tell e bot to do something, even if it can't.")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def fakeit(self, ctx):
+        global bluff
+        bluff = True
+        await ctx.send(content = "o7", ephemeral = True)
+        await ctx.bot.process_commands(ctx)
     # ------------------------------------------Bright----------------------------------------------------------#
     @commands.hybrid_command(name="bright", brief = "8")
     @app_commands.allowed_installs(guilds=True, users=True)
@@ -1350,42 +1350,42 @@ class PrintStuff(commands.Cog):
                 with open("updayt.txt", "w") as f:
                     f.write(f"{day}")
 
-                # quotes = self.bot.get_channel(869092273663651891)
-                # if quotes is None:
-                #     await self.printto("quotes was none, trying with fetch")
-                #     quotes = await self.bot.fetch_channel(869092273663651891)
-                #
-                # quoteid = -1
-                # async for message in quotes.history(limit=1):
-                #     quoteid = message.id
-                #
-                # scraped = [datetime.datetime.now().month, quoteid]
-                # try:
-                #     print("pre read quote date")
-                #     with open("monthmessage.json", "r") as file:
-                #         scraped = json.load(file)
-                #
-                # except FileNotFoundError:
-                #     scraped = [datetime.datetime.now().month, quoteid]
-                #     print(f"no file, making with {scraped}...")
-                #     with open("monthmessage.json", "x", encoding="utf-8") as file:
-                #         json.dump(scraped, file, indent=4)
-                #
-                # except Exception as e:
-                #     print(e)
-                #
-                #
-                # if scraped[0] != datetime.datetime.now().month:
-                #     print("Different month, scraping quotes...")
-                #     await self.processQuotesFrom(scraped[1], quotes)
-                #
-                #     async for message in quotes.history(limit=1):
-                #         quoteid = message.id
-                #     scraped = [datetime.datetime.now().month, quoteid]
-                #     with open("monthmessage.json", "w", encoding="utf-8") as file:
-                #         json.dump(scraped, file, indent=4)
-                # else:
-                #     print("same month, not scraping quotes...")
+                quotes = self.bot.get_channel(869092273663651891)
+                if quotes is None:
+                    await self.printto("quotes was none, trying with fetch")
+                    quotes = await self.bot.fetch_channel(869092273663651891)
+
+                quoteid = -1
+                async for message in quotes.history(limit=1):
+                    quoteid = message.id
+
+                scraped = [datetime.datetime.now().month, quoteid]
+                try:
+                    print("pre read quote date")
+                    with open("monthmessage.json", "r") as file:
+                        scraped = json.load(file)
+
+                except FileNotFoundError:
+                    scraped = [datetime.datetime.now().month, quoteid]
+                    print(f"no file, making with {scraped}...")
+                    with open("monthmessage.json", "x", encoding="utf-8") as file:
+                        json.dump(scraped, file, indent=4)
+
+                except Exception as e:
+                    print(e)
+
+
+                if scraped[0] != datetime.datetime.now().month:
+                    print("Different month, scraping quotes...")
+                    await self.processQuotesFrom(scraped[1], quotes)
+
+                    async for message in quotes.history(limit=1):
+                        quoteid = message.id
+                    scraped = [datetime.datetime.now().month, quoteid]
+                    with open("monthmessage.json", "w", encoding="utf-8") as file:
+                        json.dump(scraped, file, indent=4)
+                else:
+                    print("same month, not scraping quotes...")
 
 
         except Exception as e:
@@ -1560,187 +1560,187 @@ class PrintStuff(commands.Cog):
         await self.bot.process_commands(ctx)
 
     # #---------------------------------KILL IT WITH FIRE--------------------------------------------------#
-    # @commands.hybrid_group()
-    # @app_commands.allowed_installs(guilds=True, users=False)
-    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    # async def killit(self, ctx):
-    #     await self.printto("obsolete")
-    # @killit.group(name = "with")
-    # @app_commands.allowed_installs(guilds=True, users=False)
-    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    # async def using(self, ctx):
-    #     await self.printto("obsolete")
-    # @using.command(name = "fire")
-    # @app_commands.allowed_installs(guilds=True, users=False)
-    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    # async def fire(self, ctx):
-    #     if ctx.message.reference:
-    #         replied_message_id = ctx.message.reference.message_id
-    #         try:
-    #             replied_message = await ctx.channel.fetch_message(replied_message_id)
-    #             if replied_message.author == self.bot.user:
-    #                 await ctx.send("It's gone, we're safe now.\n YOU ALL SAW NOTHING", ephemeral=True)
-    #                 await replied_message.delete()
-    #             else:
-    #                 await ctx.send("uh... that's not one of mine, that's your problem.\n Ask them really, REALLY, **REALLY** nicely to delete it, I'm sure that'll go well.")
-    #         except discord.NotFound:
-    #             await ctx.send("That, uh... doesn't exist anymore?")
-    #     else:
-    #         async for m in ctx.channel.history(limit=30):
-    #             if m.author == self.bot.user:
-    #                 await m.delete()
-    #                 await ctx.send("o7 found it", ephemeral=True)
-    #                 return
+    @commands.hybrid_group()
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def killit(self, ctx):
+        await self.printto("obsolete")
+    @killit.group(name = "with")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def using(self, ctx):
+        await self.printto("obsolete")
+    @using.command(name = "fire")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def fire(self, ctx):
+        if ctx.message.reference:
+            replied_message_id = ctx.message.reference.message_id
+            try:
+                replied_message = await ctx.channel.fetch_message(replied_message_id)
+                if replied_message.author == self.bot.user:
+                    await ctx.send("It's gone, we're safe now.\n YOU ALL SAW NOTHING", ephemeral=True)
+                    await replied_message.delete()
+                else:
+                    await ctx.send("uh... that's not one of mine, that's your problem.\n Ask them really, REALLY, **REALLY** nicely to delete it, I'm sure that'll go well.")
+            except discord.NotFound:
+                await ctx.send("That, uh... doesn't exist anymore?")
+        else:
+            async for m in ctx.channel.history(limit=30):
+                if m.author == self.bot.user:
+                    await m.delete()
+                    await ctx.send("o7 found it", ephemeral=True)
+                    return
 
     # ----------------------------------emoji by name sender---------------------------------------------#
-    # @commands.hybrid_command(name = "emoji")
-    # @app_commands.allowed_installs(guilds=True, users=True)
-    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    # async def emote(self, ctx, emojiname):
-    #     guilds = self.bot.guilds
-    #
-    #     ebot = await self.bot.fetch_application_emojis()
-    #
-    #     emoji = None
-    #     overflow = []
-    #
-    #     if ebot and discord.utils.get(ebot, name=emojiname):
-    #         emoji = discord.utils.get(ebot, name=emojiname)
-    #     else:
-    #         for guild in guilds:
-    #             fetched = discord.utils.get(guild.emojis, name=emojiname)
-    #             if fetched:
-    #                 if emoji and not overflow:
-    #                     print(emoji)
-    #                     overflow = [emoji, fetched]
-    #                 elif emoji and overflow:
-    #                     overflow.append(fetched)
-    #                 else:
-    #                     emoji = fetched
-    #     print(overflow)
-    #     if overflow:
-    #         bview = View(timeout=50)
-    #
-    #         async def getcallb(yourl):
-    #             print("making callb")
-    #
-    #             async def callb(interaction: discord.Interaction):
-    #                 print("running")
-    #                 try:
-    #                     await interaction.channel.send(f"{yourl}")
-    #                 except Exception as e:
-    #                     print(e)
-    #
-    #             print("made callb")
-    #             return callb
-    #
-    #         for emj in overflow:
-    #
-    #             print("past func def")
-    #             btn = Button(emoji=str(emj), style=discord.ButtonStyle.blurple)
-    #             try:
-    #                 if emj.url:
-    #                     tmp = await getcallb(emj.url)
-    #                     btn.callback = tmp
-    #                 else:
-    #                     tmp = await getcallb(str(emj))
-    #                     btn.callback = tmp
-    #             except Exception as e:
-    #                 print(e)
-    #
-    #             print("past callback")
-    #             print(btn)
-    #             bview.add_item(btn)
-    #         print(bview)
-    #         try:
-    #             await ctx.reply(f"Turns out there's {len(overflow)} emojis with that name...\nluckily I can code, pick which one you wanted:", ephemeral=True, view = bview)
-    #         except Exception as e:
-    #             print(e)
-    #         finally:
-    #             return
-    #
-    #
-    #     if emoji:
-    #         await ctx.reply(f"{emoji.url}")
-    #     else:
-    #         await ctx.reply("uh... wot\nThat ain't an emoji name\n(rip emojilist)", ephemeral=True)
+    @commands.hybrid_command(name = "emoji")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def emote(self, ctx, emojiname):
+        guilds = self.bot.guilds
+
+        ebot = await self.bot.fetch_application_emojis()
+
+        emoji = None
+        overflow = []
+
+        if ebot and discord.utils.get(ebot, name=emojiname):
+            emoji = discord.utils.get(ebot, name=emojiname)
+        else:
+            for guild in guilds:
+                fetched = discord.utils.get(guild.emojis, name=emojiname)
+                if fetched:
+                    if emoji and not overflow:
+                        print(emoji)
+                        overflow = [emoji, fetched]
+                    elif emoji and overflow:
+                        overflow.append(fetched)
+                    else:
+                        emoji = fetched
+        print(overflow)
+        if overflow:
+            bview = View(timeout=50)
+
+            async def getcallb(yourl):
+                print("making callb")
+
+                async def callb(interaction: discord.Interaction):
+                    print("running")
+                    try:
+                        await interaction.channel.send(f"{yourl}")
+                    except Exception as e:
+                        print(e)
+
+                print("made callb")
+                return callb
+
+            for emj in overflow:
+
+                print("past func def")
+                btn = Button(emoji=str(emj), style=discord.ButtonStyle.blurple)
+                try:
+                    if emj.url:
+                        tmp = await getcallb(emj.url)
+                        btn.callback = tmp
+                    else:
+                        tmp = await getcallb(str(emj))
+                        btn.callback = tmp
+                except Exception as e:
+                    print(e)
+
+                print("past callback")
+                print(btn)
+                bview.add_item(btn)
+            print(bview)
+            try:
+                await ctx.reply(f"Turns out there's {len(overflow)} emojis with that name...\nluckily I can code, pick which one you wanted:", ephemeral=True, view = bview)
+            except Exception as e:
+                print(e)
+            finally:
+                return
+
+
+        if emoji:
+            await ctx.reply(f"{emoji.url}")
+        else:
+            await ctx.reply("uh... wot\nThat ain't an emoji name\n(rip emojilist)", ephemeral=True)
 
     #-------------------------------------emoji list retriever------------------------------------------#
-    # @commands.hybrid_command(name="emojilist")
-    # @app_commands.allowed_installs(guilds=True, users=True)
-    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    # async def emotelist(self, ctx):
-    #     try:
-    #
-    #         page = 0
-    #
-    #         bview = View(timeout=50)
-    #         left = Button(label="<-", style=discord.ButtonStyle.blurple)
-    #         right = Button(label="->", style=discord.ButtonStyle.blurple)
-    #
-    #
-    #         async def fetchMessage(p):
-    #             emojis = self.bot.guilds[p].emojis
-    #
-    #             emojilist = ""
-    #             for emoji in emojis:
-    #                 emojilist = emojilist + f"{emoji}"[:2000]
-    #             return emojilist
-    #
-    #         display = await ctx.reply(content = f"{await fetchMessage(0)}", ephemeral=True, view = bview)
-    #
-    #         async def incleft(ctx):
-    #             nonlocal page
-    #             if page > 0:
-    #                 page -= 1
-    #                 bview.clear_items()
-    #                 bview.add_item(left)
-    #                 pnm = Button(label=str(page) + f" {self.bot.guilds[page].name}")
-    #                 bview.add_item(pnm)
-    #                 bview.add_item(right)
-    #
-    #
-    #                 await ctx.response.edit_message(content = await fetchMessage(page), view = bview)
-    #             else:
-    #                 await ctx.response.edit_message(content = "there's nothing before 0")
-    #
-    #         async def incright(ctx):
-    #             try:
-    #                 nonlocal page
-    #                 if page < len(self.bot.guilds) - 1:
-    #                     page += 1
-    #
-    #                     bview.clear_items()
-    #                     bview.add_item(left)
-    #                     pnm = Button(label=str(page) + f" {self.bot.guilds[page].name}")
-    #                     bview.add_item(pnm)
-    #                     bview.add_item(right)
-    #
-    #                     nm = await fetchMessage(page)
-    #                     await ctx.response.edit_message(content = nm, view = bview)
-    #                 else:
-    #                     await ctx.response.edit_message(content = "That was the last page :/")
-    #
-    #             except Exception as e:
-    #                 print(e)
-    #
-    #
-    #         left.callback = incleft
-    #
-    #         right.callback = incright
-    #
-    #         pnum = Button(label=str(page) + f" {self.bot.guilds[page].name}")
-    #
-    #         bview.add_item(left)
-    #         bview.add_item(pnum)
-    #         bview.add_item(right)
-    #
-    #         await display.edit(view = bview)
-    #
-    #
-    #
-    #     except Exception as e:
-    #         print(e)
+    @commands.hybrid_command(name="emojilist")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def emotelist(self, ctx):
+        try:
+
+            page = 0
+
+            bview = View(timeout=50)
+            left = Button(label="<-", style=discord.ButtonStyle.blurple)
+            right = Button(label="->", style=discord.ButtonStyle.blurple)
+
+
+            async def fetchMessage(p):
+                emojis = self.bot.guilds[p].emojis
+
+                emojilist = ""
+                for emoji in emojis:
+                    emojilist = emojilist + f"{emoji}"[:2000]
+                return emojilist
+
+            display = await ctx.reply(content = f"{await fetchMessage(0)}", ephemeral=True, view = bview)
+
+            async def incleft(ctx):
+                nonlocal page
+                if page > 0:
+                    page -= 1
+                    bview.clear_items()
+                    bview.add_item(left)
+                    pnm = Button(label=str(page) + f" {self.bot.guilds[page].name}")
+                    bview.add_item(pnm)
+                    bview.add_item(right)
+
+
+                    await ctx.response.edit_message(content = await fetchMessage(page), view = bview)
+                else:
+                    await ctx.response.edit_message(content = "there's nothing before 0")
+
+            async def incright(ctx):
+                try:
+                    nonlocal page
+                    if page < len(self.bot.guilds) - 1:
+                        page += 1
+
+                        bview.clear_items()
+                        bview.add_item(left)
+                        pnm = Button(label=str(page) + f" {self.bot.guilds[page].name}")
+                        bview.add_item(pnm)
+                        bview.add_item(right)
+
+                        nm = await fetchMessage(page)
+                        await ctx.response.edit_message(content = nm, view = bview)
+                    else:
+                        await ctx.response.edit_message(content = "That was the last page :/")
+
+                except Exception as e:
+                    print(e)
+
+
+            left.callback = incleft
+
+            right.callback = incright
+
+            pnum = Button(label=str(page) + f" {self.bot.guilds[page].name}")
+
+            bview.add_item(left)
+            bview.add_item(pnum)
+            bview.add_item(right)
+
+            await display.edit(view = bview)
+
+
+
+        except Exception as e:
+            print(e)
 
 
     #-------------------------------------gambleping------------------------------------------------------#

@@ -1,5 +1,6 @@
 import json
 import string
+
 from argparse import BooleanOptionalAction
 import discord
 from discord.ext import commands, tasks
@@ -14,6 +15,9 @@ import random
 import ffmpeg
 import datetime
 import subprocess
+import requests
+from PIL import Image
+
 load_dotenv()
 
 
@@ -278,9 +282,9 @@ async def on_message(message):
         voices = bot.get_cog("VoiceStuff")
         await voices.debate(message)
 
-    # if ("world" in lower or "server" in lower) and ("custody" in lower or "mine" in lower) and await usettings.get_value(message, message.author, "worldismine"):
-    #     voices = bot.get_cog("VoiceStuff")
-    #     await voices.playSong(message, "music/World is Mine - Kasane Teto (Synthesizer V Cover) [0eaeiSjh7pU].mp3")
+    if ("world" in lower or "server" in lower) and ("custody" in lower or "mine" in lower) and await usettings.get_value(message, message.author, "worldismine"):
+        voices = bot.get_cog("VoiceStuff")
+        await voices.playSong(message, "music/World is Mine - Kasane Teto (Synthesizer V Cover) [0eaeiSjh7pU].mp3")
     #-----------------------------------Stop music command------------------------------------------------#
     if "e, shut up" in lower and await usettings.get_value(message, message.author, "leavevc"): #removed "good" "music" req bc deadline
         await printto("saw stop command")
@@ -307,8 +311,8 @@ async def on_message(message):
 
 
     #----------------------------------respond to pings--------------------------------------------#
-    # if  await usettings.get_value(message, message.author, "replyeyes") and bot.user.mentioned_in(message):
-    #     await message.add_reaction("👀")
+    if  await usettings.get_value(message, message.author, "replyeyes") and bot.user.mentioned_in(message):
+        await message.add_reaction("👀")
         #------------------Calls mock when mock count over 0 and not escaped------------------------------#
     elif messageCount > 0 and message.author != bot.user and not "_ _" in message.content:
         if "https" in message.content:
@@ -343,14 +347,14 @@ marle = ["<:CircleFairy:1400643761528111105>", "<:Parlor:1400314790232199248>", 
          "<:CB:1400313849298550896>","<:Bubble:1400313836623495188>", "<:Wiki:1400313825735086081>",
          "<:Spacey:1400313811705270322>","<:Technician:1400313794944827513>"]
 
-# @bot.tree.context_menu(name = "Random Marle Message")
-# @app_commands.allowed_installs(guilds=True, users=False)
-# @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-# async def reactMarle(interaction: discord.Interaction, message: discord.Message):
-#     cmarle = marle[random.randint(0, len(marle) - 1)]
-#     await printto(cmarle, interaction.user.name)
-#     await message.add_reaction(cmarle)
-#     await interaction.response.send_message(f"{cmarle}'d it.", ephemeral=True)
+@bot.tree.context_menu(name = "Random Marle Message")
+@app_commands.allowed_installs(guilds=True, users=False)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+async def reactMarle(interaction: discord.Interaction, message: discord.Message):
+    cmarle = marle[random.randint(0, len(marle) - 1)]
+    await printto(cmarle, interaction.user.name)
+    await message.add_reaction(cmarle)
+    await interaction.response.send_message(f"{cmarle}'d it.", ephemeral=True)
 
 
 
@@ -473,6 +477,31 @@ class AnthView(discord.ui.View):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 async def canpthure(interaction: discord.Interaction, message: discord.Message):
     try:
+
+        pfp_url = str(message.author.avatar.url)
+
+        # Send a GET request to the link
+        response = requests.get(pfp_url, stream=True)
+
+        # Check if the request was successful
+        if response.status_code == 200:
+            # Open a file in binary write mode and save the image
+            with open("discord_pfp.png", "wb") as file:
+                for chunk in response.iter_content(1024):
+                    file.write(chunk)
+            print("Profile picture downloaded successfully!")
+        else:
+            print(f"Failed to download image. Status code: {response.status_code}")
+
+        try:
+            with Image.open("discord_pfp.png") as img:
+                # Check if the image is animated
+                if getattr(img, "is_animated", False):
+                    print(f"It is an animated GIF with {img.n_frames} frames.")
+
+        except Exception as e:
+            print(f"Error opening image: {e}")
+
         chanthnel = await bot.fetch_channel(1529322436741566526)
         await chanthnel.send(f"-# {interaction.user.name} got an anth:")
         await chanthnel.send(str(message.author.avatar.url), view = AnthView())
@@ -538,28 +567,28 @@ async def next(ctx,  number: Optional[int] = None):
     await bot.process_commands(ctx)
 
 # #----------------------------------Mocks user who was pinged--------------------------------------------#
-# @mock.command(name = "that", brief = "Mocks last message of given user")
-# async def that(ctx, guy: discord.User):
-#     #await printto("mockprev")
-#     words = ctx.history(limit = 20, oldest_first = False)
-#
-#     #await ctx.channel.last_message.reply("e")god, getting the user pinged was SO HARD for literally no reason
-#     await printto(words)
-#     #await printto(f"assigned fetched message")
-#
-#     foundMessage = False
-#     mockee = None
-#     async for message in words:
-#         if message.author == guy and not foundMessage:
-#             await printto(message)
-#             mockee = message
-#             foundMessage = True
-#
-#     await mockee.reply("\"" + capi_sentence(mockee.content) + "\"", mention_author=False)
-#     await ctx.send(f"k", ephemeral=True)
-#
-#     await printto("mocking")
-#     await bot.process_commands(ctx)
+@mock.command(name = "that", brief = "Mocks last message of given user")
+async def that(ctx, guy: discord.User):
+    #await printto("mockprev")
+    words = ctx.history(limit = 20, oldest_first = False)
+
+    #await ctx.channel.last_message.reply("e")god, getting the user pinged was SO HARD for literally no reason
+    await printto(words)
+    #await printto(f"assigned fetched message")
+
+    foundMessage = False
+    mockee = None
+    async for message in words:
+        if message.author == guy and not foundMessage:
+            await printto(message)
+            mockee = message
+            foundMessage = True
+
+    await mockee.reply("\"" + capi_sentence(mockee.content) + "\"", mention_author=False)
+    await ctx.send(f"k", ephemeral=True)
+
+    await printto("mocking")
+    await bot.process_commands(ctx)
 
 
 asyncio.run(main())#, log_handler=handler, log_level=logging.DEBUG)
