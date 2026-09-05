@@ -21,6 +21,9 @@ from PIL import Image
 load_dotenv()
 
 
+dev = os.getenv("DEV")
+dev = dev == "1"
+print(dev)
 
 token = os.getenv("DISCORD_TOKEN")#you're not getting my bot token that easy
 
@@ -43,18 +46,19 @@ messageCount = 0
 #    print("tree ready!")
 async def printto(m: str):
     print(m)
-    channel = await bot.fetch_channel(1434085056393252904)
-    if channel is None:
-        channel = await bot.get_channel(1434085056393252904)
+    if not dev:
+        channel = await bot.fetch_channel(1434085056393252904)
+        if channel is None:
+            channel = await bot.get_channel(1434085056393252904)
 
-    try:
-        await channel.send(m)
-    except Exception as error:
-        print(str(error))
         try:
-            await channel.send(str(error))
+            await channel.send(m)
         except Exception as error:
-            print("ok that's enough try catch")
+            print(str(error))
+            try:
+                await channel.send(str(error))
+            except Exception as error:
+                print("ok that's enough try catch")
 
 
 async def setup_hook(self):
