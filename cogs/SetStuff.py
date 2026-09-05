@@ -421,18 +421,20 @@ class SetStuff(commands.Cog):
     @operation.command(name="setowner")
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def setowner(self, ctx, channel: discord.TextChannel, person: discord.User):
+    async def setowner(self, ctx, channels: commands.Greedy[discord.TextChannel], person: discord.User):
         if ctx.author.id != 702906770003198003:
             await ctx.send("what... are you even trying to do.\nit auto sets you as channel owner if you're the one who made it if that's what you\'re worried about")
         try:
             with open("channelowners.json", 'r') as f:
                 channelowners = json.load(f)
-                for key, value in channelowners.items():
-                    if channel.id in channelowners[key]:
-                        channelowners[key].remove(channel.id)
+                for channel in channels:
+                    for key, value in channelowners.items():
+                        if channel.id in channelowners[key]:
+                            channelowners[key].remove(channel.id)
 
                 tmp = channelowners.get(str(person.id), [])
-                tmp.append(channel.id)
+                for channel in channels:
+                    tmp.append(channel.id)
 
                 print(tmp)
                 channelowners[str(person.id)] = tmp
