@@ -1,7 +1,8 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from typing import Optional
+from typing import Optional, Literal
+
 import random
 import asyncio
 import string
@@ -246,6 +247,214 @@ class SetStuff(commands.Cog):
             print(e)
             print(type(e))
             return []
+
+    @commands.hybrid_group(name = "operation")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def operation(self, ctx):
+        print("obsolete")
+
+    @operation.command(name = "create")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def create(self, ctx, namewithoutoperation: str, category: Literal["Active", "Pending", "Nomar"]):
+        if ctx.guild.id != 1086880428650143765:
+            await ctx.send("how about you run this in shenanigain central so the bot doesn't fail to make a channel here")
+            return
+        try:
+            category_id = None
+            match category:
+                case "Active":
+                    category_id = 1540006691276464268
+                case "Pending":
+                    category_id = 1540008214375170198
+                case "Completed":
+                    category_id = 1540006630022979604
+                case "dead":
+                    category_id = 1540007625666859029
+                case "Nomar":
+                    category_id = 1491647429253271563
+
+
+            category = self.bot.get_channel(category_id)
+            if not isinstance(category, discord.CategoryChannel):
+                await ctx.send("I messed up the category id oopsie")
+                return
+
+            overwrites = {
+                ctx.guild.default_role: discord.PermissionOverwrite(view_channel=False),
+                self.bot.user: discord.PermissionOverwrite(view_channel=True),
+                ctx.author: discord.PermissionOverwrite(view_channel=True, pin_messages=True, manage_channels=True)
+
+            }
+
+            # 3. Create the text channel inside the category with the overwrites
+            private_channel = await ctx.guild.create_text_channel(
+                name=f"operation {namewithoutoperation}",
+                category=category,
+                overwrites=overwrites
+            )
+
+
+            try:
+                with open("channelowners.json", 'r') as f:
+                    channelowners = json.load(f)
+                    tmp = channelowners.get(str(ctx.author.id), [])
+                    tmp.append(private_channel.id)
+
+                    print(tmp)
+                    channelowners[str(ctx.author.id)] = tmp
+                    print(channelowners)
+                    print(f"channelowners: {channelowners}")
+
+                    with open("channelowners.json", 'w') as f:
+                        json.dump(channelowners, f, indent=2)
+
+            except FileNotFoundError:
+                with open("channelowners.json", "x") as f:
+                    tmp = {str(ctx.author.id): [private_channel.id]}
+                    json.dump(tmp, f, indent=2)
+                    print("made a channelowners file since it wasn't there")
+            except Exception as e:
+                print(e)
+                print(type(e))
+                await ctx.send("something broke, ", str(e))
+            await ctx.send("o7 made the channel", ephemeral = True)
+
+        except Exception as e:
+            print(e)
+            print(type(e))
+
+    @operation.command(name="move")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def move(self, ctx, category: Literal["Pending", "Active", "Completed", "Dead", "Nomar"]):
+        category_id = None
+        match category:
+            case "Active":
+                category_id = 1540006691276464268
+            case "Pending":
+                category_id = 1540008214375170198
+            case "Completed":
+                category_id = 1540006630022979604
+            case "Dead":
+                category_id = 1540007625666859029
+            case "Nomar":
+                category_id = 1491647429253271563
+
+        category = self.bot.get_channel(category_id)
+        if not isinstance(category, discord.CategoryChannel):
+            await ctx.send("I messed up the category id oopsie")
+            return
+
+        try:
+            with open("channelowners.json", 'r') as f:
+                channelowners = json.load(f)
+                tmp = channelowners.get(str(ctx.author.id), [])
+                if ctx.channel.id in tmp:
+                    await ctx.channel.edit(category=category, sync_permissions=False)
+                    await ctx.send("wow look this channel and message are in the other category emoji crazy", ephemeral = True)
+                else:
+                    await ctx.send("imma don't think you can do dat")
+                    return
+
+        except Exception as e:
+            print(e)
+            print(str(e))
+
+    @operation.command(name="invite")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def invite(self, ctx,  channel: discord.TextChannel, people: commands.Greedy[discord.User]):
+        try:
+            with open("channelowners.json", 'r') as f:
+                channelowners = json.load(f)
+                tmp = channelowners.get(str(ctx.author.id), [])
+                if channel.id in tmp:
+                    names = ""
+                    for person in people:
+                        if person.id == ctx.author.id:
+                            await ctx.send("I mean I GUESS you can invite yourself, shouldn't do any harm... y tho")
+                        await channel.set_permissions(person, overwrite=discord.PermissionOverwrite(view_channel=True))
+                        names = f"{names} {person.name}"
+                    await ctx.send(f"o7 {names} got see channel perms", ephemeral = True)
+                else:
+                    await ctx.send("imma don't think you can do dat")
+                    return
+
+        except Exception as e:
+            print(e)
+            print(str(e))
+
+
+
+    @operation.command(name="uninvite")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def uninvite(self, ctx, channel: discord.TextChannel, people: commands.Greedy[discord.User]):
+        try:
+            with open("channelowners.json", 'r') as f:
+                channelowners = json.load(f)
+                tmp = channelowners.get(str(ctx.author.id), [])
+                if channel.id in tmp:
+                    names = ""
+                    for person in people:
+                        if person.id == ctx.author.id:
+                            await ctx.send("funny as it\'d be, I\'d be a bad programmer if I let you ban yourself, so *no.*")
+                            continue
+                        names = f"{names} {person.name}"
+                        await channel.set_permissions(person, overwrite=discord.PermissionOverwrite(view_channel=False))
+                    if names:
+                        await ctx.send(f"o7 {names} got see channel perms taken", ephemeral=True)
+
+                else:
+                    if ctx.author in people:
+                        await ctx.send("You don\'t even OWN this channel, why are you trying to ban yourself")
+                    else:
+                        await ctx.send("imma don't think you can do dat")
+                    return
+
+        except Exception as e:
+            print(e)
+            print(str(e))
+
+    @operation.command(name="setowner")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def setowner(self, ctx, channel: discord.TextChannel, person: discord.User):
+        if ctx.author.id != 702906770003198003:
+            await ctx.send("what... are you even trying to do.\nit auto sets you as channel owner if you're the one who made it if that's what you\'re worried about")
+        try:
+            with open("channelowners.json", 'r') as f:
+                channelowners = json.load(f)
+                for key, value in channelowners.items():
+                    if channel.id in channelowners[key]:
+                        channelowners[key].remove(channel.id)
+
+                tmp = channelowners.get(str(person.id), [])
+                tmp.append(channel.id)
+
+                print(tmp)
+                channelowners[str(person.id)] = tmp
+                print(channelowners)
+
+                print(f"channelowners: {channelowners}")
+
+                with open("channelowners.json", 'w') as f:
+                    json.dump(channelowners, f, indent=2)
+                    await ctx.send("o7 that person\'s now the channel owner", ephemeral = True)
+
+        except FileNotFoundError:
+            with open("channelowners.json", "x") as f:
+                tmp = {str(ctx.author.id): [channel.id]}
+                json.dump(tmp, f, indent=2)
+                print("made a channelowners file since it wasn't there")
+            await ctx.send("o7 that person is now channel owner", ephemeral=True)
+        except Exception as e:
+            print(e)
+            print(str(e))
+
+
 
 async def setup(bot):
     await bot.add_cog(SetStuff(bot))
