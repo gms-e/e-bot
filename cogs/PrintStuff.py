@@ -37,6 +37,10 @@ wordleOpeners = {}
 wordleSolved = False
 wordleGuesses = 4
 
+dev = os.getenv("DEV")
+dev = dev == "1"
+print(dev)
+
 class PrintStuff(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -45,26 +49,27 @@ class PrintStuff(commands.Cog):
 
     async def printto(self, m: str):
         print(m)
-        channel = await self.bot.fetch_channel(1434085176320852018)
-        if channel is None:
-            channel = await self.bot.get_channel(1434085176320852018)
+        if not dev:
+            channel = await self.bot.fetch_channel(1434085176320852018)
+            if channel is None:
+                channel = await self.bot.get_channel(1434085176320852018)
 
-        try:
-            if len(str(m)) > 2000:
-                n = []
-                i = 0
-                for i in range(0, len(m), 1900):
-                    await channel.send(m[i:i + 1900])
-            else:
-                await channel.send(m)
-        except Exception as error:
-            print(str(error))
-            print(error)
             try:
-                await channel.send(str(error))
-                await channel.send(error)
+                if len(str(m)) > 2000:
+                    n = []
+                    i = 0
+                    for i in range(0, len(m), 1900):
+                        await channel.send(m[i:i + 1900])
+                else:
+                    await channel.send(m)
             except Exception as error:
-                print("ok that's enough try catch")
+                print(str(error))
+                print(error)
+                try:
+                    await channel.send(str(error))
+                    await channel.send(error)
+                except Exception as error:
+                    print("ok that's enough try catch")
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -76,62 +81,70 @@ class PrintStuff(commands.Cog):
         global wordleSolved
         global wordleGuesses
 
-        try:
-            cheekypeeker = self.bot.get_user(702906770003198003)
-            usedafavor = self.bot.get_user(405197452833062912)
+        if dev:
+            killword = "The super epic killword that I'm sure nobody will type out, also omar is very cool unlike the person who sent this who is a stinky doo doo head, e is the best letter and  also number now I should type some \\ character\'s for the copy pasters to see anyways I'm kinda sleepy so good enough ig, doubt it's worth making this a hidden thing in the hidden .env file"
+            wordleSolved = True
+            letterword = "whomstve"
+            wordleGuesses = 2718
+            suckyletter = "abrakadabra\\alakazamblo"
+            letterSucker = None
+        else:
+            try:
+                cheekypeeker = self.bot.get_user(702906770003198003)
+                usedafavor = self.bot.get_user(405197452833062912)
 
-            if cheekypeeker is None:
-                cheekypeeker = await self.bot.fetch_user(702906770003198003)
-            if usedafavor is None:
-                usedafavor = await self.bot.fetch_user(405197452833062912)
+                if cheekypeeker is None:
+                    cheekypeeker = await self.bot.fetch_user(702906770003198003)
+                if usedafavor is None:
+                    usedafavor = await self.bot.fetch_user(405197452833062912)
 
 
-            suckyLetter = random.choice(string.ascii_lowercase)
-            r = RandomWord()
-            killword = r.word()
-            while "-" in killword or "_" in killword or suckyLetter not in killword:
+                suckyLetter = random.choice(string.ascii_lowercase)
+                r = RandomWord()
                 killword = r.word()
+                while "-" in killword or "_" in killword or suckyLetter not in killword:
+                    killword = r.word()
 
 
 
-            letterword = r.word()
-            while "-" in letterword or "_" in letterword or suckyLetter in unicodedata.normalize('NFKD', letterword):
                 letterword = r.word()
+                while "-" in letterword or "_" in letterword or suckyLetter in unicodedata.normalize('NFKD', letterword):
+                    letterword = r.word()
 
 
-            suckerlist = [405197452833062912, 617347174120030208, 916883861634441286, 770464351336923157, 721389007426158633, 450811106504605706, 702906770003198003, 916883861634441286]
-            letterSucker = suckerlist[random.randint(0, len(suckerlist) - 1)]
+                suckerlist = [405197452833062912, 617347174120030208, 916883861634441286, 770464351336923157, 721389007426158633, 450811106504605706, 702906770003198003, 916883861634441286]
+                letterSucker = suckerlist[random.randint(0, len(suckerlist) - 1)]
 
-            sixth = self.bot.get_channel(1264704750633619486)
-            if sixth is None:
-                sixth = await self.bot.fetch_channel(1264704750633619486)
+                sixth = self.bot.get_channel(1264704750633619486)
+                if sixth is None:
+                    sixth = await self.bot.fetch_channel(1264704750633619486)
 
-            person = sixth.guild.get_member(letterSucker)
-            if person is None:
-                person = await sixth.guild.fetch_member(letterSucker)
+                person = sixth.guild.get_member(letterSucker)
+                if person is None:
+                    person = await sixth.guild.fetch_member(letterSucker)
 
-            wordleSolved = False
-            wordleGuesses = 4
-            squares = ""
+                wordleSolved = False
+                wordleGuesses = 4
+                squares = ""
 
-            for c in letterword:
-                squares = squares + ":black_medium_square:"
-            await sixth.send(
-                f"{person.name} is banned from {"ice cream" if suckyLetter == "a" else suckyLetter} today\n-# Unless they solve {squares}({len(letterword)}).")
+                for c in letterword:
+                    squares = squares + ":black_medium_square:"
+                await sixth.send(
+                    f"{person.name} is banned from {"ice cream" if suckyLetter == "a" else suckyLetter} today\n-# Unless they solve {squares}({len(letterword)}).")
 
-            await cheekypeeker.send(f"The word is {killword}, it does nothing now -. -")
-            await usedafavor.send(f"The word is {killword}, it does nothing now -. -")
+                await cheekypeeker.send(f"The word is {killword}, it makes e bot so sad :(")
+                await usedafavor.send(f"The word is {killword}, it makes e bot so sad :(")
 
-        except Exception as error:
-            print(error)
-            print(str(error))
+            except Exception as error:
+                print(error)
+                print(str(error))
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
         global suckyLetter
 
         global letterSucker
-        if after.author.id == letterSucker:
+        if not dev and after.author.id == letterSucker:
             if suckyLetter in unicodedata.normalize('NFKD', after.content.lower()) and not wordleSolved:
                 await after.reply(f"nah you ain't getting away with {suckyLetter} through an edit\n-# use /wordlee to fight for your freedom :P")
                 await after.delete()
@@ -170,7 +183,7 @@ class PrintStuff(commands.Cog):
         global schrodinger
 
         #---------------------------------------notices your non anon------------------------------------------#
-        if message.channel.id == 841490511390048277 and message.author.id != self.bot.user.id:
+        if message.channel.id == 841490511390048277 and message.author.id != self.bot.user.id and not dev:
             cnt = message.content
             ch = message.channel
             if message.attachments:
@@ -180,7 +193,7 @@ class PrintStuff(commands.Cog):
             cnt = await self.oddyspeak(cnt)
             await ch.send(cnt)
         #-----------------------------------notices your non anth---------------------------------#
-        if message.channel.id == 1529322436741566526 and message.author.id != self.bot.user.id:
+        if message.channel.id == 1529322436741566526 and message.author.id != self.bot.user.id and not dev:
             await asyncio.sleep(240)
             await message.delete()
             return
@@ -206,7 +219,7 @@ class PrintStuff(commands.Cog):
                 if attached.filename in schrodinger[message.author.id]:
                     await message.delete()
                     return
-        if message.author.id == letterSucker:
+        if message.author.id == letterSucker and not dev:
             if suckyLetter in unicodedata.normalize('NFKD', message.content.lower()) and not wordleSolved:
                 await message.reply(f"nah you're not allowed to use {suckyLetter}\n-# use /wordlee to fight for your freedom :P")
                 await message.delete()
@@ -289,7 +302,7 @@ class PrintStuff(commands.Cog):
                 print(e)
 
         #---------------------------------------chat -> dms---botignore-------------------------------------------#
-        if message.author == self.bot.user:
+        if message.author == self.bot.user and not dev:
             if message.channel.id == 841490511390048277:
                 people = await usettings.get_people()
                 for person in people:
@@ -301,7 +314,7 @@ class PrintStuff(commands.Cog):
             return
 
         #-----------------------------------------dms -> anon chat------------------------------------------------#
-        if isinstance(message.channel, discord.DMChannel) and message.author.id != self.bot.user.id:
+        if isinstance(message.channel, discord.DMChannel) and message.author.id != self.bot.user.id and not dev:
             if await usettings.get_falsey_value(message, message.author, "dmtochat"):
                 anon = await self.bot.fetch_channel(841490511390048277)
                 if message.content:
@@ -384,12 +397,12 @@ class PrintStuff(commands.Cog):
 
         # -------------------------------------responds to bluff------------------------------------------#
         global bluff
-        if bluff and "e, " in message.content and "bluff" not in message.content:
+        if bluff and "e, " in message.content and "bluff" not in message.content and not dev:
             await message.reply("o7 on it", mention_author=False)
             bluff = False
 
         #---------------------------------------door stuff print stuff collab-----------------------------------#
-        if message.channel.id == 1461631744955514932:
+        if message.channel.id == 1461631744955514932 and not dev:
             channelrole = message.author.guild.get_role(1462230075503149299)
             if channelrole not in message.author.roles:
                 await message.author.send("you should GAMBLE WITH DOORS\neven normal doors will give time")
@@ -399,7 +412,10 @@ class PrintStuff(commands.Cog):
         if len(killword) > 0 and killword.lower() in message.content.lower():
             await message.reply(f"congrats {killword} was the killword I die now\nwell, in a bit :(")
             password = os.getenv("FIRST")
-            subprocess.run(["sudo", "-S", "shutdown"], input=f"{password}\n", text=True)
+            if not dev:
+                subprocess.run(["sudo", "-S", "shutdown"], input=f"{password}\n", text=True)
+            else:
+                await message.reply("wow you really sent that message huh...\n neat but I'm not doin\' that")
     #----------------------------reincarnated as a helper command :D----------------------------------------#
     async def oddyspeak(self, message: str) -> string:
         mess = message.lower()
@@ -868,6 +884,8 @@ class PrintStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def setletterstuff(self, ctx, target:discord.Member = None, letter:str = None):
+        if dev:
+            return
         if letter and len(letter) > 1:
             letter = letter[0]
         try:
@@ -1048,12 +1066,23 @@ class PrintStuff(commands.Cog):
         global wordleGuesses
 
         parentmessage = None
+        guess = guess.lower()
+
+        if dev:
+            wordleSolved = True
+            return
+        if guess == "cat" and len(letterword) != 3:
+            if random.random() < 312/2718:
+                await ctx.send(f":green_square: :green_square: :green_square:\n-# yeah that's close enough to {letterword}, you win the wordlee :D")
+                wordleSolved = True
+            else:
+                await ctx.send("pet the cat", ephemeral = True)
 
         if wordleSolved:
             await ctx.send(f"The wordle's already been solved, it was {letterword}")
             return
 
-        async for message in ctx.channel.history(limit=12):
+        async for message in ctx.channel.history(limit=9):
             if "wordlee _ _ _ _ _ _\n" in message.content and message.author == self.bot.user:
                 parentmessage = message
                 break
@@ -1106,7 +1135,7 @@ class PrintStuff(commands.Cog):
                 for char in letterword:
                     returnstring += ":black_large_square: "
 
-                await ctx.send(f"The word is {len(letterword)} letters long\n{returnstring} (guesses left: {wordleGuesses}/6)")
+                await ctx.send(f"The word is {len(letterword)} letters long\n{returnstring} (guesses: {wordleGuesses}/6)")
                 return
             if len(guess) < len(letterword):
                 for char in letterword:
@@ -1149,9 +1178,9 @@ class PrintStuff(commands.Cog):
 
             wordleGuesses = wordleGuesses - 1
             if parentmessage:
-                await parentmessage.edit(content = parentmessage.content + "\n" + toregional + "\n" + returnstring +  f"({len(letterword)}) + guesses left: {wordleGuesses}/6")
+                await parentmessage.edit(content = parentmessage.content + "\n" + toregional + "\n" + returnstring +  f"({len(letterword)}) guesses: {wordleGuesses}/6")
             else:
-                await ctx.send("wordlee _ _ _ _ _ _\n" + toregional + "\n" + returnstring +  f"({len(letterword)}) guesses left: {wordleGuesses}/6")
+                await ctx.send("wordlee _ _ _ _ _ _\n" + toregional + "\n" + returnstring +  f"({len(letterword)}) guesses: {wordleGuesses}/6")
         except Exception as e:
             print(e)
             print(type(e))
@@ -1210,6 +1239,8 @@ class PrintStuff(commands.Cog):
         global wordleSolved
         global wordleGuesses
 
+        if dev:
+            return
 
         delay = 60 - datetime.datetime.now().minute
         if delay > 0:
@@ -1228,24 +1259,26 @@ class PrintStuff(commands.Cog):
                 sixth = await self.bot.fetch_channel(1264704750633619486)
 
             if datetime.datetime.now().hour == 0 or datetime.datetime.now().hour == 23:
+                if datetime.datetime().hour == 23:
+                    await asyncio.sleep(60 * 60)
                 print("made it to main if statement")
                 global killword
                 global suckyLetter
 
 
-                day = -1
-                try:
-                    print("pre read updayt")
-                    with open("updayt.txt", 'r') as f:
-                        line = f.readline()
-                        day = int(line.strip())  # Strip whitespace and convert to int
-                except FileNotFoundError:
-                    with open("updayt.txt", "x") as f:
-                        f.write("2")
-                        day = 2
-                        await self.printto("made a file since it wasn't there, running as if was offline")
-                except Exception as e:
-                    print(e)
+                # day = -1
+                # try:
+                #     print("pre read updayt")
+                #     with open("updayt.txt", 'r') as f:
+                #         line = f.readline()
+                #         day = int(line.strip())  # Strip whitespace and convert to int
+                # except FileNotFoundError:
+                #     with open("updayt.txt", "x") as f:
+                #         f.write("2")
+                #         day = 2
+                #         await self.printto("made a file since it wasn't there, running as if was offline")
+                # except Exception as e:
+                #     print(e)
 
                 if len(killword) > 0:
                     oldword = killword
@@ -1266,12 +1299,12 @@ class PrintStuff(commands.Cog):
                     r = RandomWord()
                     print("pre killword gen")
                     killword = r.word()
+                    suckyLetter = random.choice(string.ascii_lowercase)
+
                     while "-" in killword or "_" in killword or suckyLetter in unicodedata.normalize('NFKD', killword):
                         print(suckyLetter)
                         print(killword)
                         killword = r.word()
-
-                    suckyLetter = random.choice(string.ascii_lowercase)
 
                     print("pre letterword gen")
                     letterword = r.word()
@@ -1314,11 +1347,10 @@ class PrintStuff(commands.Cog):
                     usedafavor = await self.bot.fetch_user(405197452833062912)
 
                 print("pre killword announcement")
-                await cheekypeeker.send(f"The word is {killword}, I'm sure that's not a common one, right?")
-                await usedafavor.send(f"The word is {killword}, I'm sure that's not a common one, right?")
+                await cheekypeeker.send(f"The word is {killword}, to avoid it, right?")
+                await usedafavor.send(f"The word is {killword}, to avoid it, right?")
 
-
-
+                dieHatefulPieceOfCode = '''
                 print("pre match day")
                 day -= 1
                 print(day)
@@ -1349,6 +1381,7 @@ class PrintStuff(commands.Cog):
                 print("pre update updayt")
                 with open("updayt.txt", "w") as f:
                     f.write(f"{day}")
+'''
 
                 quotes = self.bot.get_channel(869092273663651891)
                 if quotes is None:
@@ -1393,79 +1426,83 @@ class PrintStuff(commands.Cog):
             await self.printto(str(e))
 
     #--------------------------------Check anim days left----------------------------------------------#
-    @commands.hybrid_group(name = "animation", brief = "time reset\n due in\n favors owed\ndays reserved")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def animation(self, ctx):
-        await self.printto("obsolete")
-    @commands.group(name = "dev", hidden = True)
-    async def dev(self, ctx):
-        print("obsolete")
-    @dev.command(name = "set", hidden = True)
-    async def set(self, ctx, days: int):
-
-        if "dev" in ctx.author.nick:
-            with open("updayt.txt", 'r+') as f:
-                prev = f.readline()
-                f.seek(0)
-                f.truncate()
-                f.write(str(days))
-                await ctx.send(f"changed {prev} days to {days}")
-    @animation.group(name = "due", brief = "in")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def due(self, ctx):
-        await self.printto("obsolete")
-    @due.command(name = "in")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def within(self, ctx):
-        day = -1
-        try:
-            with open("updayt.txt", 'r') as f:
-                line = f.readline()
-                day = int(line.strip())  # Strip whitespace and convert to int
-        except FileNotFoundError:
-            with open("updayt.txt", "x") as f:
-                f.write("2")
-                day = 2
-                await self.printto("made a file since it wasn't there, running as if was offline")
-        match day:
-            case 4:
-                await ctx.send("4 days left technically, made progress today .-.")
-            case 3:
-                await ctx.send(f"3 days :D")
-            case 2:
-                await ctx.send(f"2 days")
-                await ctx.send(file=discord.File("timesatickin.png"))
-            case 1:
-                await ctx.send(f"TODAY.")
-                await ctx.send("https://tenor.com/view/majoras-mask-majora-zelda-final-day-gif-26658556")
-            case _:
-                await ctx.send(f"like {day}, he done messed up now. what a nerd")
-
-    @animation.group(name = "time", brief = "reset")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def tiempo(self, ctx):
-        await self.printto("obsolete")
-    @tiempo.command(name = "reset")
-    @app_commands.allowed_installs(guilds=True, users=True)
-    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def reset(self, ctx):
-        if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912 or ctx.author.id == self.bot.user.id):
-            await ctx.send("Imma don't think you're allowed to do dat")
-            await ctx.send("https://tenor.com/view/luigi-coo-coo-crazy-luigis-mansion-dark-moon-gif-1213275346224547321")
-            return
-        with open("updayt.txt", "w") as f:
-            f.write(f"4")
-        await ctx.send("https://tenor.com/view/majoras-mask-zelda-songoftime-ocarina-gif-22880234")
-        await asyncio.sleep(12)
-        async for message in ctx.channel.history(limit=6):  # Adjust limit as needed
-            if message.author == self.bot.user:
-                await message.delete()
-                break
-        await ctx.send("o7 he gets time... *for now*...")
+    # @commands.hybrid_group(name = "animation", brief = "time reset\n due in\n favors owed\ndays reserved")
+    # @app_commands.allowed_installs(guilds=True, users=True)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def animation(self, ctx):
+    #     await self.printto("obsolete")
+    # @commands.group(name = "dev", hidden = True)
+    # async def dev(self, ctx):
+    #     print("obsolete")
+    # @dev.command(name = "set", hidden = True)
+    # async def set(self, ctx, days: int):
+    #
+    #     if "dev" in ctx.author.nick:
+    #         with open("updayt.txt", 'r+') as f:
+    #             prev = f.readline()
+    #             f.seek(0)
+    #             f.truncate()
+    #             f.write(str(days))
+    #             await ctx.send(f"changed {prev} days to {days}")
+    # @animation.group(name = "due", brief = "in")
+    # @app_commands.allowed_installs(guilds=True, users=True)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def due(self, ctx):
+    #     await self.printto("obsolete")
+    # @due.command(name = "in")
+    # @app_commands.allowed_installs(guilds=True, users=True)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def within(self, ctx):
+    #     if dev:
+    #         return
+    #     day = -1
+    #     try:
+    #         with open("updayt.txt", 'r') as f:
+    #             line = f.readline()
+    #             day = int(line.strip())  # Strip whitespace and convert to int
+    #     except FileNotFoundError:
+    #         with open("updayt.txt", "x") as f:
+    #             f.write("2")
+    #             day = 2
+    #             await self.printto("made a file since it wasn't there, running as if was offline")
+    #     match day:
+    #         case 4:
+    #             await ctx.send("4 days left technically, made progress today .-.")
+    #         case 3:
+    #             await ctx.send(f"3 days :D")
+    #         case 2:
+    #             await ctx.send(f"2 days")
+    #             await ctx.send(file=discord.File("timesatickin.png"))
+    #         case 1:
+    #             await ctx.send(f"TODAY.")
+    #             await ctx.send("https://tenor.com/view/majoras-mask-majora-zelda-final-day-gif-26658556")
+    #         case _:
+    #             await ctx.send(f"like {day}, he done messed up now. what a nerd")
+    #
+    # @animation.group(name = "time", brief = "reset")
+    # @app_commands.allowed_installs(guilds=True, users=True)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def tiempo(self, ctx):
+    #     await self.printto("obsolete")
+    # @tiempo.command(name = "reset")
+    # @app_commands.allowed_installs(guilds=True, users=True)
+    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    # async def reset(self, ctx):
+    #     if dev:
+    #         return
+    #     if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912 or ctx.author.id == self.bot.user.id):
+    #         await ctx.send("Imma don't think you're allowed to do dat")
+    #         await ctx.send("https://tenor.com/view/luigi-coo-coo-crazy-luigis-mansion-dark-moon-gif-1213275346224547321")
+    #         return
+    #     with open("updayt.txt", "w") as f:
+    #         f.write(f"4")
+    #     await ctx.send("https://tenor.com/view/majoras-mask-zelda-songoftime-ocarina-gif-22880234")
+    #     await asyncio.sleep(12)
+    #     async for message in ctx.channel.history(limit=6):  # Adjust limit as needed
+    #         if message.author == self.bot.user:
+    #             await message.delete()
+    #             break
+    #     await ctx.send("o7 he gets time... *for now*...")
 
 #--------------------------------------------Favor tracking---------------------------------------------
     @animation.group(name = "favors")
@@ -1477,6 +1514,8 @@ class PrintStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def favadd(self, ctx, number: int):
+        if dev:
+            return
         if not (ctx.author.id == 702906770003198003 or ctx.author.id == 405197452833062912):
             await ctx.send("Imma don't think you're allowed to do dat")
             await ctx.send("https://tenor.com/view/luigi-coo-coo-crazy-luigis-mansion-dark-moon-gif-1213275346224547321")
@@ -1496,6 +1535,8 @@ class PrintStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def favowed(self, ctx):
+        if dev:
+            return
         favors = 0
         try:
             with open("favors.txt", 'r') as f:
@@ -1559,6 +1600,12 @@ class PrintStuff(commands.Cog):
         await ctx.reply("Deltarune tomorrow", mention_author=False)
         await self.bot.process_commands(ctx)
 
+    @commands.hybrid_command(name="howoldisthisthingagain")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def clock(self, ctx):
+        await ctx.send(f"{ctx.channel.name} was made at {ctx.channel.created_at}")
+
     # #---------------------------------KILL IT WITH FIRE--------------------------------------------------#
     @commands.hybrid_group()
     @app_commands.allowed_installs(guilds=True, users=False)
@@ -1574,6 +1621,8 @@ class PrintStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
     async def fire(self, ctx):
+        if dev:
+            return
         if ctx.message.reference:
             replied_message_id = ctx.message.reference.message_id
             try:
@@ -1832,6 +1881,8 @@ class PrintStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def quotescrape(self, ctx):
+        if dev:
+            return
 
         if ctx.author.id != 702906770003198003:
             await ctx.send("yeah I'm not letting ya'll run this")
