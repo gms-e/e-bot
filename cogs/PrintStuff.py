@@ -1425,12 +1425,12 @@ class PrintStuff(commands.Cog):
             await self.printto(e)
             await self.printto(str(e))
 
-    #--------------------------------Check anim days left----------------------------------------------#
-    # @commands.hybrid_group(name = "animation", brief = "time reset\n due in\n favors owed\ndays reserved")
-    # @app_commands.allowed_installs(guilds=True, users=True)
-    # @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    # async def animation(self, ctx):
-    #     await self.printto("obsolete")
+    #--------------------------------remnant that only exists for favor tracking----------------------------------------------#
+    @commands.hybrid_group(name = "animation", brief = "favors")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def animation(self, ctx):
+        await self.printto("obsolete")
     # @commands.group(name = "dev", hidden = True)
     # async def dev(self, ctx):
     #     print("obsolete")
