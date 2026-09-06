@@ -454,7 +454,7 @@ class SetStuff(commands.Cog):
 
                     for memb in allowed_members:
                         asyncio.sleep(1)
-                        await channel.set_permissions(memb, overwrite=discord.PermissionOverwrite(view_channel=True))
+                        await channel.set_permissions(target = memb, view_channel=True)
 
 
 
