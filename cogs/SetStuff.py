@@ -424,10 +424,13 @@ class SetStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def setowner(self, ctx, person: discord.User, channels: commands.Greedy[discord.TextChannel]):
+        await ctx.typing()
         if ctx.author.id != 702906770003198003:
             await ctx.send("what... are you even trying to do.\nit auto sets you as channel owner if you're the one who made it if that's what you\'re worried about")
             return
         overwrites = {
+            ctx.guild.default_role: discord.PermissionOverwrite(view_channel=False),
+            self.bot.user: discord.PermissionOverwrite(view_channel=True),
             person: discord.PermissionOverwrite(view_channel=True, pin_messages=True,
                                                     manage_channels=True, manage_messages=True,
                                                     bypass_slowmode=True,
@@ -439,24 +442,21 @@ class SetStuff(commands.Cog):
             with open("channelowners.json", 'r') as f:
                 channelowners = json.load(f)
                 for channel in channels:
-
                     for key, value in channelowners.items():
                         if channel.id in channelowners[key]:
                             channelowners[key].remove(channel.id)
 
                 tmp = channelowners.get(str(person.id), [])
                 for channel in channels:
+                    allowed_members = ctx.channel.members
                     tmp.append(channel.id)
-
-                    for target in list(channel.overwrites.keys()):
-                        if isinstance(target, discord.Member):
-                            # Passing None to overwrite deletes it entirely from the channel
-                            await channel.set_permissions(target, overwrite=discord.PermissionOverwrite(pin_messages=False,
-                                                manage_channels=False, manage_messages=False,
-                                                bypass_slowmode=False,
-                                                manage_permissions=False, moderate_members=False))
-
                     await channel.set_permissions(person, overwrites=overwrites)
+
+                    for memb in allowed_members:
+                        asyncio.sleep(1)
+                        await channel.set_permissions(memb, overwrite=discord.PermissionOverwrite(view_channel=True))
+
+
 
                 channelowners[str(person.id)] = tmp
                 print(channelowners)
