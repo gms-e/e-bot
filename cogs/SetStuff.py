@@ -478,7 +478,7 @@ class SetStuff(commands.Cog):
 
                 with open("channelowners.json", 'w') as f:
                     json.dump(channelowners, f, indent=2)
-                    await ctx.send("o7 that person\'s now the channel owner", ephemeral = True)
+                    await ctx.send(f"o7 {person.name} is now the channel owner of {len(channels)} more", ephemeral = True)
 
         except FileNotFoundError:
             with open("channelowners.json", "x") as f:
