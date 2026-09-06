@@ -372,7 +372,7 @@ class SetStuff(commands.Cog):
             with open("channelowners.json", 'r') as f:
                 channelowners = json.load(f)
                 tmp = channelowners.get(str(ctx.author.id), [])
-                if channel.id in tmp:
+                if channel.id in tmp or ctx.author is self.bot.user:
                     names = ""
                     for person in people:
                         if person.id == ctx.author.id:
@@ -420,6 +420,7 @@ class SetStuff(commands.Cog):
             print(e)
             print(str(e))
 
+
     @operation.command(name="setowner")
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
@@ -438,24 +439,36 @@ class SetStuff(commands.Cog):
 
         }
 
+
+
         try:
             with open("channelowners.json", 'r') as f:
                 channelowners = json.load(f)
+
                 for channel in channels:
                     for key, value in channelowners.items():
                         if channel.id in channelowners[key]:
                             channelowners[key].remove(channel.id)
 
+
+
                 tmp = channelowners.get(str(person.id), [])
                 for channel in channels:
-                    allowed_members = ctx.channel.members
+                    coverwrite = overwrites.copy()
+                    for peep in channel.members:
+                        if peep is not person:
+                            coverwrite[peep] = discord.PermissionOverwrite(view_channel=True, pin_messages=False,
+                                                    manage_channels=False, manage_messages=False,
+                                                    bypass_slowmode=False,
+                                                    manage_permissions=False, moderate_members=False)
+
+                    coverwrite[person] = discord.PermissionOverwrite(view_channel=True, pin_messages=True,
+                                                        manage_channels=True, manage_messages=True,
+                                                        bypass_slowmode=True,
+                                                        manage_permissions=True, moderate_members=True)
+
                     tmp.append(channel.id)
-                    await channel.set_permissions(person, overwrites=overwrites)
-
-                    for memb in allowed_members:
-                        asyncio.sleep(1)
-                        await channel.set_permissions(target = memb, view_channel=True)
-
+                    await channel.edit(overwrites=coverwrite)
 
 
                 channelowners[str(person.id)] = tmp
