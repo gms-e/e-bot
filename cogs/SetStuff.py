@@ -427,7 +427,7 @@ class SetStuff(commands.Cog):
     async def setowner(self, ctx, person: discord.User, channels: commands.Greedy[discord.TextChannel]):
         await ctx.typing()
         if ctx.author.id != 702906770003198003:
-            await ctx.send("what... are you even trying to do.\nit auto sets you as channel owner if you're the one who made it if that's what you\'re worried about")
+            await ctx.send("Only Omar can run this command, too much power otherwise.\nyou *do* get ownership over your own channel by default once its made tho so you shouldnt have to")
             return
         overwrites = {
             ctx.guild.default_role: discord.PermissionOverwrite(view_channel=False),
