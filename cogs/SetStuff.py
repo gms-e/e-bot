@@ -428,14 +428,13 @@ class SetStuff(commands.Cog):
             await ctx.send("what... are you even trying to do.\nit auto sets you as channel owner if you're the one who made it if that's what you\'re worried about")
             return
         overwrites = {
-            ctx.guild.default_role: discord.PermissionOverwrite(view_channel=False),
-            self.bot.user: discord.PermissionOverwrite(view_channel=True),
-            ctx.author: discord.PermissionOverwrite(view_channel=True, pin_messages=True,
+            person: discord.PermissionOverwrite(view_channel=True, pin_messages=True,
                                                     manage_channels=True, manage_messages=True,
                                                     bypass_slowmode=True,
                                                     manage_permissions=True, moderate_members=True)
 
         }
+
         try:
             with open("channelowners.json", 'r') as f:
                 channelowners = json.load(f)
@@ -452,9 +451,12 @@ class SetStuff(commands.Cog):
                     for target in list(channel.overwrites.keys()):
                         if isinstance(target, discord.Member):
                             # Passing None to overwrite deletes it entirely from the channel
-                            await channel.set_permissions(target, overwrite=None)
+                            await channel.set_permissions(target, overwrite=discord.PermissionOverwrite(pin_messages=False,
+                                                manage_channels=False, manage_messages=False,
+                                                bypass_slowmode=False,
+                                                manage_permissions=False, moderate_members=False))
 
-                    await channel.edit(overwrites=overwrites)
+                    await channel.set_permissions(person, overwrites=overwrites)
 
                 channelowners[str(person.id)] = tmp
                 print(channelowners)
