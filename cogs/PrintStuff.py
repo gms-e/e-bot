@@ -1259,7 +1259,7 @@ class PrintStuff(commands.Cog):
                 sixth = await self.bot.fetch_channel(1264704750633619486)
 
             if datetime.datetime.now().hour == 0 or datetime.datetime.now().hour == 23:
-                if datetime.datetime().hour == 23:
+                if datetime.datetime.now().hour == 23:
                     await asyncio.sleep(60 * 60)
                 print("made it to main if statement")
                 global killword

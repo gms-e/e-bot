@@ -331,6 +331,9 @@ class SetStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def move(self, ctx, category: Literal["Pending", "Active", "Completed", "Dead", "Nomar"]):
+        if ctx.guild.id != 1086880428650143765:
+            await ctx.send("how about you run this in shenanigain central so the bot doesn't fail to get a nonexistent category ID, IN the relevant operation")
+            return
         category_id = None
         match category:
             case "Active":
@@ -357,7 +360,7 @@ class SetStuff(commands.Cog):
                     await ctx.channel.edit(category=category, sync_permissions=False)
                     await ctx.send("wow look this channel and message are in the other category emoji crazy", ephemeral = True)
                 else:
-                    await ctx.send("imma don't think you can do dat")
+                    await ctx.send("imma don't think you can do dat here, you can run this in YOUR operation (if you have one)")
                     return
 
         except Exception as e:
@@ -368,6 +371,9 @@ class SetStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def invite(self, ctx,  channel: discord.TextChannel, people: commands.Greedy[discord.User]):
+        if ctx.guild.id != 1086880428650143765:
+            await ctx.send("how about you run this in shenanigain central, though even without this check it woulda failed since you don't 'own' any channels here")
+            return
         try:
             with open("channelowners.json", 'r') as f:
                 channelowners = json.load(f)
@@ -394,6 +400,9 @@ class SetStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
     async def uninvite(self, ctx, channel: discord.TextChannel, people: commands.Greedy[discord.User]):
+        if ctx.guild.id != 1086880428650143765:
+            await ctx.send("there isn't even OPERATIONS in this server, what are you trying to accomplish")
+            return
         try:
             with open("channelowners.json", 'r') as f:
                 channelowners = json.load(f)
