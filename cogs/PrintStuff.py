@@ -1434,7 +1434,7 @@ class PrintStuff(commands.Cog):
 
                 else:
                     await sixth.send("The shapeshifter didn't even SAY anything with it, anyways time for unbiased letter ban :D")
-                    suckerlist = list(int(sshifter))
+                    suckerlist = [int(sshifter)]
 
 
                 # day = -1
