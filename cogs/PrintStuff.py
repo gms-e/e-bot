@@ -604,7 +604,7 @@ class PrintStuff(commands.Cog):
         try:
             global sshifter
 
-            if str(ctx.author.id) != sshifter:
+            if int(ctx.author.id) != int(sshifter):
                 await ctx.send("You aint sus lil bro", ephemeral = True)
                 return
 
