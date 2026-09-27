@@ -1405,6 +1405,10 @@ class PrintStuff(commands.Cog):
                               916883861634441286]
 
                 global sussyspoken
+                imp = sixth.guild.get_member(sshifter)
+                if imp is None:
+                    imp = await sixth.guild.fetch_member(sshifter)
+                await sixth.send(f"The shapeshifter was {imp.name} the whole time")
                 if sussyspoken:
                     votedouts = await self.getHighestVotees()
                     if len(votedouts) == 0:
