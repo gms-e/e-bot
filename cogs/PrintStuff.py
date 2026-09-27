@@ -573,13 +573,29 @@ class PrintStuff(commands.Cog):
     @shifter.command(name="vote", brief="sussy baka")
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def vote(self, ctx, sussybaka: discord.User, keyfordevtesting: Optional[int]):
+    async def vote(self, ctx, sussybaka: discord.User):
         global suslist
-        if keyfordevtesting:
-            suslist[keyfordevtesting] = sussybaka.id
-        else:
-            suslist[ctx.author.id] = sussybaka.id
+        suslist[ctx.author.id] = sussybaka.id
         await ctx.send(content = f"You've guessed {sussybaka.name} is the imposter, can change at any time", ephemeral = True)
+
+    @shifter.command(name="suspected", brief="sussed baka")
+    @app_commands.allowed_installs(guilds=True, users=False)
+    @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
+    async def vlist(self, ctx, sussybaka: discord.User):
+        global sussyspoken
+        sussed = await self.getHighestVotees()
+        if sussed:
+            votedpeople = ""
+            for key in sussed:
+                votedguy = self.bot.get_user(key)
+                if votedguy is None:
+                    votedguy = await self.bot.fetch_user(key)
+                votedpeople = votedpeople + " and " + votedguy.name
+            votedpeople = votedpeople[4:]
+            await ctx.send(f"{votedpeople} got the most votes ._.")
+        else:
+            await ctx.send(f"nobody's voted{" even tho the ss said somethin" if sussyspoken else " and the ss has said NOTHING"}")
+
 
     @shifter.command(name="say", brief="sussy baka")
     @app_commands.allowed_installs(guilds=True, users=False)
