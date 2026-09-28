@@ -178,8 +178,8 @@ class PrintStuff(commands.Cog):
                 print(e)
 
             oldvals = {"shifter": shiftername, "killword": killword, "wordlee": letterword, "shifterid": shifterid}
-            print(f"no file, making with {oldvals}...")
-            with open("pvals.json", "x", encoding="utf-8") as file:
+            print(f"writing with {oldvals}...")
+            with open("pvals.json", "w", encoding="utf-8") as file:
                 json.dump(scraped, file, indent=4)
 
     @commands.Cog.listener()
@@ -631,12 +631,12 @@ class PrintStuff(commands.Cog):
     @shifter.command(name="say", brief="sussy baka")
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def skinwalk(self, ctx, skinsuit: Optional[discord.User], message: str):
+    async def skinwalk(self, ctx, message: str ,skinsuit: Optional[discord.User], fakeFail: Optional[bool]):
         try:
             global sshifter
-
-            if int(ctx.author.id) != int(sshifter):
-                await ctx.send("You aint sus lil bro", ephemeral = True)
+            fakeFail = "rue" in fakeFail
+            if int(ctx.author.id) != int(sshifter) or fakeFail:
+                await ctx.send("You ain't sus lil bro", ephemeral = True)
                 return
 
             webhooks = await ctx.channel.webhooks()
@@ -1582,7 +1582,7 @@ class PrintStuff(commands.Cog):
 
                 oldvals = {"shifter": shifter.name, "killword": killword, "wordlee": letterword, "shifterid": int(sshifter)}
                 print(f"updating persistent vals with {oldvals}...")
-                with open("pvals.json", "x", encoding="utf-8") as file:
+                with open("pvals.json", "w", encoding="utf-8") as file:
                     json.dump(scraped, file, indent=4)
                 dieHatefulPieceOfCode = '''
                 print("pre match day")
