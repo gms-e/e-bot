@@ -85,7 +85,8 @@ class PrintStuff(commands.Cog):
         global wordleGuesses
         global sshifter
         global suslist
-
+        shiftername = None
+        shifterid = None
         if dev:
             killword = "The super epic killword that I'm sure nobody will type out, also omar is very cool unlike the person who sent this who is a stinky doo doo head, e is the best letter and  also number now I should type some \\ character\'s for the copy pasters to see anyways I'm kinda sleepy so good enough ig, doubt it's worth making this a hidden thing in the hidden .env file"
             wordleSolved = True
@@ -126,6 +127,8 @@ class PrintStuff(commands.Cog):
                 shifter = sixth.guild.get_member(sshifter)
                 if shifter is None:
                     shifter = await sixth.guild.fetch_member(sshifter)
+                shiftername = shifter.name
+                shifterid = shifter.id
                 await shifter.send("You're the shifter\nuse shifter say <message> <person> to say something as that person\n(If you don't you get banned from a letter)\ntry not to get voted out, have fun :D")
 
 
@@ -147,9 +150,37 @@ class PrintStuff(commands.Cog):
 
                 await cheekypeekers.send(f"The word is {killword}\n it makes e bot so sad :(")
 
+
             except Exception as error:
                 print(error)
                 print(str(error))
+
+            oldvals = {}
+            try:
+                print("read old vals")
+                with open("pvals.json", "r") as file:
+                    oldvals = json.load(file)
+
+                oldshifter = sixth.guild.get_member(oldvals["shifterid"])
+                if oldshifter is None:
+                    oldshifter = await sixth.guild.fetch_member(oldvals["shifterid"])
+                if oldshifter.id == sshifter:
+                    await oldshifter.send("the bot got rebooted but you lucked out getting shifter again, are you astro? (don't answer that it goes straight to anoneemous)")
+                else:
+                    await oldshifter.send("the bot got rebooted so you aren't shifter anymore, which hurt me physically *way* more than it hurts you emotionally (also I'm doxxing u in sixth)")
+
+                await sixth.send(f"btw imposter was {oldvals["shifter"]}, killword was {oldvals["killword"]}, and wordlee was {oldvals["wordlee"]} before my untimelee deemise")
+
+            except FileNotFoundError:
+                print("no file, skipping sixth messsage and making file next")
+
+            except Exception as e:
+                print(e)
+
+            oldvals = {"shifter": shiftername, "killword": killword, "wordlee": letterword, "shifterid": shifterid}
+            print(f"no file, making with {oldvals}...")
+            with open("pvals.json", "x", encoding="utf-8") as file:
+                json.dump(scraped, file, indent=4)
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
@@ -1383,7 +1414,7 @@ class PrintStuff(commands.Cog):
 
 
             if datetime.datetime.now().hour == 22 or datetime.datetime.now().hour == 21:
-                if len(suslist) == 0:
+                if len(suslist)!= 0:
 
                     await sixth.send
 
@@ -1549,6 +1580,10 @@ class PrintStuff(commands.Cog):
 
                 await cheekypeekers.send(f"The word is {killword}\n it makes e bot so sad :(")
 
+                oldvals = {"shifter": shifter.name, "killword": killword, "wordlee": letterword, "shifterid": int(sshifter)}
+                print(f"updating persistent vals with {oldvals}...")
+                with open("pvals.json", "x", encoding="utf-8") as file:
+                    json.dump(scraped, file, indent=4)
                 dieHatefulPieceOfCode = '''
                 print("pre match day")
                 day -= 1
