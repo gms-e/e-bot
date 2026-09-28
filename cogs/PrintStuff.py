@@ -631,14 +631,14 @@ class PrintStuff(commands.Cog):
     @shifter.command(name="say", brief="sussy baka")
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def skinwalk(self, ctx, message: str ,skinsuit: Optional[discord.User], fakeFail: Optional[bool]):
+    async def skinwalk(self, ctx, message: str ,skinsuit: Optional[discord.User], fakefail: Optional[bool]):
         try:
             global sshifter
-            if fakeFail:
-                fakeFail = "rue" in fakeFail
+            if fakefail:
+                fakefail = "rue" in fakefail
             else:
-                fakeFail = False
-            if int(ctx.author.id) != int(sshifter) or fakeFail:
+                fakefail = False
+            if int(ctx.author.id) != int(sshifter) or fakefail:
                 await ctx.send("You ain't sus lil bro", ephemeral = True)
                 return
 
