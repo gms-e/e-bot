@@ -1466,7 +1466,7 @@ class PrintStuff(commands.Cog):
                             await sixth.send("Ya'll voted right :D the shapeshifters gonna get banned from a letter now :D")
                         else:
                             await sixth.send("ooooooooooohhhh, ya'll voted wrong. imma ban, uh...")
-                            voters = listsuslist.keys()
+                            voters = list(suslist.keys())
                             if len(voters) < 4:
                                 await sixth.send("someone who didn't vote, gotta step it up")
                                 suckerlist = [i for i in suckerlist if i not in voters]
@@ -1475,7 +1475,7 @@ class PrintStuff(commands.Cog):
                                 suckerlist = [i for i in suckerlist if i in voters]
                     else:
                         await sixth.send("ya'll had TIES?? Now the person getting banned from a letter is gonna be... uh,")
-                        voters = listsuslist.keys()
+                        voters = list(suslist.keys())
                         if len(voters) < 4:
                             await sixth.send("someone who didn't vote, gotta step it up")
                             suckerlist = [i for i in suckerlist if i not in voters]
