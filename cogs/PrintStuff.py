@@ -169,7 +169,7 @@ class PrintStuff(commands.Cog):
                 else:
                     await oldshifter.send("the bot got rebooted so you aren't shifter anymore, which hurt me physically *way* more than it hurts you emotionally (also I'm doxxing u in sixth)")
 
-                await sixth.send(f"btw imposter was {oldvals["shifter"]}, killword was {oldvals["killword"]}, and wordlee was {oldvals["wordlee"]} before my untimelee deemise")
+                await sixth.send(f"btw imposter was {oldvals["shifter"]}, killword was {oldvals["killword"]}, and wordlee {"didn't exist" if not oldvals["wordlee"] else f"was {oldvals["wordlee"]}"} before my untimelee deemise")
 
             except FileNotFoundError:
                 print("no file, skipping sixth messsage and making file next")
@@ -180,7 +180,7 @@ class PrintStuff(commands.Cog):
             oldvals = {"shifter": shiftername, "killword": killword, "wordlee": letterword, "shifterid": shifterid}
             print(f"writing with {oldvals}...")
             with open("pvals.json", "w", encoding="utf-8") as file:
-                json.dump(scraped, file, indent=4)
+                json.dump(oldvals, file, indent=4)
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
@@ -634,7 +634,10 @@ class PrintStuff(commands.Cog):
     async def skinwalk(self, ctx, message: str ,skinsuit: Optional[discord.User], fakeFail: Optional[bool]):
         try:
             global sshifter
-            fakeFail = "rue" in fakeFail
+            if fakeFail:
+                fakeFail = "rue" in fakeFail
+            else:
+                fakeFail = False
             if int(ctx.author.id) != int(sshifter) or fakeFail:
                 await ctx.send("You ain't sus lil bro", ephemeral = True)
                 return
@@ -1583,7 +1586,7 @@ class PrintStuff(commands.Cog):
                 oldvals = {"shifter": shifter.name, "killword": killword, "wordlee": letterword, "shifterid": int(sshifter)}
                 print(f"updating persistent vals with {oldvals}...")
                 with open("pvals.json", "w", encoding="utf-8") as file:
-                    json.dump(scraped, file, indent=4)
+                    json.dump(oldvals, file, indent=4)
                 dieHatefulPieceOfCode = '''
                 print("pre match day")
                 day -= 1
