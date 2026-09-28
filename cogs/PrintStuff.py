@@ -612,7 +612,7 @@ class PrintStuff(commands.Cog):
     @shifter.command(name="suspected", brief="sussed baka")
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def vlist(self, ctx, sussybaka: discord.User):
+    async def vlist(self, ctx):
         global sussyspoken
         sussed = await self.getHighestVotees()
         if sussed:
