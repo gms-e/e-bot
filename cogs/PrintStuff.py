@@ -1462,6 +1462,7 @@ class PrintStuff(commands.Cog):
                 await sixth.send(f"The shapeshifter was {imp.name} the whole time")
                 if sussyspoken:
                     votedouts = await self.getHighestVotees()
+                    print(votedouts)
                     if len(votedouts) == 0:
                         await sixth.send("Nobody voted, ig someone randoms getting letterbanned just like old times :D (aside from ss they're safe)")
                         suckerlist = [i for i in suckerlist if i != int(sshifter)]
@@ -1491,7 +1492,7 @@ class PrintStuff(commands.Cog):
                     await sixth.send("The shapeshifter didn't even SAY anything with it, anyways time for unbiased letter ban :D")
                     suckerlist = [int(sshifter)]
 
-
+                print(suckerlist)
                 # day = -1
                 # try:
                 #     print("pre read updayt")
@@ -1510,14 +1511,15 @@ class PrintStuff(commands.Cog):
                     oldword = killword
                     r = RandomWord()
                     killword = r.word()
-                    person = sixth.guild.get_member(letterSucker)
-                    print("made it to person")
-                    if person is None:
-                        person = await sixth.guild.fetch_member(letterSucker)
-                    print("pre name")
-                    letterSuckerName = person.name
-                    print("post name")
-                    await sixth.send(f"the kill word was {oldword}, but now there's a new one so rip bozo I lived\n-# also wordlee was {letterword} if {letterSuckerName} didn't get it{"\n(unless I didn't live and got rebooted.)\nidk man it's not like that stuff persists" if random.random() < 0.5 else ""}")
+                    if letterSucker:
+                        person = sixth.guild.get_member(letterSucker)
+                        print("made it to person")
+                        if person is None:
+                            person = await sixth.guild.fetch_member(letterSucker)
+                        print("pre name")
+                        letterSuckerName = person.name
+                        print("post name")
+                        await sixth.send(f"the kill word was {oldword}, but now there's a new one so rip bozo I lived\n-# also wordlee was {letterword} if {letterSuckerName} didn't get it{"\n(unless I didn't live and got rebooted.)\nit kinda persists now but its not like I can tell when it happens" if random.random() < 0.5 else ""}")
 
                 suckyLetter = random.choice(string.ascii_lowercase)
 
@@ -1541,6 +1543,7 @@ class PrintStuff(commands.Cog):
 
 
                 print("pre lettersucker assignment")
+                print(suckerlist)
                 letterSucker = suckerlist[random.randint(0, len(suckerlist) - 1)]
 
 
