@@ -1419,7 +1419,6 @@ class PrintStuff(commands.Cog):
             if datetime.datetime.now().hour == 22 or datetime.datetime.now().hour == 21:
                 if len(suslist)!= 0:
 
-                    await sixth.send
 
                     allhighestvoted = await self.getHighestVotees()
 
@@ -1428,7 +1427,7 @@ class PrintStuff(commands.Cog):
                         if votedguy is None:
                             votedguy = await self.bot.fetch_user(allhighestvoted[0])
                         await sixth.send(
-                            f"{votedguy.name} gonna be voted out in {24 - datetime.datetime.now().hour} hour{"" if datetime.datetime.now().hour == 23 else "s"} ({highestvotecount} votes)")
+                            f"{votedguy.name} gonna be voted out in {24 - datetime.datetime.now().hour} hour{"" if datetime.datetime.now().hour == 23 else "s"}")
                     else:
                         votedpeople = ""
                         for key in allhighestvoted:
@@ -1438,9 +1437,12 @@ class PrintStuff(commands.Cog):
                             votedpeople = votedpeople + " and " + votedguy.name
                         votedpeople = votedpeople[4:]
                         await sixth.send(
-                            f"{votedpeople} are tied, someone break the tie in {24 - datetime.datetime.now().hour} hour{"" if datetime.datetime.now().hour == 23 else "s"} ({highestvotecount} votes)")
+                            f"{votedpeople} are tied, someone break the tie in {24 - datetime.datetime.now().hour} hour{"" if datetime.datetime.now().hour == 23 else "s"}")
                 else:
-                    await sixth.send("nobody voted on who the shapeshifter was, did they not use the epic feature? :(")
+                    if sussyspoken:
+                        await sixth.send("nobody voted on who the shapeshifter was, even tho they've said something somewhere :(")
+                    else:
+                        await sixth.send("nobody voted on who the shapeshifter was, probably because they HAVEN'T SAID ANYTHING smh my head\n-# this is so sad I should remove a letter from them in 1-2 hours")
 
 
 
@@ -1454,7 +1456,6 @@ class PrintStuff(commands.Cog):
                               770464351336923157, 721389007426158633, 450811106504605706, 702906770003198003,
                               916883861634441286]
 
-                global sussyspoken
                 imp = sixth.guild.get_member(sshifter)
                 if imp is None:
                     imp = await sixth.guild.fetch_member(sshifter)
