@@ -97,6 +97,11 @@ class PrintStuff(commands.Cog):
             sshifter = None
             suslist = {}
         else:
+
+            sixth = self.bot.get_channel(1264704750633619486)
+            if sixth is None:
+                sixth = await self.bot.fetch_channel(1264704750633619486)
+
             try:
                 # suckyLetter = random.choice(string.ascii_lowercase)
                 r = RandomWord()
@@ -115,10 +120,6 @@ class PrintStuff(commands.Cog):
                 # letterSucker = suckerlist[random.randint(0, len(suckerlist) - 1)]
                 sshifter = shifterlist[random.randint(0, len(shifterlist) - 1)]
                 suslist = {}
-
-                sixth = self.bot.get_channel(1264704750633619486)
-                if sixth is None:
-                    sixth = await self.bot.fetch_channel(1264704750633619486)
 
                 # person = sixth.guild.get_member(letterSucker)
                 # if person is None:
