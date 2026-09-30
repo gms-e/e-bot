@@ -1469,6 +1469,8 @@ class PrintStuff(commands.Cog):
                     if len(votedouts) == 1:
                         if int(votedouts[0]) == int(sshifter):
                             await sixth.send("Ya'll voted right :D the shapeshifters gonna get banned from a letter now :D")
+                            suckerlist = [int(sshifter)]
+
                         else:
                             await sixth.send("ooooooooooohhhh, ya'll voted wrong. imma ban, uh...")
                             voters = list(suslist.keys())
