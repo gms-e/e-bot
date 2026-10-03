@@ -1140,6 +1140,8 @@ class PrintStuff(commands.Cog):
         oldvals = {"shifter": shifter.name, "killword": killword, "wordlee": letterword, "shifterid": sshifter,
                    "restore": True, "lettersucker": letterSucker, "wordlesolved": wordleSolved}
         print(f"updating persistent vals with {oldvals}...")
+        with open("pvals.json", "w", encoding="utf-8") as file:
+            json.dump(oldvals, file, indent=4)
 
         # --------------------------------------e-----------------------------------------#
     @commands.hybrid_command(name="e")
