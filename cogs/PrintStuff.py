@@ -1133,6 +1133,10 @@ class PrintStuff(commands.Cog):
         global wordleSolved
         global letterSucker
 
+        sixth = self.bot.get_channel(1264704750633619486)
+        if sixth is None:
+            sixth = await self.bot.fetch_channel(1264704750633619486)
+
         shifter = sixth.guild.get_member(sshifter)
         if shifter is None:
             shifter = await sixth.guild.fetch_member(sshifter)
