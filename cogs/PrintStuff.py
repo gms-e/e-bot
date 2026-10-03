@@ -183,7 +183,7 @@ class PrintStuff(commands.Cog):
                 await shifter.send("You're the shifter\nuse shifter say <message> <person> to say something as that person\n(If you don't you get banned from a letter)\ntry not to get voted out, have fun :D")
 
 
-                wordleSolved = True
+                wordleSolved = False
                 wordleGuesses = 4
                 squares = ""
 
