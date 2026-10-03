@@ -112,6 +112,7 @@ class PrintStuff(commands.Cog):
                         oldvals = json.load(file)
 
                     if oldvals["restore"]:
+                        print("restoring...")
                         sshifter = oldvals["shifterid"]
                         killword = oldvals["killword"]
                         letterword = oldvals["wordlee"]
@@ -143,7 +144,7 @@ class PrintStuff(commands.Cog):
                     print(e)
 
 
-
+                print("not restoring...")
                 suckyLetter = random.choice(string.ascii_lowercase)
                 r = RandomWord()
                 killword = r.word()
