@@ -112,6 +112,7 @@ class PrintStuff(commands.Cog):
                         oldvals = json.load(file)
 
                     if oldvals["restore"]:
+                        suckyLetter = random.choice(string.ascii_lowercase)
                         print("restoring...")
                         sshifter = oldvals["shifterid"]
                         killword = oldvals["killword"]
@@ -122,7 +123,7 @@ class PrintStuff(commands.Cog):
                         squares = ""
                         for c in letterword:
                             squares = squares + ":black_medium_square:"
-                        await sixth.send(f"The show must go on.\n{f"wordlee is still {squares}({len(letterword)})" if letterword else ""}{"\n-# but that really hurt" if random.random() < 0.4 else ""}")
+                        await sixth.send(f"The show must go on.\n{f"wordlee is still {squares}({len(letterword)})" if letterword else ""} ({suckyLetter}){"\n-# but that really hurt" if random.random() < 0.4 else ""}")
                         return
                     else:
                         oldshifter = sixth.guild.get_member(oldvals["shifterid"])
@@ -1115,7 +1116,7 @@ class PrintStuff(commands.Cog):
                 if targetoperation and targetoperation == "Add":
                     if target.id not in letterSucker:
                         letterSucker.append(target.id)
-                    returnstr = f"{target.name} is now banned from the letter\n"
+                    returnstr = f"{target.name} is now banned from the letter {suckyLetter if not letter else ""}\n"
                 else:
                     letterSucker = [sucker for sucker in letterSucker if sucker != target.id]
                     returnstr = f"{target.name} is not banned from the letter\n-# if they even were to begin with I don't check that\n"
