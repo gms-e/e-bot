@@ -1113,7 +1113,7 @@ class PrintStuff(commands.Cog):
                 return
             if target:
                 if targetoperation and targetoperation == "Add":
-                    if letterSucker.id not in letterSucker:
+                    if target.id not in letterSucker:
                         letterSucker.append(target.id)
                     returnstr = f"{target.name} is now banned from the letter\n"
                 else:
