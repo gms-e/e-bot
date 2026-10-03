@@ -119,6 +119,7 @@ class PrintStuff(commands.Cog):
                         letterSucker = oldvals.get("lettersucker", [])
                         wordleSolved = oldvals.get("wordlesolved", False)
 
+                        squares = ""
                         for c in letterword:
                             squares = squares + ":black_medium_square:"
                         await sixth.send(f"The show must go on.\n{f"wordlee is still {squares}({len(letterword)})" if letterword else ""}{"\n-# but that really hurt" if random.random < 0.4 else ""}")
