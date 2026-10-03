@@ -530,10 +530,13 @@ async def sudoreboot(ctx, password, secondpassword):
         return
 
     idiotwithvars = bot.get_cog("PrintStuff")
-    await idiotwithvars.storevars()
-    await asyncio.sleep(1)
-    await ctx.send("goodbye world")
-    subprocess.run(["sudo", "-S", "reboot"], input=f"{password}\n", text=True)
+    try:
+        await idiotwithvars.storevars()
+        await asyncio.sleep(1)
+        await ctx.send("goodbye world")
+        subprocess.run(["sudo", "-S", "reboot"], input=f"{password}\n", text=True)
+    except Exception as e:
+        print(e)
 
 
 #----------------------------------Mocks message used on--------------------------------------------#
