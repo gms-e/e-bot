@@ -529,6 +529,9 @@ async def sudoreboot(ctx, password, secondpassword):
         await ctx.send("ain't no way you forgot THAT password")
         return
 
+    idiotwithvars = bot.get_cog("PrintStuff")
+    await idiotwithvars.storevars()
+    await asyncio.sleep(1)
     await ctx.send("goodbye world")
     subprocess.run(["sudo", "-S", "reboot"], input=f"{password}\n", text=True)
 
