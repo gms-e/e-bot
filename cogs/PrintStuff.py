@@ -92,7 +92,7 @@ class PrintStuff(commands.Cog):
             wordleSolved = True
             letterword = "whomstve"
             wordleGuesses = 2718
-            suckyletter = "abrakadabra\\alakazamblo"
+            suckyLetter = "abrakadabra\\alakazamblo"
             letterSucker = []
             sshifter = None
             suslist = {}
@@ -1113,11 +1113,11 @@ class PrintStuff(commands.Cog):
                 return
             if target:
                 if targetoperation and targetoperation == "Add":
-                    if lettersucker.id not in letterSucker:
+                    if letterSucker.id not in letterSucker:
                         letterSucker.append(target.id)
                     returnstr = f"{target.name} is now banned from the letter\n"
                 else:
-                    lettersucker = [sucker for sucker in letterSucker if sucker != target.id]
+                    letterSucker = [sucker for sucker in letterSucker if sucker != target.id]
                     returnstr = f"{target.name} is not banned from the letter\n-# if they even were to begin with I don't check that\n"
             if letter:
                 suckyLetter = letter
