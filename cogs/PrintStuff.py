@@ -114,10 +114,13 @@ class PrintStuff(commands.Cog):
                     if oldvals["restore"]:
                         sshifter = oldvals["shifterid"]
                         killword = oldvals["killword"]
-                        wordlee = oldvals["wordlee"]
+                        letterword = oldvals["wordlee"]
                         letterSucker = oldvals.get("lettersucker", [])
                         wordleSolved = oldvals.get("wordlesolved", False)
-                        await sixth.send(f"The show must go on.{"\n-# but that really hurt" if random.random < 0.4 else ""}")
+
+                        for c in letterword:
+                            squares = squares + ":black_medium_square:"
+                        await sixth.send(f"The show must go on.\n{f"wordlee is still {squares}({len(letterword)})" if letterword else ""}{"\n-# but that really hurt" if random.random < 0.4 else ""}")
                         return
                     else:
                         oldshifter = sixth.guild.get_member(oldvals["shifterid"])
@@ -181,8 +184,8 @@ class PrintStuff(commands.Cog):
                 wordleGuesses = 4
                 squares = ""
 
-                # for c in letterword:
-                #     squares = squares + ":black_medium_square:"
+                for c in letterword:
+                    squares = squares + ":black_medium_square:"
                 # await sixth.send(
                 #     f"{person.name} is banned from {"ice cream" if suckyLetter == "a" else suckyLetter} today\n-# Unless they solve {squares}({len(letterword)})."
                 # + f"\njust for testing purposes the shifter is {shifter.name}, get doxxed smh my head")
