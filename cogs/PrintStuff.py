@@ -31,7 +31,7 @@ bluff = False
 
 killword = ""
 letterword = ""
-letterSucker = None
+letterSucker = []
 suckyLetter = ""
 wordleOpeners = {}
 wordleSolved = False
@@ -93,17 +93,55 @@ class PrintStuff(commands.Cog):
             letterword = "whomstve"
             wordleGuesses = 2718
             suckyletter = "abrakadabra\\alakazamblo"
-            letterSucker = None
+            letterSucker = []
             sshifter = None
             suslist = {}
         else:
+
 
             sixth = self.bot.get_channel(1264704750633619486)
             if sixth is None:
                 sixth = await self.bot.fetch_channel(1264704750633619486)
 
             try:
-                # suckyLetter = random.choice(string.ascii_lowercase)
+
+                oldvals = {}
+                try:
+                    print("read old vals")
+                    with open("pvals.json", "r") as file:
+                        oldvals = json.load(file)
+
+                    if oldvals["restore"]:
+                        sshifter = oldvals["shifterid"]
+                        killword = oldvals["killword"]
+                        wordlee = oldvals["wordlee"]
+                        letterSucker = oldvals.get("lettersucker", [])
+                        wordleSolved = oldvals.get("wordlesolved", False)
+                        await sixth.send(f"The show must go on.{"\n-# but that really hurt" if random.random < 0.4 else ""}")
+                        return
+                    else:
+                        oldshifter = sixth.guild.get_member(oldvals["shifterid"])
+                        if oldshifter is None:
+                            oldshifter = await sixth.guild.fetch_member(oldvals["shifterid"])
+                        if oldshifter.id == sshifter:
+                            await oldshifter.send(
+                                "the bot got rebooted but you lucked out getting shifter again, are you astro? (don't answer that it goes straight to anoneemous)")
+                        else:
+                            await oldshifter.send(
+                                "the bot got rebooted so you aren't shifter anymore, which hurt me physically *way* more than it hurts you emotionally (also I'm doxxing u in sixth)")
+
+                        await sixth.send(
+                            f"btw imposter was {oldvals["shifter"]}, killword was {oldvals["killword"]}, and wordlee {"didn't exist" if not oldvals["wordlee"] else f"was {oldvals["wordlee"]}"} before my untimelee deemise")
+
+                except FileNotFoundError:
+                    print("no file, skipping sixth messsage and making file w new vars")
+
+                except Exception as e:
+                    print(e)
+
+
+
+                suckyLetter = random.choice(string.ascii_lowercase)
                 r = RandomWord()
                 killword = r.word()
                 while "-" in killword or "_" in killword or suckyLetter not in killword:
@@ -111,9 +149,9 @@ class PrintStuff(commands.Cog):
 
 
 
-                # letterword = r.word()
-                # while "-" in letterword or "_" in letterword or suckyLetter in unicodedata.normalize('NFKD', letterword):
-                #     letterword = r.word()
+                letterword = r.word()
+                while "-" in letterword or "_" in letterword or suckyLetter in unicodedata.normalize('NFKD', letterword):
+                    letterword = r.word()
 
 
                 shifterlist = sixth.guild.get_role(1555353099923755118)
@@ -148,7 +186,8 @@ class PrintStuff(commands.Cog):
                 # await sixth.send(
                 #     f"{person.name} is banned from {"ice cream" if suckyLetter == "a" else suckyLetter} today\n-# Unless they solve {squares}({len(letterword)})."
                 # + f"\njust for testing purposes the shifter is {shifter.name}, get doxxed smh my head")
-                await sixth.send("Nobody's banned from a letter yet... *For now*.")
+
+                await sixth.send(f"Nobody's banned from a letter yet... *For now*.\n-# if someone DOES get banned they face {squares}({len(letterword)}).")
 
 
                 cheekypeekers = self.bot.get_channel(1551820789207007362)
@@ -157,44 +196,25 @@ class PrintStuff(commands.Cog):
 
                 await cheekypeekers.send(f"The word is {killword}\n it makes e bot so sad :(")
 
+                oldvals = {"shifter": shiftername, "killword": killword, "wordlee": letterword, "shifterid": sshifter,
+                           "restore": False, "lettersucker": letterSucker, "wordlesolved": wordleSolved}
+                print(f"writing with {oldvals}...")
+                with open("pvals.json", "w", encoding="utf-8") as file:
+                    json.dump(oldvals, file, indent=4)
+
+
 
             except Exception as error:
                 print(error)
                 print(str(error))
 
-            oldvals = {}
-            try:
-                print("read old vals")
-                with open("pvals.json", "r") as file:
-                    oldvals = json.load(file)
-
-                oldshifter = sixth.guild.get_member(oldvals["shifterid"])
-                if oldshifter is None:
-                    oldshifter = await sixth.guild.fetch_member(oldvals["shifterid"])
-                if oldshifter.id == sshifter:
-                    await oldshifter.send("the bot got rebooted but you lucked out getting shifter again, are you astro? (don't answer that it goes straight to anoneemous)")
-                else:
-                    await oldshifter.send("the bot got rebooted so you aren't shifter anymore, which hurt me physically *way* more than it hurts you emotionally (also I'm doxxing u in sixth)")
-
-                await sixth.send(f"btw imposter was {oldvals["shifter"]}, killword was {oldvals["killword"]}, and wordlee {"didn't exist" if not oldvals["wordlee"] else f"was {oldvals["wordlee"]}"} before my untimelee deemise")
-
-            except FileNotFoundError:
-                print("no file, skipping sixth messsage and making file next")
-
-            except Exception as e:
-                print(e)
-
-            oldvals = {"shifter": shiftername, "killword": killword, "wordlee": letterword, "shifterid": shifterid}
-            print(f"writing with {oldvals}...")
-            with open("pvals.json", "w", encoding="utf-8") as file:
-                json.dump(oldvals, file, indent=4)
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
         global suckyLetter
 
         global letterSucker
-        if not dev and not wordleSolved and after.author.id == letterSucker:
+        if not dev and not wordleSolved and after.author.id in letterSucker:
             if suckyLetter in unicodedata.normalize('NFKD', after.content.lower()) and not wordleSolved:
                 await after.reply(f"nah you ain't getting away with {suckyLetter} through an edit\n-# use /wordlee to fight for your freedom :P")
                 await after.delete()
@@ -269,7 +289,7 @@ class PrintStuff(commands.Cog):
                 if attached.filename in schrodinger[message.author.id]:
                     await message.delete()
                     return
-        if not wordleSolved and message.author.id == letterSucker and not dev:
+        if not wordleSolved and message.author.id in letterSucker and not dev:
             if suckyLetter in unicodedata.normalize('NFKD', message.content.lower()) and not wordleSolved:
                 await message.reply(f"nah you're not allowed to use {suckyLetter}\n-# use /wordlee to fight for your freedom :P")
                 await message.delete()
@@ -611,28 +631,55 @@ class PrintStuff(commands.Cog):
     @shifter.command(name="vote", brief="sussy baka")
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def vote(self, ctx, sussybaka: discord.User):
+    async def vote(self, ctx, sussybaka: discord.User, ephem: bool = True):
+
+        global suckyLetter
+        if 1555353099923755118 not in [role.id for role in ctx.author.roles]:
+            if random.random() < 0.5:
+                if ctx.guild.id == 773015467753209888:
+                    await ctx.send(f"{ctx.author.name} is now banned from {"ice cream" if suckyLetter == "a" else suckyLetter}\n-# idk man shoulda been shifty ig")
+                    global letterSucker
+                    if ctx.author.id not in letterSucker:
+                        letterSucker.append(ctx.author.id)
+
+
+
         global suslist
+
         suslist[ctx.author.id] = sussybaka.id
-        await ctx.send(content = f"You've guessed {sussybaka.name} is the imposter, can change at any time", ephemeral = True)
+        await ctx.send(content = f"You've guessed {sussybaka.name} is the imposter, can change at any time", ephemeral = ephem)
 
     @shifter.command(name="suspected", brief="sussed baka")
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
-    async def vlist(self, ctx):
+    async def vlist(self, ctx, ephem: bool = True):
+        global suslist
+        global sshifter
         global sussyspoken
-        sussed = await self.getHighestVotees()
-        if sussed:
-            votedpeople = ""
-            for key in sussed:
-                votedguy = self.bot.get_user(key)
-                if votedguy is None:
-                    votedguy = await self.bot.fetch_user(key)
-                votedpeople = votedpeople + " and " + votedguy.name
-            votedpeople = votedpeople[4:]
-            await ctx.send(f"{votedpeople} got the most votes ._.")
+        print(suslist)
+
+        if suslist:
+            allvotees = set(suslist.values())
+            votecount = {}
+            allvotes = list(suslist.values())
+            for key in allvotees:
+                votecount[key] = allvotes.count(key)
+
+            votestring = ""
+
+            sixth = self.bot.get_channel(1264704750633619486)
+            if sixth is None:
+                sixth = await self.bot.fetch_channel(1264704750633619486)
+
+            for person, count in votecount.items():
+                dude = sixth.guild.get_member(person)
+                if dude is None:
+                    dude = await sixth.guild.fetch_member(person)
+                votestring = votestring + f"{dude.name} : {count}\n"
+
+            await ctx.send(votestring, ephemeral = ephem)
         else:
-            await ctx.send(f"nobody's voted{" even tho the ss said somethin" if sussyspoken else " and the ss has said NOTHING"}")
+            await ctx.send(f"nobody's voted{" even tho the ss said somethin" if sussyspoken else " and the ss has said NOTHING"}", ephemeral = ephem)
 
 
     @shifter.command(name="say", brief="sussy baka")
@@ -648,7 +695,9 @@ class PrintStuff(commands.Cog):
             if int(ctx.author.id) != int(sshifter) or fakefail:
                 await ctx.send("You ain't sus lil bro", ephemeral = True)
                 return
-
+            if ctx.channel.id == 841490511390048277:
+                await ctx.send("no.", ephemeral = True)
+                return
             webhooks = await ctx.channel.webhooks()
 
             ehook = None
@@ -1045,7 +1094,7 @@ class PrintStuff(commands.Cog):
     @commands.hybrid_command(name="setletterstuff")
     @app_commands.allowed_installs(guilds=True, users=True)
     @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-    async def setletterstuff(self, ctx, target:discord.Member = None, letter:str = None):
+    async def setletterstuff(self, ctx, target:discord.Member = None, targetoperation: Literal["Add", "Remove"] = None, letter:str = None):
         if dev:
             return
         if letter and len(letter) > 1:
@@ -1058,17 +1107,36 @@ class PrintStuff(commands.Cog):
                 await ctx.send(f"You're not that guy pal, you're not that guy.\nbro was gonna set {"NOTHING" if not target and not letter else ""}{"target = " + target.name if target else ""} {"letter = " + letter if letter else ""}")
                 return
             if target:
-                letterSucker = target.id
-                returnstr = f"{target.name} is now banned from the letter\n"
+                if targetoperation and targetoperation == "Add":
+                    if lettersucker.id not in letterSucker:
+                        letterSucker.append(target.id)
+                    returnstr = f"{target.name} is now banned from the letter\n"
+                else:
+                    lettersucker = [sucker for sucker in letterSucker if sucker != target.id]
+                    returnstr = f"{target.name} is not banned from the letter\n-# if they even were to begin with I don't check that\n"
             if letter:
                 suckyLetter = letter
-                returnstr = returnstr + f"the letter is now {suckyLetter}"
+                returnstr = returnstr + f"the letter is now {"ice cream" if suckyLetter == "a" else suckyLetter}"
             if not letter and not target:
                 returnstr = "You, ah... Didn't set any values"
             await ctx.send(returnstr)
         except Exception as e:
             print(e)
 
+    async def storevars(self):
+        global sshifter
+        global killword
+        global letterword
+        global wordleSolved
+        global letterSucker
+
+        shifter = sixth.guild.get_member(sshifter)
+        if shifter is None:
+            shifter = await sixth.guild.fetch_member(sshifter)
+
+        oldvals = {"shifter": shifter.name, "killword": killword, "wordlee": letterword, "shifterid": sshifter,
+                   "restore": True, "lettersucker": letterSucker, "wordlesolved": wordleSolved}
+        print(f"updating persistent vals with {oldvals}...")
 
         # --------------------------------------e-----------------------------------------#
     @commands.hybrid_command(name="e")
@@ -1219,7 +1287,7 @@ class PrintStuff(commands.Cog):
     @app_commands.allowed_installs(guilds=True, users=False)
     @app_commands.allowed_contexts(guilds=True, dms=False, private_channels=False)
 
-    async def spoken(self, ctx, guess: str = "no guess so just show len"):
+    async def spoken(self, ctx, guess: str = "no guess so just show len", guessnumifnotletterbanned: Optional[int] = None):
         global letterSucker
         global wordleOpeners
         global letterword
@@ -1253,19 +1321,23 @@ class PrintStuff(commands.Cog):
         if sixth is None:
             sixth = await self.bot.fetch_channel(1264704750633619486)
 
-        person = sixth.guild.get_member(letterSucker)
-        if person is None:
-            person = await sixth.guild.fetch_member(letterSucker)
-
-        if ctx.author.id != letterSucker:
+        if ctx.author.id not in letterSucker:
             for char in letterword:
                 returnstring += ":black_large_square: "
             if ctx.author.id in wordleOpeners:
                 await ctx.send(f"You've already opened it, you gotta wait {wordleOpeners[ctx.author.id]} minutes to give more guesses")
             else:
-                wordleGuesses = 6
+                amount = int(guessnumifnotletterbanned)
+                if amount < -1:
+                    await ctx.send("ok removing guesses is funny, but I'll ONLY let you remove ONE. ya meanie -. -")
+                    return
+                if amount > 6:
+                    await ctx.send("you're a generous person huh. It *IS* capped at 6 tho but you do you.")
+                wordleGuesses = wordleGuesses + amount
+                if wordleGuesses > 6:
+                    wordleGuesses = 6
                 wordleOpeners[ctx.author.id] = 60
-                await ctx.send(f"o7 the person who's supressed now has 6 guesses\n{returnstring} ({len(letterword)})")
+                await ctx.send(f"o7 the person who's supressed now has {wordleGuesses} guesses\n{returnstring} ({len(letterword)})")
                 while wordleOpeners[ctx.author.id] > 0:
                     wordleOpeners[ctx.author.id] = wordleOpeners[ctx.author.id] - 1
                     await asyncio.sleep(60)
@@ -1521,14 +1593,17 @@ class PrintStuff(commands.Cog):
                     r = RandomWord()
                     killword = r.word()
                     if letterSucker:
-                        person = sixth.guild.get_member(letterSucker)
-                        print("made it to person")
-                        if person is None:
-                            person = await sixth.guild.fetch_member(letterSucker)
-                        print("pre name")
-                        letterSuckerName = person.name
-                        print("post name")
-                        await sixth.send(f"the kill word was {oldword}, but now there's a new one so rip bozo I lived\n-# also wordlee was {letterword} if {letterSuckerName} didn't get it{"\n(unless I didn't live and got rebooted.)\nit kinda persists now but its not like I can tell when it happens" if random.random() < 0.5 else ""}")
+                        suckernames = ""
+                        for sucker in letterSucker:
+                            person = sixth.guild.get_member(sucker)
+                            print("made it to person")
+                            if person is None:
+                                person = await sixth.guild.fetch_member(sucker)
+                            print("pre name")
+                            suckernames = suckernames + " or " + person.name
+                            print("post name")
+                            suckernames = suckernames[4:]
+                        await sixth.send(f"the kill word was {oldword}, but now there's a new one so rip bozo I lived\n-# also wordlee was {letterword} if {suckernames} didn't get it{"\n(unless I didn't live and got rebooted.)\nit kinda persists now but its not like I can tell when it happens" if random.random() < 0.5 else ""}")
 
                 suckyLetter = random.choice(string.ascii_lowercase)
 
@@ -1553,7 +1628,7 @@ class PrintStuff(commands.Cog):
 
                 print("pre lettersucker assignment")
                 print(suckerlist)
-                letterSucker = suckerlist[random.randint(0, len(suckerlist) - 1)]
+                letterSucker = [suckerlist[random.randint(0, len(suckerlist) - 1)]]
 
                 shifterlist = sixth.guild.get_role(1555353099923755118)
                 if shifterlist is None:
@@ -1576,9 +1651,9 @@ class PrintStuff(commands.Cog):
                     sixth = await self.bot.fetch_channel(1264704750633619486)
 
                 print("pre get member from lettersucker ID")
-                person = sixth.guild.get_member(letterSucker)
+                person = sixth.guild.get_member(letterSucker[0])
                 if person is None:
-                    person = await sixth.guild.fetch_member(letterSucker)
+                    person = await sixth.guild.fetch_member(letterSucker[0])
 
                 print(letterSucker)
 
@@ -1588,8 +1663,23 @@ class PrintStuff(commands.Cog):
                 print("pre sixth letter announcement")
                 for c in letterword:
                     squares = squares + ":black_medium_square:"
+                flavortext = f"-# Unless they solve {squares}({len(letterword)})."
+                match person.id:
+                    case 770464351336923157:
+                        flavortext = f"-# unless that greenbean solves {squares}({len(letterword)})."
+                    case 405197452833062912:
+                        flavortext = f"-# unless she avoids {squares}({len(letterword)})\n-# with /set letterstuff"
+                    case 405197452833062912:
+                        flavortext = f"-# unless he gets around to doing {squares}({len(letterword)})"
+                    case 721389007426158633:
+                        flavortext = f"-# unless he bothers solving {squares}({len(letterword)})"
+                    case 456858402832908301:
+                        flavortext = f"-# unless that cheese wheel solves {squares}({len(letterword)})"
+                    case 617347174120030208:
+                        flavortext = f"-# unless they care to solve {squares}({len(letterword)})"
+
                 await sixth.send(
-                    f"{person.name} is banned from {"ice cream" if suckyLetter == "a" else suckyLetter} today\n-# Unless they solve {squares}({len(letterword)})."
+                    f"{person.name} is banned from {"ice cream" if suckyLetter == "a" else suckyLetter} today\n{flavortext}"
                 + f"\nalso there's a new shifter good luck with that")
 
                 print("pre killword announcement")
@@ -1600,7 +1690,8 @@ class PrintStuff(commands.Cog):
 
                 await cheekypeekers.send(f"The word is {killword}\n it makes e bot so sad :(")
 
-                oldvals = {"shifter": shifter.name, "killword": killword, "wordlee": letterword, "shifterid": int(sshifter)}
+                oldvals = {"shifter": shifter.name, "killword": killword, "wordlee": letterword, "shifterid": sshifter,
+                           "restore": False, "lettersucker": letterSucker, "wordlesolved": wordleSolved}
                 print(f"updating persistent vals with {oldvals}...")
                 with open("pvals.json", "w", encoding="utf-8") as file:
                     json.dump(oldvals, file, indent=4)
