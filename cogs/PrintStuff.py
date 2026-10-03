@@ -122,7 +122,7 @@ class PrintStuff(commands.Cog):
                         squares = ""
                         for c in letterword:
                             squares = squares + ":black_medium_square:"
-                        await sixth.send(f"The show must go on.\n{f"wordlee is still {squares}({len(letterword)})" if letterword else ""}{"\n-# but that really hurt" if random.random < 0.4 else ""}")
+                        await sixth.send(f"The show must go on.\n{f"wordlee is still {squares}({len(letterword)})" if letterword else ""}{"\n-# but that really hurt" if random.random() < 0.4 else ""}")
                         return
                     else:
                         oldshifter = sixth.guild.get_member(oldvals["shifterid"])
