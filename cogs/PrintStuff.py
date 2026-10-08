@@ -2523,6 +2523,48 @@ class PrintStuff(commands.Cog):
             await self.printto("An error occurred:", type(error).__name__)
             await self.printto(str(error))
 
+
+    async def parseforname(self, content: str, male: bool, all = False):
+        try:
+            skip = False
+            victim = None
+            content = content.lower()
+            if ("e," in content or "bot" in content) and all:
+                victim = "e bot"
+            if "rov" in content and all:
+                victim = "rover"
+
+
+            if ("mario" in content or "mf" in content) and (not male or all):
+                skip = True
+                victim = "mariofan"
+            if "astro" in content and (male or all):
+                skip = True
+                victim = "astro"
+            if "cb" in content and male:
+                skip = True
+                victim = "cb"
+            if "josh" in content and male:
+                skip = True
+                victim = "josh"
+            if ("anth" in content or "ante" in content) and (not male or all):
+                skip = True
+                victim = "anth"
+            if "ed" in content and "wosk" in content and (male or all):
+                victim = "edwosk"
+
+            if ("om" in content or "gamerside" in content) and (male or all):
+                skip = True
+                victim = "omar"
+            if ("meow" in content or "ma" in content) and "er" in content and not skip and (male or all):
+                victim = "meowinger"
+
+
+            return victim
+        except Exception as error:
+            print(error)
+            return("thatbroke")
+
     async def parseleftcat(self, num: int):
         leftcat = None
         match num:
@@ -2697,15 +2739,69 @@ class PrintStuff(commands.Cog):
                 quotee = quotee.author.name
                 print(quotee)
             else:
-                m = [msg async for msg in channel.history(limit=3)]
+                m = [msg async for msg in channel.history(limit=6)]
                 quotee = m[1].author.name
-                if m[1].author == author:
-                    quotee = m[2].author.name
+                for msg in m:
+                    if msg.author != author:
+                        quotee = msg.author.name
+                        break
                 # await self.printto(quotee.content)
                 # await self.printto(quotee)
-        if "self" in quotee:
+        if "myself" in quotee:
             quotee = author.name
+        if "him" in quotee:
+            if message.reference:
+                victim = await self.parseforname(message.reference.content, True)
+                if victim:
+                    quotee = victim
+                else:
+                    quotee = "edwosk"
 
+            else:
+                m = [msg async for msg in channel.history(limit=6)]
+                for msg in m:
+                    victim = await self.parseforname(msg.content, True)
+                    print(victim)
+                    if victim:
+                        quotee = victim
+                        break
+                if quotee is None:
+                    quotee = "edwosk"
+
+        if "her" in quotee:
+            if message.reference:
+                victim = await self.parseforname(message.reference.content, False)
+                if victim:
+                    quotee = victim
+                else:
+                    quotee = "edwosk"
+
+            else:
+                m = [msg async for msg in channel.history(limit=6)]
+                for msg in m:
+                    victim = await self.parseforname(msg.content, False)
+                    if victim:
+                        quotee = victim
+                        break
+                if quotee is None:
+                    quotee = "edwosk"
+        if "them" in quotee:
+            if message.reference:
+                victim = await self.parseforname(message.reference.content, False, True)
+                if victim:
+                    quotee = victim
+                else:
+                    quotee = "edwosk"
+
+            else:
+                m = [msg async for msg in channel.history(limit=6)]
+                for msg in m:
+                    victim = await self.parseforname(msg.content, False, True)
+                    if victim:
+                        quotee = victim
+                        break
+                if quotee is None:
+                    quotee = "edwosk"
 
         leftcat = await self.parseleftcat(author.id)
         rightcat = await self.parserightcat(quotee)
