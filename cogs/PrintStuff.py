@@ -2735,7 +2735,7 @@ class PrintStuff(commands.Cog):
             return
         if "you" in quotee:
             if message.reference:
-                quotee = await message.channel.fetch_message(message.reference.message_id)
+                quotee = await channel.fetch_message(message.reference.message_id)
                 quotee = quotee.author.name
                 print(quotee)
             else:
@@ -2751,7 +2751,8 @@ class PrintStuff(commands.Cog):
             quotee = author.name
         if "him" in quotee:
             if message.reference:
-                victim = await self.parseforname(message.reference.content, True)
+                ref = await channel.fetch_message(message.reference.message_id)
+                victim = await self.parseforname(ref.content, True)
                 if victim:
                     quotee = victim
                 else:
@@ -2770,7 +2771,8 @@ class PrintStuff(commands.Cog):
 
         if "her" in quotee:
             if message.reference:
-                victim = await self.parseforname(message.reference.content, False)
+                ref = await channel.fetch_message(message.reference.message_id)
+                victim = await self.parseforname(ref.content, False)
                 if victim:
                     quotee = victim
                 else:
@@ -2787,7 +2789,8 @@ class PrintStuff(commands.Cog):
                     quotee = "edwosk"
         if "them" in quotee:
             if message.reference:
-                victim = await self.parseforname(message.reference.content, False, True)
+                ref = await channel.fetch_message(message.reference.message_id)
+                victim = await self.parseforname(ref.content, False, True)
                 if victim:
                     quotee = victim
                 else:
