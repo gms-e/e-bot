@@ -2769,8 +2769,9 @@ class PrintStuff(commands.Cog):
                     if victim:
                         quotee = victim
                         break
-                if quotee is None:
+                if quotee == "him":
                     quotee = "edwosk"
+
 
         if "her" in quotee:
             if message.reference:
@@ -2788,7 +2789,7 @@ class PrintStuff(commands.Cog):
                     if victim:
                         quotee = victim
                         break
-                if quotee is None:
+                if quotee == "her":
                     quotee = "edwosk"
         if "them" in quotee:
             if message.reference:
@@ -2806,9 +2807,9 @@ class PrintStuff(commands.Cog):
                     if victim:
                         quotee = victim
                         break
-                if quotee is None:
+                if quotee == "them":
                     quotee = "edwosk"
-
+        print("final quotee: ", quotee)
         leftcat = await self.parseleftcat(author.id)
         rightcat = await self.parserightcat(quotee)
         if rightcat is None or leftcat is None:
