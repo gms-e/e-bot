@@ -85,6 +85,7 @@ class PrintStuff(commands.Cog):
         global wordleGuesses
         global sshifter
         global suslist
+        global sussyspoken
         shiftername = None
         shifterid = None
         if dev:
@@ -120,6 +121,7 @@ class PrintStuff(commands.Cog):
                         letterSucker = oldvals.get("lettersucker", [])
                         wordleSolved = oldvals.get("wordlesolved", False)
                         suslist = oldvals.get("suslist", {})
+                        sussyspoken = oldvals.get("sussyspoken", False)
 
                         squares = ""
                         for c in letterword:
@@ -204,7 +206,7 @@ class PrintStuff(commands.Cog):
                 await cheekypeekers.send(f"The word is {killword}\n it makes e bot so sad :(")
 
                 oldvals = {"shifter": shiftername, "killword": killword, "wordlee": letterword, "shifterid": sshifter,
-                           "restore": False, "lettersucker": letterSucker, "wordlesolved": wordleSolved, "suslist": suslist}
+                           "restore": False, "lettersucker": letterSucker, "wordlesolved": wordleSolved, "suslist": suslist, "sussyspoken": sussyspoken}
                 print(f"writing with {oldvals}...")
                 with open("pvals.json", "w", encoding="utf-8") as file:
                     json.dump(oldvals, file, indent=4)
@@ -1137,6 +1139,7 @@ class PrintStuff(commands.Cog):
         global wordleSolved
         global letterSucker
         global suslist
+        global sussyspoken
 
         sixth = self.bot.get_channel(1264704750633619486)
         if sixth is None:
@@ -1147,7 +1150,7 @@ class PrintStuff(commands.Cog):
             shifter = await sixth.guild.fetch_member(sshifter)
 
         oldvals = {"shifter": shifter.name, "killword": killword, "wordlee": letterword, "shifterid": sshifter,
-                   "restore": True, "lettersucker": letterSucker, "wordlesolved": wordleSolved, "suslist": suslist}
+                   "restore": True, "lettersucker": letterSucker, "wordlesolved": wordleSolved, "suslist": suslist, "sussyspoken": sussyspoken}
         print(f"updating persistent vals with {oldvals}...")
         with open("pvals.json", "w", encoding="utf-8") as file:
             json.dump(oldvals, file, indent=4)
@@ -1708,7 +1711,7 @@ class PrintStuff(commands.Cog):
                 await cheekypeekers.send(f"The word is {killword}\n it makes e bot so sad :(")
 
                 oldvals = {"shifter": shifter.name, "killword": killword, "wordlee": letterword, "shifterid": sshifter,
-                           "restore": False, "lettersucker": letterSucker, "wordlesolved": wordleSolved, "suslist": suslist}
+                           "restore": False, "lettersucker": letterSucker, "wordlesolved": wordleSolved, "suslist": suslist, "sussyspoken": sussyspoken}
                 print(f"updating persistent vals with {oldvals}...")
                 with open("pvals.json", "w", encoding="utf-8") as file:
                     json.dump(oldvals, file, indent=4)
