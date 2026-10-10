@@ -137,6 +137,17 @@ class SetStuff(commands.Cog):
     async def chance_group(self, ctx):
         print("obsolete")
 
+    # #------------------------------------Server role management---------------------------------------------#
+
+    @chance_group.command(name = "shifter")
+    async def role_add(self, ctx, canbeshifter: bool):
+        if canbeshifter:
+            await ctx.author.add_roles(ctx.author.guild.get_role(1555353099923755118))
+            await ctx.send("o7 you're in")
+        else:
+            await ctx.author.remove_roles(ctx.author.guild.get_role(1555353099923755118))
+            await ctx.send("o7 it's gone")
+
 
     @chance_group.command(name = "mock", brief = "toggles 1/1000 mock chance")
     async def mock(self, ctx, value: bool):

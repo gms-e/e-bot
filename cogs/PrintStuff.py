@@ -167,8 +167,7 @@ class PrintStuff(commands.Cog):
                 if shifterlist is None:
                     shifterlist = await sixth.guild.fetch_role(1555353099923755118)
                 shifterlist = [s.id for s in shifterlist.members]
-                if 770464351336923157 in shifterlist:
-                    shifterlist.append(770464351336923157)
+
                 # suckerlist = [405197452833062912, 617347174120030208, 916883861634441286, 770464351336923157, 721389007426158633, 450811106504605706, 702906770003198003, 916883861634441286]
                 # letterSucker = suckerlist[random.randint(0, len(suckerlist) - 1)]
                 sshifter = shifterlist[random.randint(0, len(shifterlist) - 1)]
@@ -1568,11 +1567,13 @@ class PrintStuff(commands.Cog):
                             suckerlist = [int(sshifter)]
 
                         else:
-                            await sixth.send("ooooooooooohhhh, ya'll voted wrong. imma ban, uh...")
+                            await sixth.send("ooooooooooohhhh, ya'll voted wrong. imma letterban, uh...")
                             voters = list(suslist.keys())
                             if random.random() < 0.1:
                                 await sixth.send("The guy ya'll voted out, that's *funny*.\n-# Just this once :D")
                                 suckerlist = [votedouts[0]]
+                            elif random.random() < 0.1 and int(votedouts[0]) == 916883861634441286:
+                                await sixth.send("edwosk specifically bc of his double odds")
                             elif len(voters) < 4:
                                 await sixth.send("someone who didn't vote, gotta step it up")
                                 suckerlist = [i for i in suckerlist if i not in voters]
@@ -1654,8 +1655,7 @@ class PrintStuff(commands.Cog):
                 if shifterlist is None:
                     shifterlist = await sixth.guild.fetch_role(1555353099923755118)
                 shifterlist = [s.id for s in shifterlist.members]
-                if 770464351336923157 in shifterlist:
-                    shifterlist.append(770464351336923157)
+
                 sshifter = shifterlist[random.randint(0, len(shifterlist) - 1)]
                 suslist = {}
                 sussyspoken = False
